@@ -99,19 +99,19 @@ const TechnicalStrength = () => {
               const positions = [
                 "top-0 left-0",
                 "top-0 right-0",
-                "top-[calc(50%-105px)] left-[calc(50%-113px)]", // middle image idx=2
+                "top-[calc(50%-85px)] left-[calc(50%-113px)]", // middle image idx=2
                 "bottom-0 left-0",
                 "bottom-0 right-0",
               ];
 
               // Add inline style only for middle image on mobile (width < 768px)
-           const mobileOffsetStyle =
-             idx === 2 && window.innerWidth < 768
-               ? {
-                   left: `calc(50% - 113px + 50px)`,
-                   top: `calc(50% - 105px + 30px)`,
-                 }
-               : {};
+              const mobileOffsetStyle =
+                idx === 2 && window.innerWidth < 768
+                  ? {
+                      left: `calc(50% - 113px + 50px)`,
+                      top: `calc(50% - 85px + 30px)`,
+                    }
+                  : {};
 
               return (
                 <img
