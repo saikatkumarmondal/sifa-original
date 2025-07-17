@@ -61,7 +61,7 @@ const SpareParts = () => {
           <div className="card relative group w-96 shadow-sm">
             <figure>
               <img
-                src="/public/Photo/Photo/3. Section/4. Elevator Safety Gear Set.jpg"
+                src="/Photo/Photo/3. Section/4. Elevator Safety Gear Set.jpg"
                 alt="Shoes"
                 className="w-80 h-[400px]"
               />
