@@ -5,7 +5,7 @@ const slidesData = [
   {
     image: "/Photo/slidebar/1 Slide Photo.png",
     video:
-      "https://res.cloudinary.com/dtztayuxq/video/upload/v1752635512/1_qzszpr.mov",
+      "https://res.cloudinary.com/dtztayuxq/video/upload/v1752743850/3708aff54d062a6caab5e0896c9b9839_wcwbjg.mp4",
     text: "Welcome to SIFA Elevator",
     label: "01",
   },

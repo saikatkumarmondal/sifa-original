@@ -16,8 +16,63 @@ const TechnicalStrength = () => {
   ];
 
   const [visibleSet, setVisibleSet] = useState(0);
+  const [current, setCurrent] = useState(0);
   const groupRef = useRef(null);
   const gsapBoxRefs = useRef([]);
+  const text1Ref = useRef(null);
+  const text2Ref = useRef(null);
+  const getCurrentImages = () => {
+    const len = images.length;
+    return [
+      images[(current + 0) % len],
+      images[(current + 1) % len],
+      images[(current + 2) % len],
+      images[(current + 3) % len],
+      images[(current + 4) % len],
+    ];
+  };
+
+  useEffect(() => {
+    gsap.set(gsapBoxRefs.current[2], { autoAlpha: 0 });
+
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 5 });
+
+    tl.to(gsapBoxRefs.current[1], {
+      autoAlpha: 0,
+      y: -40,
+      duration: 1,
+      onComplete: () => {
+        gsap.set(gsapBoxRefs.current[1], { display: "none" });
+        gsap.set(gsapBoxRefs.current[2], { display: "block" });
+      },
+    })
+      .to(
+        gsapBoxRefs.current[2],
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 1,
+        },
+        "+=0.2"
+      )
+      .to(gsapBoxRefs.current[2], {
+        autoAlpha: 0,
+        y: -40,
+        delay: 5,
+        duration: 1,
+        onComplete: () => {
+          gsap.set(gsapBoxRefs.current[2], { display: "none" });
+          gsap.set(gsapBoxRefs.current[1], { display: "block" });
+        },
+      })
+      .to(gsapBoxRefs.current[1], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 1,
+      });
+
+    return () => tl.kill();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -43,92 +98,88 @@ const TechnicalStrength = () => {
     );
   }, [visibleSet]);
 
-  const getCurrentImages = () => {
-    const start = visibleSet * 5;
-    return images.slice(start, start + 5);
-  };
-
   return (
-    <div className="flex flex-col lg:flex-row gap-10 my-10 px-4">
-      {/* Left Section (Text Boxes) */}
-      <div className="flex flex-col gap-6 w-full lg:w-1/2">
-        {/* Box 1 */}
-        <div
-          className="group mx-4 md:mx-12 lg:mx-20 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300"
-          ref={(el) => (gsapBoxRefs.current[0] = el)}>
-          <h1 className="text-4xl font-bold text-black group-hover:text-blue-900 transition">
-            Technical Strength
-          </h1>
-          <p className="text-xl text-gray-800 my-3">
-            Ningbo SIFA Elevator Co., Ltd
-          </p>
-        </div>
-
-        {/* Box 2 */}
-        <div
-          className="group mx-4 md:mx-12 lg:mx-20 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300"
-          ref={(el) => (gsapBoxRefs.current[1] = el)}>
-          <p className="text-center text-2xl text-gray-700 group-hover:text-black transition">
-            "Ningbo SIFA Elevator Co., Ltd. excels in
-            <br /> innovation, precision manufacturing, and
-            <br /> quality control. We provide safe, efficient,
-            <br /> and customizable elevator solutions with
-            <br /> advanced technology and global support."
-          </p>
-        </div>
-
-        {/* Box 3 */}
-        <div
-          className="group mx-4 md:mx-12 lg:mx-20 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300"
-          ref={(el) => (gsapBoxRefs.current[2] = el)}>
-          <p className="text-center text-2xl text-gray-700 group-hover:text-black transition">
-            "Smart Technology,
-            <br /> Safe and Efficient
-            <br /> Elevators."
-          </p>
-        </div>
+    <div>
+      <div>
+        <h1 className="text-4xl font-bold text-black group-hover:text-blue-900 transition text-center">
+          Technical Strength
+        </h1>
+        <p className="text-xl text-gray-800 my-1 text-center">
+          Ningbo SIFA Elevator Co., Ltd
+        </p>
       </div>
+      <div className="flex flex-col lg:flex-row items-center gap-10 my-3 px-4">
+        {/* Left Section (Text Boxes) */}
+        <div className="flex flex-col gap-6 w-full lg:w-1/2 mt-10 mr-20">
+          <div className=" rounded-box h-96 relative -right-15 -top-9">
+            <div className="mr-10 h-full ">
+              <div
+                className="group sm:mx-4 md:mx-12 lg:mx-20 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300"
+                ref={(el) => (gsapBoxRefs.current[1] = el)}>
+                <p className="text-center text-2xl text-gray-700 group-hover:text-black transition">
+                  "Ningbo SIFA Elevator Co., Ltd. excels in
+                  <br /> innovation, precision manufacturing, and
+                  <br /> quality control. We provide safe, efficient,
+                  <br /> and customizable elevator solutions with
+                  <br /> advanced technology and global support."
+                </p>
+              </div>
+            </div>
 
-      {/* Right Section (Diamond Image Carousel) */}
-      <div className="w-full lg:w-1/2">
-        <div className="w-full h-[400px] md:h-[500px] lg:h-screen bg-white flex justify-center items-center">
-          <div
-            ref={groupRef}
-            className="relative w-[300px] md:w-[500px] lg:w-[700px] h-[400px] md:h-[500px] lg:h-[600px]">
-            {getCurrentImages().map((img, idx) => {
-              const positions = [
-                "top-0 left-0",
-                "top-0 right-0",
-                "top-[calc(50%-85px)] left-[calc(50%-113px)]", // middle image idx=2
-                "bottom-0 left-0",
-                "bottom-0 right-0",
-              ];
+            <div className="mr-13 h-full  ">
+              <div
+                className="group  md:mx-12 lg:mx-20 mt-10 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300 relative -top-100"
+                ref={(el) => (gsapBoxRefs.current[2] = el)}>
+                <p className="text-center text-2xl text-gray-700 group-hover:text-black transition my-25">
+                  "Smart Technology,
+                  <br /> Safe and Efficient
+                  <br /> Elevators."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-              // Add inline style only for middle image on mobile (width < 768px)
-              const mobileOffsetStyle =
-                idx === 2 && window.innerWidth < 768
-                  ? {
-                      left: `calc(50% - 113px + 50px)`,
-                      top: `calc(50% - 85px + 30px)`,
-                    }
-                  : {};
+        {/* Right Section (Diamond Image Carousel) */}
+        <div className="w-full lg:w-1/2 my-10 lg:my-0">
+          <div className="w-full h-[400px] md:h-[500px] lg:h-screen bg-white flex justify-center items-center">
+            <div
+              ref={groupRef}
+              className="relative w-[300px] md:w-[500px] lg:w-[700px] h-[400px] md:h-[500px] lg:h-[600px]">
+              {getCurrentImages().map((img, idx) => {
+                const positions = [
+                  "top-0 left-0",
+                  "top-0 right-0",
+                  "top-[calc(50%-85px)] left-[calc(50%-113px)]",
+                  "bottom-0 left-0",
+                  "bottom-0 right-0",
+                ];
 
-              return (
-                <img
-                  key={idx}
-                  src={img}
-                  alt={`photo-${idx}`}
-                  className={`absolute
+                const mobileOffsetStyle =
+                  idx === 2 && window.innerWidth < 768
+                    ? {
+                        left: `calc(50% - 113px + 50px)`,
+                        top: `calc(50% - 85px + 30px)`,
+                      }
+                    : {};
+
+                return (
+                  <img
+                    key={idx}
+                    src={img}
+                    alt={`photo-${idx}`}
+                    className={`absolute
                     w-[100px] md:w-[180px] lg:w-[230px]
                     h-[100px] md:h-[160px] lg:h-[200px]
                     object-cover border rounded-4xl border-white
                     ${positions[idx]}
                     transition-all duration-500
                   `}
-                  style={mobileOffsetStyle}
-                />
-              );
-            })}
+                    style={mobileOffsetStyle}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

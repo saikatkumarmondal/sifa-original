@@ -87,16 +87,11 @@ const Navbar = () => {
       style={{ position: "sticky" }}>
       <div className="flex justify-between items-center">
         {/* Logo */}
-        <div
-          className="h-[110px] w-[139px] bg-red-900"
-          style={{
-            clipPath: "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
-          }}
-          ref={divRef}>
+        <div className="h-[110px] w-[139px]">
           <div className="h-[95px] w-[120px] flex items-center justify-center">
             <img
-              src="/Photo/Photo/LOGO/SIFA LOGO white png.png"
-              className="w-[90px] h-[75px] pt-3"
+              src="/Photo/Photo/LOGO/logo.png"
+              className="w-full h-full pt-3"
               alt="SIFA Logo"
             />
           </div>

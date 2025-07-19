@@ -46,15 +46,15 @@ const GlobalCase = () => {
   }, []);
 
   return (
-    <div className="my-20">
-      <div className="my-20">
+    <div className="my-5">
+      <div className="my-5">
         <p className="text-xl  text-center font-semibold my-4">
           Ningbo SIFA Elevator
         </p>
         <h3 className="text-6xl font-bold text-center my-3">Global Case</h3>
         <p className="text-sm text-gray-700 text-center my-3">
-          Reliable elevators and escalators for safe, efficient, and long-lasFng
-          performance.
+          Reliable elevators and escalators for safe, efficient, and
+          <br /> long-lasFng performance.
         </p>
       </div>
 
@@ -63,11 +63,20 @@ const GlobalCase = () => {
           <div className="relative w-full h-[320px] flex justify-center items-center">
             <div
               ref={imageGroupRef}
-              className="flex gap-6 transition duration-500">
+              className="
+          flex gap-6 transition duration-500 
+          sm:gap-4 sm:w-[90%] 
+          md:gap-5 md:w-[85%] 
+          lg:gap-6 lg:w-[80%]">
               {currentSet.map((item, index) => (
                 <div
                   key={index}
-                  className="relative w-[350px] h-[300px] rounded-xl overflow-hidden shadow-md border border-white">
+                  className="
+              relative w-[350px] h-[300px] rounded-xl overflow-hidden shadow-md border border-white
+              sm:w-[280px] sm:h-[240px]
+              md:w-[320px] md:h-[280px]
+              lg:w-[350px] lg:h-[300px]
+            ">
                   <img
                     src={item.src}
                     alt={`slide-${index}`}

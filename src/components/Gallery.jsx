@@ -8,7 +8,7 @@ const images = [
   "/Photo/Photo/1. Section/3.jpg",
   "/Photo/Photo/1. Section/4.jpg",
   "/Photo/Photo/1. Section/5.png",
-  "/Photo/Photo/1. Section/6.jpg",
+  "/Photo/Photo/1. Section/changed.jpg",
 ];
 
 const Gallery = () => {
@@ -100,7 +100,7 @@ const Gallery = () => {
             <img
               src={src}
               alt={`Gallery ${i + 1}`}
-              className="w-full h-auto object-contain"
+              className="w-full h-auto object-contain bg-cover"
               loading="lazy"
               style={{ transformStyle: "preserve-3d" }}
             />
