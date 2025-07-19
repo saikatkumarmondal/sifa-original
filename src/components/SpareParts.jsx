@@ -73,7 +73,7 @@ const SpareParts = () => {
             md:grid-cols-2
             lg:grid-cols-4 /* Changed to 3 columns on lg as per the original for consistency if needed */
             md:gap-x-2     /* Specific horizontal gap for md and lg */
-            lg:gap-x-5
+            lg:gap-x-3
             justify-items-center /* Centers grid items within their cells */
           ">
           {sparePartsData.map((part) => (

@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
   
-    const image = { path: "/public/Photo/Photo/LOGO/logo.png" };
+    const image = { path: "/Photo/Photo/LOGO/logo.png" };
 
     return (
       <footer className="footer sm:footer-horizontal bg-base-300 text-base-content p-10">
