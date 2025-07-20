@@ -117,11 +117,10 @@ const TechnicalStrength = () => {
                 className="group sm:mx-4 md:mx-12 lg:mx-20 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300"
                 ref={(el) => (gsapBoxRefs.current[1] = el)}>
                 <p className="text-center text-2xl text-gray-700 group-hover:text-black transition">
-                  "Ningbo SIFA Elevator Co., Ltd. excels in
-                  <br /> innovation, precision manufacturing, and
-                  <br /> quality control. We provide safe, efficient,
-                  <br /> and customizable elevator solutions with
-                  <br /> advanced technology and global support."
+                  "Ningbo SIFA Elevator Co., Ltd. <br /> excels in innovation,
+                  precision manufacturing, and quality control.
+                  <br /> We provide safe, efficient, and customizable elevator
+                  solutions with advanced technology and global support."
                 </p>
               </div>
             </div>
@@ -130,7 +129,7 @@ const TechnicalStrength = () => {
               <div
                 className="group  md:mx-12 lg:mx-20 mt-10 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300 relative -top-100"
                 ref={(el) => (gsapBoxRefs.current[2] = el)}>
-                <p className="text-center text-2xl text-gray-700 group-hover:text-black transition my-25">
+                <p className="w-full h-full flex items-center justify-center text-center text-4xl text-gray-700 group-hover:text-black transition my-25">
                   "Smart Technology,
                   <br /> Safe and Efficient
                   <br /> Elevators."

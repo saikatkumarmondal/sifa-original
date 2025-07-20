@@ -51,15 +51,6 @@ const Navbar = () => {
     { name: "Newsroom", path: "/newsroom" },
   ];
 
-  // Animate logo left/right
-  useGSAP(() => {
-    const tl = gsap.timeline({ repeat: -1, yoyo: true });
-    tl.to(divRef.current, { x: 300, duration: 1 }).to(divRef.current, {
-      x: -6,
-      duration: 1,
-    });
-  }, []);
-
   // Animate hover items
   useEffect(() => {
     liRefs.current.forEach((el, i) => {
@@ -83,14 +74,14 @@ const Navbar = () => {
 
   return (
     <nav
-      className="sticky top-0 z-50 bg-blue-500 px-4 py-3 md:px-9 md:py-4"
+      className="sticky top-0 z-50 bg-blue-500 h-[90px] px-4 py-3 md:px-9 md:py-4"
       style={{ position: "sticky" }}>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center relative">
         {/* Logo */}
         <div className="h-[110px] w-[139px]">
-          <div className="h-[95px] w-[120px] flex items-center justify-center">
+          <div className="h-[60px] w-[120px] flex items-center justify-center pb-3">
             <img
-              src="/Photo/Photo/LOGO/logo.png"
+              src="/Photo/Photo/LOGO/SIFA LOGO white png.png"
               className="w-full h-full pt-3"
               alt="SIFA Logo"
             />
@@ -105,14 +96,14 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Menu */}
-        <ul className="hidden lg:flex gap-5 text-white absolute">
+        <ul className="hidden lg:flex gap-5 text-white absolute pb-13">
           {menuItems.map((item, index) => (
             <li
               key={index}
               ref={(el) => (liRefs.current[index] = el)}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={() => handleMouseLeave(index)}
-              className="relative left-130 whitespace-nowrap flex items-center cursor-pointer">
+              className="relative left-130 whitespace-nowrap flex items-center text-xl cursor-pointer">
               <NavLink
                 to={item.path}
                 className={({ isActive }) =>

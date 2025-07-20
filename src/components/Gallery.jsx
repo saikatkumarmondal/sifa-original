@@ -8,7 +8,7 @@ const images = [
   "/Photo/Photo/1. Section/3.jpg",
   "/Photo/Photo/1. Section/4.jpg",
   "/Photo/Photo/1. Section/5.png",
-  "/Photo/Photo/1. Section/changed.jpg",
+  "/Photo/Photo/1. Section/changed.jfif",
 ];
 
 const Gallery = () => {

@@ -59,15 +59,16 @@ const GlobalCase = () => {
       </div>
 
       <div>
-        <div className="overflow-hidden py-10 bg-white">
-          <div className="relative w-full h-[320px] flex justify-center items-center">
+        <div className="overflow-hidden py-10 bg-white pl-20">
+          <div className="relative w-full h-[320px] flex justify-center items-center mx-auto">
             <div
               ref={imageGroupRef}
               className="
           flex gap-6 transition duration-500 
           sm:gap-4 sm:w-[90%] 
           md:gap-5 md:w-[85%] 
-          lg:gap-6 lg:w-[80%]">
+          lg:gap-6 lg:w-[80%] 
+          mx-auto">
               {currentSet.map((item, index) => (
                 <div
                   key={index}

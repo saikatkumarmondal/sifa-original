@@ -66,19 +66,19 @@ const Slider = () => {
     gsap.set(next, { xPercent: 100, zIndex: 2 });
     gsap.set(current, { zIndex: 1 });
 
-  gsap.to(textRef.current, {
-    opacity: 0,
-    y: -20,
-    duration: 0.3,
-    onComplete: () => {
-      setCurrentIndex(nextIndex); 
-      gsap.fromTo(
-        textRef.current,
-        { y: 20, opacity: 0, },
-        { y: 0, opacity: 1, duration: 1,  }
-      );
-    },
-  });
+    gsap.to(textRef.current, {
+      opacity: 0,
+      y: -20,
+      duration: 0.3,
+      onComplete: () => {
+        setCurrentIndex(nextIndex);
+        gsap.fromTo(
+          textRef.current,
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1 }
+        );
+      },
+    });
 
     gsap.to(current, {
       xPercent: -100,
@@ -110,26 +110,25 @@ const Slider = () => {
     );
 
     gsap.set(textRef.current, { opacity: 1, y: 0 });
-  }, [] );
-    
-      useEffect(() => {
-        slidesRef.current.forEach((slide, i) =>
-          gsap.set(slide, {
-            xPercent: i === currentIndex ? 0 : 100,
-            zIndex: i === currentIndex ? 2 : 0,
-          })
-        );
+  }, []);
 
-        gsap.set(textRef.current, { opacity: 1, y: 0 });
-      }, []);
+  useEffect(() => {
+    slidesRef.current.forEach((slide, i) =>
+      gsap.set(slide, {
+        xPercent: i === currentIndex ? 0 : 100,
+        zIndex: i === currentIndex ? 2 : 0,
+      })
+    );
 
-      // ⬇️ ⬇️ ⬇️ Add this one
-      useEffect(() => {
-        const interval = setInterval(() => {
-          handleNext();
-        }, 5000);
-        return () => clearInterval(interval);
-      }, [currentIndex]);
+    gsap.set(textRef.current, { opacity: 1, y: 0 });
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [currentIndex]);
 
   return (
     <div
@@ -142,7 +141,7 @@ const Slider = () => {
             key={i}
             ref={(el) => (slidesRef.current[i] = el)}
             className="absolute top-0 left-0 w-full h-full flex items-center justify-between px-6 sm:px-16">
-            {/* Background Image with Light Black Gradient Overlay */}
+            {/* Background Image */}
             <div className="absolute inset-0 w-full h-full z-0">
               <img
                 src={image}
@@ -152,31 +151,28 @@ const Slider = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
             </div>
 
-            {/* Text Content */}
+            {/* Text */}
             <div className="relative z-20 w-1/2">
               {i === currentIndex && (
                 <h2
                   ref={i === currentIndex ? textRef : null}
-                  className={`font-bold text-2xl sm:text-4xl md:text-5xl max-w-md leading-snug whitespace-nowrap ${
+                  className={`font-bold text-2xl sm:text-4xl md:text-5xl max-w-md leading-snug ${
+                    currentIndex === 0
+                      ? "whitespace-nowrap"
+                      : "whitespace-pre-line"
+                  } ${
                     currentIndex === 2
                       ? "text-yellow-400"
                       : currentIndex === 5
                       ? "text-white"
                       : "text-white"
                   }`}>
-                  {slidesData[currentIndex].text
-                    .split("\n")
-                    .map((line, idx) => (
-                      <span key={idx}>
-                        {line}
-                        <br />
-                      </span>
-                    ))}
+                  {slidesData[currentIndex].text}
                 </h2>
               )}
             </div>
 
-            {/* Video Section (Right-Aligned) */}
+            {/* Video */}
             <div className="relative z-20 w-[450px] h-[400px] hidden sm:flex items-center justify-end">
               <video
                 src={video}
@@ -191,7 +187,7 @@ const Slider = () => {
         ))}
       </div>
 
-      {/* Navigation Dots */}
+      {/* Dots */}
       <div className="absolute bottom-8 left-8 sm:left-20 flex space-x-4 z-30">
         {slidesData.map(({ label }, i) => (
           <button
