@@ -4,6 +4,7 @@ const images = [
   { src: "/Photo/Photo/6. Our Work/Afghanistan.png", name: "Afghanistan" },
   { src: "/Photo/Photo/6. Our Work/Dhaka.jpg", name: "Dhaka" },
   { src: "/Photo/Photo/6. Our Work/Ethiopia.png", name: "Ethiopia" },
+  { src: "/Photo/Photo/6. Our Work/Ethiopia.png", name: "Ethiopia" },
   { src: "/Photo/Photo/6. Our Work/Indonesia.jpg", name: "Indonesia" },
   { src: "/Photo/Photo/6. Our Work/Laus.png", name: "Laos" },
   { src: "/Photo/Photo/6. Our Work/Rwanda.jpg", name: "Rwanda" },
@@ -59,13 +60,13 @@ const GlobalCase = () => {
       </div>
 
       <div className="">
-        <div className="overflow-hidden py-10 bg-white pl-18">
+        <div className="overflow-hidden py-10 bg-white pl-0.05 md:pl-7 lg:pl-18  ">
           <div className="relative w-full h-[320px] flex justify-center items-center mx-auto">
             <div
               ref={imageGroupRef}
               className="
           flex gap-6 transition duration-500 
-          sm:gap-4 sm:w-[90%] 
+          sm:gap-8 sm:w-full sm:justify-center sm:px-4 
           md:gap-5 md:w-[85%] 
           lg:gap-6 lg:w-[80%] 
           mx-auto">
