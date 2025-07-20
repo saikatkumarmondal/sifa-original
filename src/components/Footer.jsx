@@ -34,11 +34,13 @@ const Footer = () => {
     <>
       <footer className="footer sm:footer-horizontal bg-blue-500 p-10 text-white">
         <nav>
-          <img
-            src={image.path}
-            alt=""
-            className="w-[130px] h-[80px] mb-6 sm:mb-0"
-          />
+          <div className="w-[165px] h-[70px]">
+            <img
+              src={image.path}
+              alt=""
+              className="w-full h-full mb-6 sm:mb-0"
+            />
+          </div>
           <a
             className="link link-hover hover:text-yellow-400 transition-colors duration-300"
             href="/">
@@ -154,7 +156,7 @@ const Footer = () => {
         ref={dividerRef}
         className="divider divider-neutral text-white my-0 bg-blue-500"
         style={{
-          borderTop: "4px solid #fbbf24", // yellow-400 for visibility
+          borderTop: "4px solid #fbbf24",
           height: "8px",
         }}
       />
