@@ -67,8 +67,8 @@ const VerticalTransport = () => {
           ref={(el) => (textRef.current[1] = el)}
           className="text-lg sm:text-xl text-gray-800">
           We excel in providing complete elevator, escalator, and spare parts
-          solutions — prioritizing reliability,{" "}
-          <br className="hidden sm:block" /> efficiency, and safety at every
+          <br />
+          solutions — prioritizing reliability, efficiency, and safety at every
           step.
         </p>
         <p

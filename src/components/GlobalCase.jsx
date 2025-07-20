@@ -52,14 +52,14 @@ const GlobalCase = () => {
           Ningbo SIFA Elevator
         </p>
         <h3 className="text-6xl font-bold text-center my-3">Global Case</h3>
-        <p className="text-sm text-gray-700 text-center my-3">
+        <p className="text-sm text-gray-700 text-center my-3 whitespace-nowrap">
           Reliable elevators and escalators for safe, efficient, and
-          <br /> long-lasFng performance.
+          long-lasting performance.
         </p>
       </div>
 
       <div>
-        <div className="overflow-hidden py-10 bg-white pl-20">
+        <div className="overflow-hidden py-10 bg-white pl-15">
           <div className="relative w-full h-[320px] flex justify-center items-center mx-auto">
             <div
               ref={imageGroupRef}

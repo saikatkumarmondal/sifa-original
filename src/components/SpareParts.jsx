@@ -55,7 +55,7 @@ const SpareParts = () => {
         <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-800">
           Spare Parts Solution
         </h2>
-        <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed whitespace-nowrap">
           “Quality Spare Parts and Components We Offer for Elevators &
           Escalators”
         </p>

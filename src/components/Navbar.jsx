@@ -76,13 +76,13 @@ const Navbar = () => {
     <nav
       className="sticky top-0 z-50 bg-blue-500 h-[90px] px-4 py-3 md:px-9 md:py-4"
       style={{ position: "sticky" }}>
-      <div className="flex justify-between items-center relative">
+      <div className="flex justify-between items-center ">
         {/* Logo */}
-        <div className="h-[110px] w-[139px]">
-          <div className="h-[60px] w-[120px] flex items-center justify-center pb-3">
+        <div className="h-[110px] w-[139px] pb-8">
+          <div className="h-[px] w-[120px] flex items-center justify-center">
             <img
               src="/Photo/Photo/LOGO/SIFA LOGO white png.png"
-              className="w-full h-full pt-3"
+              className="w-full h-full pt-3 -mt-[13px]" // 👈 added this
               alt="SIFA Logo"
             />
           </div>

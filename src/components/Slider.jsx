@@ -3,14 +3,14 @@ import { gsap } from "gsap";
 
 const slidesData = [
   {
-    image: "/Photo/slidebar/1 Slide Photo.png",
+    image: "/Photo/slidebar/1 Slide Photo.jpg",
     video:
       "https://res.cloudinary.com/dtztayuxq/video/upload/v1752743850/3708aff54d062a6caab5e0896c9b9839_wcwbjg.mp4",
     text: "Welcome to SIFA Elevator",
     label: "01",
   },
   {
-    image: "/Photo/slidebar/2 Slide Photo.png",
+    image: "/Photo/slidebar/2 Slide Photo.jpg",
     video:
       "https://res.cloudinary.com/dtztayuxq/video/upload/v1752635687/2_Slide_Video_bey2ro.mp4",
     text: "Safety First, Reliability Always\n– We Provide the Best.",

@@ -7,7 +7,7 @@ import gsap from "gsap";
 const Footer = () => {
   const logoRef = useRef(null);
   const dividerRef = useRef(null);
-  const image = { path: "/Photo/Photo/LOGO/logo.png" };
+  const image = { path: "/Photo/Photo/LOGO/SIFA LOGO white png.png" };
 
   useEffect(() => {
     gsap.to(logoRef.current, {
@@ -56,9 +56,7 @@ const Footer = () => {
             <li>
               A3085, Building 1, No.888,
               <br />
-              Dongchang Road,
-              <br />
-              Jiangbei District,
+              Dongchang Road, Jiangbei District,
               <br />
               Ningbo, China.
             </li>
@@ -96,7 +94,7 @@ const Footer = () => {
         </nav>
 
         <nav>
-          <h6 className="footer-title text-xl sm:text-2xl font-bold mb-3">
+          <h6 className=" text-xl sm:text-2xl font-bold mb-3 text-white">
             ELEVATOR
           </h6>
           <a className="link link-hover text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
@@ -120,7 +118,7 @@ const Footer = () => {
         </nav>
 
         <nav>
-          <h6 className="footer-title text-xl sm:text-2xl font-bold mb-3">
+          <h6 className="text-white text-xl sm:text-2xl font-bold mb-3">
             ESCALATOR
           </h6>
           <div className="grid grid-rows gap-4">
@@ -137,7 +135,7 @@ const Footer = () => {
         </nav>
 
         <nav>
-          <h6 className="footer-title text-xl sm:text-2xl font-bold py-5 sm:py-0 mb-3">
+          <h6 className="text-white text-xl sm:text-2xl font-bold py-5 sm:py-0 mb-3">
             COMPANY
           </h6>
           <div className="grid grid-rows gap-4">
