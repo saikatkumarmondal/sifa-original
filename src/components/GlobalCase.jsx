@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+
 const images = [
   { src: "/Photo/Photo/6. Our Work/Afghanistan.png", name: "Afghanistan" },
   { src: "/Photo/Photo/6. Our Work/Dhaka.jpg", name: "Dhaka" },
   { src: "/Photo/Photo/6. Our Work/Ethiopia.png", name: "Ethiopia" },
-  { src: "/Photo/Photo/6. Our Work/Ethiopia.png", name: "Ethiopia" },
+
   { src: "/Photo/Photo/6. Our Work/Indonesia.jpg", name: "Indonesia" },
   { src: "/Photo/Photo/6. Our Work/Laus.png", name: "Laos" },
   { src: "/Photo/Photo/6. Our Work/Rwanda.jpg", name: "Rwanda" },
 ];
+
 const GlobalCase = () => {
   const trackRef = useRef();
   const [visibleIndex, setVisibleIndex] = useState(0);
@@ -34,7 +36,18 @@ const GlobalCase = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const currentSet = images.slice(visibleIndex, visibleIndex + 3);
+  // NEW function to get 3 images continuously with no duplicates:
+  const getCurrentSet = () => {
+    const len = images.length;
+    return [
+      images[visibleIndex % len],
+      images[(visibleIndex + 1) % len],
+      images[(visibleIndex + 2) % len],
+    ];
+  };
+
+  const currentSet = getCurrentSet();
+
   useEffect(() => {
     const track = trackRef.current;
 
@@ -60,7 +73,7 @@ const GlobalCase = () => {
       </div>
 
       <div className="">
-        <div className="overflow-hidden py-10 bg-white pl-0.05 md:pl-7 lg:pl-18  ">
+        <div className="overflow-hidden py-10 bg-white pl-0.05 md:pl-7 lg:pl-18">
           <div className="relative w-full h-[320px] flex justify-center items-center mx-auto">
             <div
               ref={imageGroupRef}
