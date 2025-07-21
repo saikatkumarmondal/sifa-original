@@ -73,7 +73,7 @@ const GlobalCase = () => {
       </div>
 
       <div className="">
-        <div className="overflow-hidden py-10 bg-white pl-0.05 md:pl-7 lg:pl-18">
+        <div className="overflow-hidden py-10 bg-white pl-0.05 md:pl-7 lg:-pr-17">
           <div className="relative w-full h-[320px] flex justify-center items-center mx-auto">
             <div
               ref={imageGroupRef}

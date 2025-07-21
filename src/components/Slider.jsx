@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
 const slidesData = [
@@ -13,35 +13,35 @@ const slidesData = [
     image: "/Photo/slidebar/2 Slide Photo.jpg",
     video:
       "https://res.cloudinary.com/dtztayuxq/video/upload/v1752635687/2_Slide_Video_bey2ro.mp4",
-    text: "Safety First, Reliability Always\n– We Provide the Best.",
+    text: "Safety First, Reliability\n Always We Provide the Best.",
     label: "02",
   },
   {
     image: "/Photo/slidebar/3 Slide Photo.jpg",
     video:
       "https://res.cloudinary.com/dtztayuxq/video/upload/v1752635809/3_ivujg8.mp4",
-    text: "Your Safety,\nOur Commitment.",
+    text: "Your Safety, Our Commitment.",
     label: "03",
   },
   {
     image: "/Photo/slidebar/4 Slide Photo.jpg",
     video:
       "https://res.cloudinary.com/dtztayuxq/video/upload/v1752635899/4_cb5hun.mp4",
-    text: "Safe, efficient, and reliable\nelevators for all buildings.",
+    text: "Safe, Efficient, and Reliable\n Elevators For All Buildings.",
     label: "04",
   },
   {
     image: "/Photo/slidebar/5 Slide Photo.jpg",
     video:
       "https://res.cloudinary.com/dtztayuxq/video/upload/v1752635953/5_fskqbi.mp4",
-    text: "Elevating\nEvery Building",
+    text: "Elevating Every Building.",
     label: "05",
   },
   {
     image: "/Photo/slidebar/6 Slide Photo.jpg",
     video:
       "https://res.cloudinary.com/dtztayuxq/video/upload/v1752635998/6_kvoilu.mp4",
-    text: "Seamless escalators and walkways for\nsmooth, efficient movement.",
+    text: "Seamless Escalators and Walkways \nFor Smooth, Efficient Movement.",
     label: "06",
   },
 ];
@@ -52,7 +52,26 @@ const Slider = () => {
   const slidesRef = useRef([]);
   const wrapperRef = useRef(null);
   const textRef = useRef(null);
+  // function formatText(text) {
+  //   if (typeof text !== "string") return text;
+  //   return text.split("\n").map((line, i, arr) => (
+  //     <React.Fragment key={i}>
+  //       {line}
+  //       {i < arr.length - 1 && <br />}
+  //     </React.Fragment>
+  //   ));
+  // }
 
+  function formatText(text) {
+    if (typeof text !== "string") return text;
+    const lines = text.split("\n");
+    return lines.map((line, i) => (
+      <React.Fragment key={i}>
+        <span style={{ whiteSpace: "nowrap" }}>{line}</span>
+        {i < lines.length - 1 && <br />}
+      </React.Fragment>
+    ));
+  }
   const gotoSlide = (nextIndex) => {
     if (isTweening.current) return;
     const total = slidesData.length;
@@ -108,18 +127,6 @@ const Slider = () => {
         zIndex: i === currentIndex ? 2 : 0,
       })
     );
-
-    gsap.set(textRef.current, { opacity: 1, y: 0 });
-  }, []);
-
-  useEffect(() => {
-    slidesRef.current.forEach((slide, i) =>
-      gsap.set(slide, {
-        xPercent: i === currentIndex ? 0 : 100,
-        zIndex: i === currentIndex ? 2 : 0,
-      })
-    );
-
     gsap.set(textRef.current, { opacity: 1, y: 0 });
   }, []);
 
@@ -136,7 +143,7 @@ const Slider = () => {
       className="w-full h-[350px] md:w-full md:h-[600px] bg-black overflow-hidden relative mb-10">
       {/* Slides */}
       <div className="w-full h-full relative">
-        {slidesData.map(({ image, video }, i) => (
+        {slidesData.map(({ image, video, text }, i) => (
           <div
             key={i}
             ref={(el) => (slidesRef.current[i] = el)}
@@ -153,23 +160,13 @@ const Slider = () => {
 
             {/* Text */}
             <div className="relative z-20 w-1/2">
-              {i === currentIndex && (
-                <h2
-                  ref={i === currentIndex ? textRef : null}
-                  className={`font-bold text-2xl sm:text-4xl md:text-5xl max-w-md leading-snug ${
-                    currentIndex === 0
-                      ? "whitespace-nowrap"
-                      : "whitespace-pre-line"
-                  } ${
-                    currentIndex === 2
-                      ? "text-yellow-400"
-                      : currentIndex === 5
-                      ? "text-white"
-                      : "text-white"
-                  }`}>
-                  {slidesData[currentIndex].text}
-                </h2>
-              )}
+              <h2
+                ref={i === currentIndex ? textRef : null}
+                className="font-bold text-2xl sm:text-4xl md:text-5xl max-w-full break-words text-white"
+                style={{ whiteSpace: "normal" }} // allow line breaks at <br />
+              >
+                {formatText(text)}
+              </h2>
             </div>
 
             {/* Video */}
