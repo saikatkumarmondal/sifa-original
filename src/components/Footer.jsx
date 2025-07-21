@@ -34,7 +34,7 @@ const Footer = () => {
     <>
       <footer className="footer sm:footer-horizontal bg-blue-500 p-10 text-white">
         <nav>
-          <div className="w-[165px] h-[58px]">
+          <div className="w-[120px] h-[60px]">
             <img
               src={image.path}
               alt=""

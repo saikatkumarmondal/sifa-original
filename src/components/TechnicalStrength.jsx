@@ -21,6 +21,7 @@ const TechnicalStrength = () => {
   const gsapBoxRefs = useRef([]);
   const text1Ref = useRef(null);
   const text2Ref = useRef(null);
+
   const getCurrentImages = () => {
     const len = images.length;
     return [
@@ -39,7 +40,7 @@ const TechnicalStrength = () => {
 
     tl.to(gsapBoxRefs.current[1], {
       autoAlpha: 0,
-      y: -40,
+      y: -10,
       duration: 1,
       onComplete: () => {
         gsap.set(gsapBoxRefs.current[1], { display: "none" });
@@ -57,7 +58,7 @@ const TechnicalStrength = () => {
       )
       .to(gsapBoxRefs.current[2], {
         autoAlpha: 0,
-        y: -40,
+        y: -10,
         delay: 5,
         duration: 1,
         onComplete: () => {
@@ -83,6 +84,7 @@ const TechnicalStrength = () => {
         stagger: 0.1,
         onComplete: () => {
           setVisibleSet((prev) => (prev === 0 ? 1 : 0));
+          setCurrent((prev) => (prev + 5) % images.length); // ✅ KEY FIX
         },
       });
     }, 5000);
@@ -108,13 +110,14 @@ const TechnicalStrength = () => {
           Ningbo SIFA Elevator Co., Ltd
         </p>
       </div>
-      <div className="flex flex-col lg:flex-row items-center gap-10 my-3 px-4">
+
+      <div className="flex flex-col my-10 lg:flex-row items-center gap-10 px-4">
         {/* Left Section (Text Boxes) */}
-        <div className="flex flex-col gap-6 w-full lg:w-1/2 mt-10 mr-20">
-          <div className=" rounded-box h-96 relative -right-15 -top-9">
+        <div className="flex flex-col gap-6 w-full lg:w-1/2 mt-10 mr-20 sm:mt-32">
+          <div className="rounded-box h-96 relative -right-15 -top-9">
             <div className="mr-10 h-full ">
               <div
-                className="group sm:mx-4 md:mx-12 lg:mx-20 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300"
+                className="group sm:mx-4 sm:mb-20 md:mx-12 md:mb-20 lg:mx-20 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300"
                 ref={(el) => (gsapBoxRefs.current[1] = el)}>
                 <p className="text-center text-2xl text-gray-700 group-hover:text-black transition">
                   "Ningbo SIFA Elevator Co., Ltd. <br /> excels in innovation,
@@ -125,9 +128,9 @@ const TechnicalStrength = () => {
               </div>
             </div>
 
-            <div className="mr-13 h-full  ">
+            <div className="mr-13 h-full">
               <div
-                className="group  md:mx-12 lg:mx-20 mt-10 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300 relative -top-100"
+                className="group md:mx-12 lg:mx-20 mt-10 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300 relative -top-100"
                 ref={(el) => (gsapBoxRefs.current[2] = el)}>
                 <p className="w-full h-full flex items-center justify-center text-center text-4xl text-gray-700 group-hover:text-black transition my-25">
                   "Smart Technology,
@@ -140,8 +143,8 @@ const TechnicalStrength = () => {
         </div>
 
         {/* Right Section (Diamond Image Carousel) */}
-        <div className="w-full lg:w-1/2 my-10 lg:my-0">
-          <div className="w-full h-[400px] md:h-[500px] lg:h-screen bg-white flex justify-center items-center">
+        <div className="w-full lg:w-1/2 my-20 lg:my-0 sm:mt-40">
+          <div className="w-full my-20 h-[400px] md:h-[500px] lg:h-screen bg-white flex justify-center items-center">
             <div
               ref={groupRef}
               className="relative w-[300px] md:w-[500px] lg:w-[700px] h-[400px] md:h-[500px] lg:h-[600px]">
