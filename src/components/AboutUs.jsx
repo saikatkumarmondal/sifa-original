@@ -6,7 +6,7 @@ const AboutUs = () => {
   return (
     <div>
       <h1
-        className="text-5xl md:text-6xl font-bold text-center text-indigo-700 my-3 tracking-wide"
+        className="text-5xl md:text-6xl font-bold text-center text-indigo-700 my-10 tracking-wide"
         data-aos="fade-up"
         data-aos-duration="1000">
         About Us
