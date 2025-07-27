@@ -66,7 +66,7 @@ const SifaElevator = () => {
   return (
     <div className="mx-4 sm:mx-6 md:mx-10">
       <div className="text-center my-8">
-        <h1 className="text-4xl font-bold">Ningbo SIFA Elevator Co., Ltd</h1>
+        <h1 className="text-4xl font-bold">Ningbo SIFA Elevator Co., Ltd.</h1>
         <p className="text-xl font-semibold mt-2">
           “Smooth, Safe & Reliable Movement – Vertically and Horizontally”
         </p>
@@ -84,7 +84,9 @@ const SifaElevator = () => {
               className="w-full h-full object-cover rounded-xl"
             />
             <div className="absolute bottom-0 w-full bg-white/90 py-4 text-center">
-              <p className="text-2xl font-bold text-black p-2 text-center mx-auto">{item.label}</p>
+              <p className="text-2xl font-bold text-black p-2 text-center mx-auto">
+                {item.label}
+              </p>
             </div>
           </div>
         ))}

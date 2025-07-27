@@ -7,7 +7,8 @@ import SpareParts from './SpareParts';
 import WhyChooseUs from "./WhyChooseUs";
 import TechnicalStrength from "./TechnicalStrength";
 import GlobalCase from "./GlobalCase";
-
+import TechnicalStrength1st from "./TechnicalStrength1st";
+import TechnicalStrength2nd from "./TechnicalStrength2nd";
 
 const Home = () => {
   return (
@@ -21,7 +22,9 @@ const Home = () => {
           <SifaElevator></SifaElevator>
           <SpareParts></SpareParts>
           <WhyChooseUs></WhyChooseUs>
-          <TechnicalStrength></TechnicalStrength>
+          <TechnicalStrength1st></TechnicalStrength1st>
+          {/* <TechnicalStrength2nd></TechnicalStrength2nd> */}
+          {/* <TechnicalStrength></TechnicalStrength> */}
           <GlobalCase></GlobalCase>
           <div className="mb-10 lg:mb-20" />
         </section>

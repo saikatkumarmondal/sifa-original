@@ -101,25 +101,27 @@ const TechnicalStrength = () => {
   }, [visibleSet]);
 
   return (
-    <div>
-      <div>
-        <h1 className="text-4xl font-bold text-black group-hover:text-blue-900 transition text-center">
-          Technical Strength
-        </h1>
-        <p className="text-xl text-gray-800 my-1 text-center">
-          Ningbo SIFA Elevator Co., Ltd
-        </p>
+    <div className="">
+      <div className="mb-0 ">
+        <div className=" relative -bottom-39">
+          <h1 className="text-4xl  font-bold re text-black group-hover:text-blue-900 transition text-center">
+            Technical Strength
+          </h1>
+          <p className="text-xl text-gray-800 mt-1 text-center">
+            Ningbo SIFA Elevator Co., Ltd.
+          </p>
+        </div>
       </div>
 
-      <div className="flex flex-col my-10 lg:flex-row items-center gap-10 px-4">
+      <div className="flex flex-col mb-2 md:mb-6 lg:flex-row items-center gap-3 px-4">
         {/* Left Section (Text Boxes) */}
-        <div className="flex flex-col gap-6 w-full lg:w-1/2 mt-10 mr-20 sm:mt-32">
+        <div className="flex flex-col gap-2 w-full lg:w-1/2 mt-2 mr-20 sm:mt-32">
           <div className="rounded-box h-96 relative -right-15 -top-9">
-            <div className="mr-10 h-full ">
+            <div className="mr-10 h-[400px] ">
               <div
-                className="group sm:mx-4 sm:mb-20 md:mx-12 md:mb-20 lg:mx-20 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300"
+                className="group sm:mx-4 sm:mb-20 md:mx-12 md:mb-20 lg:mx-20 p-10 bg-white  transition-all duration-300"
                 ref={(el) => (gsapBoxRefs.current[1] = el)}>
-                <p className="text-center text-2xl text-gray-700 group-hover:text-black transition">
+                <p className="text-center text-3xl text-gray-700 group-hover:text-black transition">
                   "Ningbo SIFA Elevator Co., Ltd. <br /> excels in innovation,
                   precision manufacturing, and quality control.
                   <br /> We provide safe, efficient, and customizable elevator
@@ -128,9 +130,9 @@ const TechnicalStrength = () => {
               </div>
             </div>
 
-            <div className="mr-13 h-full">
+            <div className="mr-13 h-[70%]">
               <div
-                className="group md:mx-12 lg:mx-20 mt-10 p-10 border-4 border-blue-300 bg-white shadow-md rounded-xl transition-all duration-300 relative -top-100"
+                className="group md:mx-12 lg:mx-20 mt-10 p-10  bg-white  transition-all duration-300 relative -top-100"
                 ref={(el) => (gsapBoxRefs.current[2] = el)}>
                 <p className="w-full h-full flex items-center justify-center text-center text-4xl text-gray-700 group-hover:text-black transition my-25">
                   "Smart Technology,
@@ -147,7 +149,7 @@ const TechnicalStrength = () => {
           <div className="w-full my-20 h-[400px] md:h-[500px] lg:h-screen bg-white flex justify-center items-center">
             <div
               ref={groupRef}
-              className="relative w-[300px] md:w-[500px] lg:w-[700px] h-[400px] md:h-[500px] lg:h-[600px]">
+              className="relative w-[300px] md:w-[500px] lg:w-[700px] h-[400px] md:h-[400px] lg:h-[400px]">
               {getCurrentImages().map((img, idx) => {
                 const positions = [
                   "top-0 left-0",
@@ -171,8 +173,8 @@ const TechnicalStrength = () => {
                     src={img}
                     alt={`photo-${idx}`}
                     className={`absolute
-                    w-[100px] md:w-[180px] lg:w-[230px]
-                    h-[100px] md:h-[160px] lg:h-[200px]
+                    w-[100px] md:w-[180px] lg:w-[180px]
+                    h-[100px] md:h-[160px] lg:h-[180px]
                     object-cover border rounded-4xl border-white
                     ${positions[idx]}
                     transition-all duration-500

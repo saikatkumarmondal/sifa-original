@@ -4,9 +4,9 @@ import { gsap } from "gsap";
 // Om Namah Shivaya
 const images = [
   "/Photo/Photo/1. Section/1.jpg",
-  "/Photo/Photo/1. Section/2.jpg",
+
   "/Photo/Photo/1. Section/3.jpg",
-  "/Photo/Photo/1. Section/4.jpg",
+
   "/Photo/Photo/1. Section/5.png",
   "/Photo/Photo/1. Section/changed.jfif",
 ];
@@ -88,10 +88,10 @@ const Gallery = () => {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="max-w-7xl  mx-auto px-4 py-6">
       <div
         ref={containerRef}
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
         {images.map((src, i) => (
           <div
             key={i}
@@ -100,7 +100,7 @@ const Gallery = () => {
             <img
               src={src}
               alt={`Gallery ${i + 1}`}
-              className="w-full h-auto object-contain bg-cover"
+              className="w-[350px] h-[350px] object-contain bg-cover"
               loading="lazy"
               style={{ transformStyle: "preserve-3d" }}
             />
