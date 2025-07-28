@@ -44,7 +44,7 @@ const Footer = () => {
           <a
             className="link link-hover hover:text-yellow-400 transition-colors duration-300"
             href="/">
-            <p className="text-xl sm:text-2xl font-semibold">
+            <p className="text-xm sm:text-2xl font-semibold">
               NINGBO SIFA ELEVATOR CO., LTD.
             </p>
           </a>
@@ -55,7 +55,7 @@ const Footer = () => {
                 className="hover:text-yellow-400 transition-colors duration-300"
               />
             </li>
-            <li>
+            <li className="text-sm">
               A3085, Building 1, No.888,
               <br />
               Dongchang Road, Jiangbei District,
@@ -96,55 +96,51 @@ const Footer = () => {
         </nav>
 
         <nav>
-          <h6 className=" text-xl sm:text-2xl font-bold mb-3 text-white">
-            ELEVATOR
-          </h6>
-          <a className="link link-hover text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+          <h6 className=" text-[18px]  font-bold mb-3 text-white">ELEVATOR</h6>
+          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
             <p>Passenger Elevator</p>
           </a>
-          <a className="link link-hover text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
             <p>Villa Elevator</p>
           </a>
-          <a className="link link-hover text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
             <p>Panoramic Elevator</p>
           </a>
-          <a className="link link-hover text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+          <a className="link link-hovertext-[13px]  hover:text-yellow-400 transition-colors duration-300">
             <p>Hospital Elevator</p>
           </a>
-          <a className="link link-hover text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
             <p>Freight Elevator</p>
           </a>
-          <a className="link link-hover text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
             <p>Hydraulic Elevator</p>
           </a>
         </nav>
 
         <nav>
-          <h6 className="text-white text-xl sm:text-2xl font-bold mb-3">
-            ESCALATOR
-          </h6>
+          <h6 className="text-white text-[18px] font-bold mb-3">ESCALATOR</h6>
           <div className="grid grid-rows gap-4">
-            <a className="text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
               <p>Outdoor Escalator</p>
             </a>
-            <a className="text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
               <p>Indoor Escalator</p>
             </a>
-            <a className="text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
               <p>Moving Walkway</p>
             </a>
           </div>
         </nav>
 
         <nav>
-          <h6 className="text-white text-xl sm:text-2xl font-bold py-5 sm:py-0 mb-3">
+          <h6 className="text-white text-[18px] font-bold py-5 sm:py-0 mb-3">
             COMPANY
           </h6>
           <div className="grid grid-rows gap-4">
-            <a className="text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
               <p>About Us</p>
             </a>
-            <a className="text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
               <p>Newsroom</p>
             </a>
           </div>

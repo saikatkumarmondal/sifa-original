@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-
+import { FaRegCheckCircle } from "react-icons/fa";
+import { TbHeadphonesFilled } from "react-icons/tb";
+import { IoShieldCheckmarkOutline } from "react-icons/io5";
+import { TbTruckDelivery } from "react-icons/tb";
 const WhyChooseUs = () => {
-      const fullText = `Ningbo SIFA Elevator Co., Ltd. is a trusted leader in vertical transportation, offering high-quality elevators and escalators for residential, commercial, and industrial use. We specialize in passenger, villa, freight, and panoramic elevators, as well as key components like control systems, door operators, and safety gear. Our products are built to meet international safety and performance standards, ensuring reliability and durability in every installation.`;
-
-    const [ showFull, setShowFull ] = useState( false );
-      const words = fullText.split(" ");
-      const shortText = words.slice(0, 20).join(" ") + "...";
   const videoAndImage = {
     image: "/Photo/Photo/4.Section/Photo.jpg",
     video: "/Photo/Photo/4.Section/Video.mp4",
@@ -31,19 +29,55 @@ const WhyChooseUs = () => {
       </div>
 
       {/* Text Section */}
-      <div className=" sm:p-6 w-full md:w-1/2 flex flex-col space-y-5 md:pl-10">
+      <div className=" sm:p-6 w-full md:w-full flex flex-col space-y-5 md:pl-10">
         <h1 className="text-3xl sm:text-4xl lg:text-5xl lg:p-10 font-extrabold text-center my-4 sm:my-8">
           Why Choose Us
         </h1>
-        <div className="max-w-xl mx-auto ">
-          <p className="text-gray-800 leading-6 text-base sm:text-lg lg:text-xl ">
-            {showFull ? fullText : shortText}
-          </p>
-          <button
-            onClick={() => setShowFull(!showFull)}
-            className="mt-2 text-blue-600 font-semibold hover:underline">
-            {showFull ? "Show Less ↑" : "Learn More →"}
-          </button>
+        <div className="max-w-7xl  grid grid-cols-2 gap-10">
+          <ul className="flex items-start justify-center gap-2">
+            <li>
+              <FaRegCheckCircle size={20} />
+            </li>
+            <li className="flex flex-col leading-tight">
+              <p className="font-semibold">Quality First</p>
+              <p className="text-sm mt-2">
+                International stanvaidart & Strict
+                <br />
+                inspections
+              </p>
+            </li>
+          </ul>
+          <ul className="flex items-start justify-center gap-2">
+            <li>
+              <TbHeadphonesFilled size={20} />
+            </li>
+            <li className="flex flex-col leading-tight">
+              <p className="font-semibold">Customer Support</p>
+              <p className="text-sm mt-2">
+                24/7 Service & Technical Assistance
+              </p>
+            </li>
+          </ul>
+          <ul className="flex items-start justify-center gap-2">
+            <li>
+              <IoShieldCheckmarkOutline size={20} />
+            </li>
+            <li className="flex flex-col leading-tight">
+              <p className="font-semibold">Customization</p>
+              <p className="text-sm mt-2">
+                Designed to fit your building & brand
+              </p>
+            </li>
+          </ul>
+          <ul className="flex items-start justify-center gap-2">
+            <li>
+              <TbTruckDelivery size={20} />
+            </li>
+            <li className="flex flex-col leading-tight">
+              <p className="font-semibold">Fast Delivery</p>
+              <p className="text-sm mt-2">Reliable logistics & global reach</p>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

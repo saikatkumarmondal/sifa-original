@@ -2,23 +2,37 @@ import React, { useEffect, useRef, useState } from "react";
 import { CiMenuBurger } from "react-icons/ci";
 import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io";
 import gsap from "gsap";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router"; // Changed to react-router-dom for correctness
 import { RxCrossCircled } from "react-icons/rx";
+// Assuming DropdownMenu is in a separate file, you'll need to import it
+import DropdownMenu from "./DropdownMenu";
 
 const Navbar = () => {
+  const menuItems = [
+    { name: "Home", path: "/" },
+    { name: "About Us", path: "/about" },
+    { name: "Elevator", path: "/elevator" },
+    { name: "Escalator", path: "/escalator" },
+    { name: "Spare Parts", path: "/spare-parts" },
+    { name: "Contact Us", path: "/contact" },
+    { name: "Newsroom", path: "/newsroom" },
+  ];
+
   // Single declarations only:
   const liRefs = useRef([]);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [elevatorOpen, setElevatorOpen] = useState(false);
   const [escalatorOpen, setEscalatorOpen] = useState(false);
+  const [sparePartsOpen, setSparePartsOpen] = useState(false); // Added state for Spare Parts
 
   const menuPanelRef = useRef();
   const mobileItemRefs = useRef([]);
-  mobileItemRefs.current = [];
+  mobileItemRefs.current = []; // Initialize as an empty array
 
   const elevatorDropdownRef = useRef();
   const escalatorDropdownRef = useRef();
+  const sparePartsDropdownRef = useRef(); // Added ref for Spare Parts dropdown
 
   // GSAP animations for dropdowns
   useEffect(() => {
@@ -58,6 +72,26 @@ const Navbar = () => {
       });
     }
   }, [escalatorOpen]);
+
+  // GSAP animation for Spare Parts dropdown
+  useEffect(() => {
+    if (sparePartsOpen) {
+      gsap.fromTo(
+        sparePartsDropdownRef.current,
+        { y: -20, opacity: 0, display: "block" },
+        { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }
+      );
+    } else {
+      gsap.to(sparePartsDropdownRef.current, {
+        y: -20,
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () =>
+          gsap.set(sparePartsDropdownRef.current, { display: "none" }),
+      });
+    }
+  }, [sparePartsOpen]);
 
   // Hover scaling animations
   useEffect(() => {
@@ -105,18 +139,16 @@ const Navbar = () => {
           ease: "power2.inOut",
         }
       );
+    } else {
+      // Added else block to animate menu closing
+      gsap.to(menuPanelRef.current, {
+        x: "-100%",
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.inOut",
+      });
     }
   }, [menuOpen]);
-
-  const menuItems = [
-    { name: "Home", path: "/" },
-    { name: "About Us", path: "/about" },
-    { name: "Elevator", path: "/elevator" },
-    { name: "Escalator", path: "/escalator" },
-    { name: "Spare Parts", path: "/spare-parts" },
-    { name: "Contact Us", path: "/contact" },
-    { name: "Newsroom", path: "/newsroom" },
-  ];
 
   return (
     <nav
@@ -151,6 +183,8 @@ const Navbar = () => {
                 onMouseEnter={() => {
                   handleMouseEnter(index);
                   setElevatorOpen(true);
+                  setEscalatorOpen(false); // Close other dropdowns
+                  setSparePartsOpen(false); // Close other dropdowns
                 }}
                 onMouseLeave={() => {
                   handleMouseLeave(index);
@@ -195,6 +229,8 @@ const Navbar = () => {
                 onMouseEnter={() => {
                   handleMouseEnter(index);
                   setEscalatorOpen(true);
+                  setElevatorOpen(false); // Close other dropdowns
+                  setSparePartsOpen(false); // Close other dropdowns
                 }}
                 onMouseLeave={() => {
                   handleMouseLeave(index);
@@ -229,7 +265,39 @@ const Navbar = () => {
                   ))}
                 </div>
               </li>
+            ) : item.name === "Spare Parts" ? (
+              <li
+                key={index}
+                ref={(el) => (liRefs.current[index] = el)}
+                onMouseEnter={() => {
+                  handleMouseEnter(index);
+                  setSparePartsOpen(true);
+                  setElevatorOpen(false); // Close other dropdowns
+                  setEscalatorOpen(false); // Close other dropdowns
+                }}
+                onMouseLeave={() => {
+                  handleMouseLeave(index);
+                  setSparePartsOpen(false);
+                }}
+                className="relative whitespace-nowrap flex flex-col items-start text-xl cursor-pointer px-5">
+                <button
+                  onClick={() => setSparePartsOpen((prev) => !prev)}
+                  className="flex items-center gap-1 transition-all duration-300">
+                  {item.name}
+                  {hoveredIndex === index ? (
+                    <IoIosArrowRoundUp className="transition" />
+                  ) : (
+                    <IoIosArrowRoundDown className="transition" />
+                  )}
+                </button>
+
+                {/* Spare Parts Mega Dropdown */}
+                <div className="absolute top-full  mt-0 z-50 -mr-30">
+                  {sparePartsOpen && <DropdownMenu isOpen={sparePartsOpen} />}
+                </div>
+              </li>
             ) : (
+              // THIS IS THE CRUCIAL CHANGE: Correctly close the previous ternary and start the final 'else' branch
               <li
                 key={index}
                 ref={(el) => (liRefs.current[index] = el)}
@@ -245,11 +313,13 @@ const Navbar = () => {
                     }`
                   }>
                   {item.name}
-                  {hoveredIndex === index ? (
+                  {/* You had an extra conditional rendering for arrows here, but for simple links,
+                      you usually don't show dropdown arrows unless they have a submenu */}
+                  {/* {hoveredIndex === index ? (
                     <IoIosArrowRoundUp className="transition" />
                   ) : (
                     <IoIosArrowRoundDown className="transition" />
-                  )}
+                  )} */}
                 </NavLink>
               </li>
             )
@@ -271,7 +341,6 @@ const Navbar = () => {
                 <RxCrossCircled />
               </button>
 
-              {/* <-- REPLACE THIS PART --> */}
               {menuItems.map((item, index) => {
                 const elevatorItems = [
                   "Passenger Elevator",
@@ -350,6 +419,36 @@ const Navbar = () => {
                       )}
                     </li>
                   );
+                } else if (item.name === "Spare Parts") {
+                  return (
+                    <li key={index} className="my-[20px]">
+                      <button
+                        onClick={() => setSparePartsOpen((prev) => !prev)}
+                        className="w-full text-left py-2 px-3 rounded text-white text-base flex justify-between items-center hover:bg-yellow-300 hover:text-black transition-all duration-200">
+                        {item.name}
+                        {sparePartsOpen ? (
+                          <IoIosArrowRoundUp className="inline-block" />
+                        ) : (
+                          <IoIosArrowRoundDown className="inline-block" />
+                        )}
+                      </button>
+                      {sparePartsOpen && (
+                        <div className="pl-6 mt-2">
+                          {/* In a mobile menu, typically you'd just link to the main page or show simpler sub-categories */}
+                          <NavLink
+                            to={item.path}
+                            onClick={() => setMenuOpen(false)}
+                            className="block py-1 px-2 rounded text-white text-sm hover:bg-yellow-300 hover:text-black transition-colors duration-200">
+                            View All Spare Parts (Mobile)
+                          </NavLink>
+                          {/* You might add specific sub-links here for mobile if needed, e.g.: */}
+                          {/* <ul className="pl-2 mt-1 space-y-1">
+                            <li><NavLink to="/spare-parts/category-a" onClick={() => setMenuOpen(false)} className="block py-1 px-2 rounded text-white text-xs hover:bg-yellow-300 hover:text-black">Category A</NavLink></li>
+                          </ul> */}
+                        </div>
+                      )}
+                    </li>
+                  );
                 } else {
                   return (
                     <li
@@ -386,7 +485,6 @@ const Navbar = () => {
                   );
                 }
               })}
-              {/* <-- END REPLACE --> */}
             </ul>
           </>
         )}

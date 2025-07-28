@@ -1,183 +1,755 @@
-import React, { useEffect, useRef, useState } from "react";
-import { FaLock } from "react-icons/fa";
-import { CiMenuBurger } from "react-icons/ci";
-
-import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io";
-import { RxCrossCircled } from "react-icons/rx";
-
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-
-import { RiMenu2Fill } from "react-icons/ri";
+import React, { useState } from "react";
+import { Link, NavLink } from "react-router";
 
 const Navbar2 = () => {
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const divRef = useRef();
-  const imageRef = useRef();
-  const sidebarRef = useRef();
-  const menuItems = [
-    "Home",
-    "About Us",
-    "Elevator",
-    "Escalator",
-    "Spare Parts",
-    "Contact Us",
-    "Newsroom",
-  ];
-
-//   useGSAP(() => {
-//     const tl = gsap.timeline({ repeat: -1, yoyo: true });
-//     tl.to(divRef.current, {
-//       x: 155,
-//       duration: 2,
-//       ease: "power2.out",
-//     }).to(divRef.current, {
-//       x: -6,
-//       duration: 2,
-//       ease: "power2.out",
-//     });
-//   }, []);
-//   useGSAP(() => {
-//     const tl = gsap.timeline({ repeat: -1, yoyo: true });
-//     tl.to(imageRef.current, {
-//       x: 10,
-//       duration: 1,
-//       ease: "power1.out",
-//     }).to(divRef.current, {
-//       x: -6,
-//       duration: 2,
-//       ease: "power2.out",
-//     });
-//   }, []);
-
-//   useEffect(() => {
-//     if (isOpen) {
-//       gsap.to(sidebarRef.current, {
-//         x: 0,
-//         duration: 0.3,
-//         ease: "power1.out",
-//       });
-//     } else {
-//       gsap.to(sidebarRef.current, {
-//         x: "-100%",
-//         duration: 0.3,
-//         ease: "power1.out",
-//       });
-//     }
-//   }, [isOpen]);
-
+  const [show, setShow] = useState(false);
+  //
+  //   <div className="navbar bg-base-100 shadow-sm">
   return (
-    <>
-      <nav className=" md:block bg-indigo-400 px-10 py-5 flex items-center justify-between md:bg-transparent md:px-0 md:py-0">
-        <a href="#" className="md:hidden">
-          <img src="/public/Photo/Photo/LOGO/SIFA LOGO white png.png" alt="Logo" className="w-30 h-10" />
-        </a>
-
-        <div className="hidden md:flex ">
-          <div className="h-auto sticky top-0 z-50 bg-blue-500 px-9 py-2 grid grid-cols-2 md:grid-cols-3 items-center">
-            {/* Left Logo */}
-            <div
-              ref={divRef}
-              className="h-[110px] w-[139px] bg-red-900"
-              style={{
-                clipPath: "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
-              }}>
-              <div className="h-[#95px] w-[120px] flex items-center">
-                <img
-                  src="/public/Photo/Photo/LOGO/SIFA LOGO white png.png"
-                  className="w-full h-full"
-                  alt=""
-                  ref={imageRef}
-                />
-              </div>
-            </div>
-
-            {/* Center Navigation Menu (hidden on mobile) */}
-            <ul className="hidden md:flex gap-3 text-white">
-              {menuItems.map((item, index) => (
-                <li
-                  key={index}
-                  className="whitespace-nowrap flex items-center gap-1 cursor-pointer"
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}>
-                  {item}
-                  {hoveredIndex === index ? (
-                    <IoIosArrowRoundUp />
-                  ) : (
-                    <IoIosArrowRoundDown />
-                  )}
-                </li>
-              ))}
-            </ul>
-
-            {/* Right Side Icons and Language */}
-            <div className="flex justify-end items-center space-x-4">
-             
-            </div>
-          </div>
-        </div>
-        <div className="">
-         
-          <button onClick={() => setIsOpen(!isOpen)}>
-            <RiMenu2Fill size={38} color="white" className="md:hidden" />
-          </button>
-        </div>
-      </nav>
-
-      {/* Overlay background */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-30 z-20"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Slide-in dropdown from left */}
-      <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-30 transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-        ref={sidebarRef}>
-        <div className="p-4 border-b flex justify-between ">
-          <img src={TruckImage} className="w-20 h-20" alt="truck" />
-          <RxCrossCircled size={30} onClick={() => setIsOpen(false)} />
-        </div>
-        <ul className="p-4 space-y-3">
-          <li className="hover:text-indigo-600 cursor-pointer">
-            <p className="p-0 flex  items-center">
+    <div className="navbar bg-base-100 shadow-sm">
+      <div className="navbar-start">
+        <div className="dropdown">
+          <div
+            tabIndex={0}
+            role="button"
+            onClick={() => setShow(!show)}
+            className="btn btn-ghost lg:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
               {" "}
-              Home <IoIosArrowRoundDown size={20} />
-            </p>
-            <div className="divider p-0"></div>
-          </li>
-          <li className="hover:text-indigo-600 cursor-pointer">
-            <p className="flex items-center">
-              Pages <IoIosArrowRoundDown size={20} />
-            </p>
-          </li>
-          <li className="hover:text-indigo-600 cursor-pointer">
-            <p className="flex items-center">
-              Services <IoIosArrowRoundDown size={20} />
-            </p>
-          </li>
-          <li className="hover:text-indigo-600 cursor-pointer">
-            <p className="flex items-center">
-              Spare Parts <IoIosArrowRoundDown size={20} />
-            </p>
-          </li>
-          <li className="hover:text-indigo-600 cursor-pointer">
-            <p className="flex items-center">
-              News <IoIosArrowRoundDown size={20}></IoIosArrowRoundDown>
-            </p>
-          </li>
-          <li className="hover:text-indigo-600 cursor-pointer">
-            <p className="text-gray-400">Contact</p>
-          </li>
-        </ul>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />{" "}
+            </svg>
+          </div>
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+            <li>
+              <NavLink to="/">Home</NavLink>
+            </li>
+            <li>
+              <Link to="/about">About Us</Link>
+            </li>
+
+            <li className="dropdown dropdown-hover relative">
+              <a tabIndex={0} role="button" className="hover:bg-base-200">
+                Elevator
+              </a>
+              <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
+                <li>
+                  <a>Passenger Elevator</a>
+                </li>
+                <li>
+                  <a>Villa Elevator</a>
+                </li>
+                <li>
+                  <a>Panoramic Elevator</a>
+                </li>
+                <li>
+                  <a>Hospital Elevator</a>
+                </li>
+                <li>
+                  <a>Freight Elevator</a>
+                </li>
+                <li>
+                  <a>Hydraulic Elevator</a>
+                </li>
+              </ul>
+            </li>
+            <li className="dropdown dropdown-hover relative">
+              <a tabIndex={0} role="button" className="hover:bg-base-200">
+                Escalator
+              </a>
+              <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
+                <li>
+                  <a>Indoor Escalator</a>
+                </li>
+                <li>
+                  <a>Outdoor Escalator</a>
+                </li>
+                <li>
+                  <a>Moving Walks</a>
+                </li>
+              </ul>
+            </li>
+            <li className="dropdown dropdown-hover relative">
+              <a tabIndex={0} role="button" className="hover:bg-base-200">
+                Spare Parts
+              </a>
+              <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
+                <li>
+                  <a>Elevator Door Inverter</a>
+                </li>
+                <li>
+                  <a>Elevator Light Curtain</a>
+                </li>
+                <a className="dropdown dropdown-hover relative">
+                  <a tabIndex={0}>Elevator Control System</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Monarch</a>
+                    </li>
+                    <li>
+                      <a>Step</a>
+                    </li>
+                    <li>
+                      <a>ARD</a>
+                    </li>
+                    <li>
+                      <a>Resistance</a>
+                    </li>
+                    <li>
+                      <a>IGBT</a>
+                    </li>
+                    <li>
+                      <a>Modernization</a>
+                    </li>
+                    <li>
+                      <a>Switch & Power Box</a>
+                    </li>
+                  </ul>
+                </a>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={1}>Elevator COP & LOP</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Box Type COP</a>
+                    </li>
+                    <li>
+                      <a>Wall Mounted COP</a>
+                    </li>
+                    <li>
+                      <a>Full Hight COP</a>
+                    </li>
+                    <li>
+                      <a>Disabled-Accessible COP</a>
+                    </li>
+                    <li>
+                      <a>Touch Type COP</a>
+                    </li>
+                    <li>
+                      <a>Box Type LOP</a>
+                    </li>
+                    <li>
+                      <a>Wall Mounted LOP</a>
+                    </li>
+                    <li>
+                      <a>Villa Elevator LOP</a>
+                    </li>
+                    <li>
+                      <a>Hall Lantern</a>
+                    </li>
+                    <li>
+                      <a>Landing Overhead Panel</a>
+                    </li>
+                    <li>
+                      <a>Fireman Switch</a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={2}>Traction Machine </a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>XINDA</a>
+                    </li>
+                    <li>
+                      <a>Mona Drive</a>
+                    </li>
+                    <li>
+                      <a>Torin Drive</a>
+                    </li>
+                    <li>
+                      <a>Motor Base & Conter Parts</a>
+                    </li>
+                    <li>
+                      <a>Damping Pad </a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a>Elevator Nylon Pully</a>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={3}>Elevator Cabin</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Cabin Design </a>
+                    </li>
+                    <li>
+                      <a>Hall Door Design</a>
+                    </li>
+                    <li>
+                      <a>Ceiling Design</a>
+                    </li>
+                    <li>
+                      <a>Floor Design</a>
+                    </li>
+                    <li>
+                      <a>Handrail Design </a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a>Elevator Push Button</a>
+                </li>
+                <li>
+                  <a>Elevator Encoder</a>
+                </li>
+                <li>
+                  <a>Elevator Switch Sensor</a>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={4}>Elevator Cable</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Traveling Cable</a>
+                    </li>
+                    <li>
+                      <a>Connection Cable</a>
+                    </li>
+                    <li>
+                      <a>Cable Clamp</a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={5}>Elevator Rope</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Steel Wire Rope</a>
+                    </li>
+                    <li>
+                      <a>Rope Fastening</a>
+                    </li>
+                    <li>
+                      <a>Rope Clip</a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={6}>Elevator Door Parts</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Door Operator</a>
+                    </li>
+                    <li>
+                      <a>Door Vane</a>
+                    </li>
+                    <li>
+                      <a>Door Motor</a>
+                    </li>
+                    <li>
+                      <a>Door Contact</a>
+                    </li>
+                    <li>
+                      <a>Door Slider</a>
+                    </li>
+                    <li>
+                      <a>Door Lock</a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={7}>Elevator Safety Parts</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Elevator Speed Governor</a>
+                    </li>
+                    <li>
+                      <a>Elevator Safety Gear</a>
+                    </li>
+                    <li className="dropdown dropdown-hover relative">
+                      <a tabIndex={0}>Elevator Buffer</a>
+                      <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                        <li>
+                          <a>Oil Buffer</a>
+                        </li>
+                        <li>
+                          <a>Polyurethane Buffer</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a>Door Contact</a>
+                    </li>
+                    <li>
+                      <a>Door Slider</a>
+                    </li>
+                    <li>
+                      <a>Door Lock</a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={8}>Elevator Guide Rail & Shoe</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Guide Rail</a>
+                    </li>
+                    <li>
+                      <a>Guide Rail Supporting Parts</a>
+                    </li>
+                    <li>
+                      <a>Oil Can</a>
+                    </li>
+                    <li>
+                      <a>Guide Shoe Lining</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a>Elevator Cabin Flow Fan</a>
+                </li>
+                <li>
+                  <a>Elevator Wheel</a>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={9}>Elevator Lock & Key</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Power Supply Lock</a>
+                    </li>
+                    <li>
+                      <a>COP Lock</a>
+                    </li>
+                    <li>
+                      <a>Triangle Lock</a>
+                    </li>
+                    <li>
+                      <a>Key</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a>Elevator Intercom</a>
+                </li>
+                <li>
+                  <a>Elevator Station Clock</a>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={10}>Escalator Parts</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Step</a>
+                    </li>
+                    <li>
+                      <a>Step Roller</a>
+                    </li>
+                    <li>
+                      <a>Wheel</a>
+                    </li>
+                    <li>
+                      <a>Handrail Belt</a>
+                    </li>
+                    <li>
+                      <a>Chain</a>
+                    </li>
+                    <li>
+                      <a>Brake</a>
+                    </li>
+                    <li>
+                      <a>Safety Brush</a>
+                    </li>
+                    <li>
+                      <a>Comb Plate</a>
+                    </li>
+                    <li>
+                      <a>Yellow Side</a>
+                    </li>
+                    <li>
+                      <a>Walkway Pallet</a>
+                    </li>
+                    <li>
+                      <a>PCB</a>
+                    </li>
+                    <li>
+                      <a>Others</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a>Careers</a>
+            </li>
+
+            <li>
+              <Link to="/contact">Contact Us</Link>
+            </li>
+          </ul>
+        </div>
       </div>
-    </>
+      <div className="navbar bg-base-100 relative z-100">
+        <div className="navbar-center hidden lg:flex lg:justify-between">
+          <ul className="menu menu-horizontal px-1">
+            <li>
+              <NavLink to="/">Home</NavLink>
+            </li>
+            <li>
+              <NavLink to="/about">About Us</NavLink>
+            </li>
+
+            <li className="dropdown dropdown-hover relative">
+              <a tabIndex={0} role="button" className="hover:bg-base-200">
+                Elevator
+              </a>
+              <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
+                <li>
+                  <a>Passenger Elevator</a>
+                </li>
+                <li>
+                  <a>Villa Elevator</a>
+                </li>
+                <li>
+                  <a>Panoramic Elevator</a>
+                </li>
+                <li>
+                  <a>Hospital Elevator</a>
+                </li>
+                <li>
+                  <a>Freight Elevator</a>
+                </li>
+                <li>
+                  <a>Hydraulic Elevator</a>
+                </li>
+              </ul>
+            </li>
+            <li className="dropdown dropdown-hover relative">
+              <a tabIndex={0} role="button" className="hover:bg-base-200">
+                Escalator
+              </a>
+              <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
+                <li>
+                  <a>Indoor Escalator</a>
+                </li>
+                <li>
+                  <a>Outdoor Escalator</a>
+                </li>
+                <li>
+                  <a>Moving Walks</a>
+                </li>
+              </ul>
+            </li>
+            <li className="dropdown dropdown-hover relative">
+              <a tabIndex={0} role="button" className="hover:bg-base-200">
+                Spare Parts
+              </a>
+              <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
+                <li>
+                  <a>Elevator Door Inverter</a>
+                </li>
+                <li>
+                  <a>Elevator Light Curtain</a>
+                </li>
+                <a className="dropdown dropdown-hover relative">
+                  <a tabIndex={0}>Elevator Control System</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Monarch</a>
+                    </li>
+                    <li>
+                      <a>Step</a>
+                    </li>
+                    <li>
+                      <a>ARD</a>
+                    </li>
+                    <li>
+                      <a>Resistance</a>
+                    </li>
+                    <li>
+                      <a>IGBT</a>
+                    </li>
+                    <li>
+                      <a>Modernization</a>
+                    </li>
+                    <li>
+                      <a>Switch & Power Box</a>
+                    </li>
+                  </ul>
+                </a>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={1}>Elevator COP & LOP</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Box Type COP</a>
+                    </li>
+                    <li>
+                      <a>Wall Mounted COP</a>
+                    </li>
+                    <li>
+                      <a>Full Hight COP</a>
+                    </li>
+                    <li>
+                      <a>Disabled-Accessible COP</a>
+                    </li>
+                    <li>
+                      <a>Touch Type COP</a>
+                    </li>
+                    <li>
+                      <a>Box Type LOP</a>
+                    </li>
+                    <li>
+                      <a>Wall Mounted LOP</a>
+                    </li>
+                    <li>
+                      <a>Villa Elevator LOP</a>
+                    </li>
+                    <li>
+                      <a>Hall Lantern</a>
+                    </li>
+                    <li>
+                      <a>Landing Overhead Panel</a>
+                    </li>
+                    <li>
+                      <a>Fireman Switch</a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={2}>Traction Machine </a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>XINDA</a>
+                    </li>
+                    <li>
+                      <a>Mona Drive</a>
+                    </li>
+                    <li>
+                      <a>Torin Drive</a>
+                    </li>
+                    <li>
+                      <a>Motor Base & Conter Parts</a>
+                    </li>
+                    <li>
+                      <a>Damping Pad </a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a>Elevator Nylon Pully</a>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={3}>Elevator Cabin</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Cabin Design </a>
+                    </li>
+                    <li>
+                      <a>Hall Door Design</a>
+                    </li>
+                    <li>
+                      <a>Ceiling Design</a>
+                    </li>
+                    <li>
+                      <a>Floor Design</a>
+                    </li>
+                    <li>
+                      <a>Handrail Design </a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a>Elevator Push Button</a>
+                </li>
+                <li>
+                  <a>Elevator Encoder</a>
+                </li>
+                <li>
+                  <a>Elevator Switch Sensor</a>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={4}>Elevator Cable</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Traveling Cable</a>
+                    </li>
+                    <li>
+                      <a>Connection Cable</a>
+                    </li>
+                    <li>
+                      <a>Cable Clamp</a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={5}>Elevator Rope</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Steel Wire Rope</a>
+                    </li>
+                    <li>
+                      <a>Rope Fastening</a>
+                    </li>
+                    <li>
+                      <a>Rope Clip</a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={6}>Elevator Door Parts</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Door Operator</a>
+                    </li>
+                    <li>
+                      <a>Door Vane</a>
+                    </li>
+                    <li>
+                      <a>Door Motor</a>
+                    </li>
+                    <li>
+                      <a>Door Contact</a>
+                    </li>
+                    <li>
+                      <a>Door Slider</a>
+                    </li>
+                    <li>
+                      <a>Door Lock</a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={7}>Elevator Safety Parts</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Elevator Speed Governor</a>
+                    </li>
+                    <li>
+                      <a>Elevator Safety Gear</a>
+                    </li>
+                    <li className="dropdown dropdown-hover relative">
+                      <a tabIndex={0}>Elevator Buffer</a>
+                      <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                        <li>
+                          <a>Oil Buffer</a>
+                        </li>
+                        <li>
+                          <a>Polyurethane Buffer</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a>Door Contact</a>
+                    </li>
+                    <li>
+                      <a>Door Slider</a>
+                    </li>
+                    <li>
+                      <a>Door Lock</a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={8}>Elevator Guide Rail & Shoe</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Guide Rail</a>
+                    </li>
+                    <li>
+                      <a>Guide Rail Supporting Parts</a>
+                    </li>
+                    <li>
+                      <a>Oil Can</a>
+                    </li>
+                    <li>
+                      <a>Guide Shoe Lining</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a>Elevator Cabin Flow Fan</a>
+                </li>
+                <li>
+                  <a>Elevator Wheel</a>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={9}>Elevator Lock & Key</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Power Supply Lock</a>
+                    </li>
+                    <li>
+                      <a>COP Lock</a>
+                    </li>
+                    <li>
+                      <a>Triangle Lock</a>
+                    </li>
+                    <li>
+                      <a>Key</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a>Elevator Intercom</a>
+                </li>
+                <li>
+                  <a>Elevator Station Clock</a>
+                </li>
+                <li className="dropdown dropdown-hover relative">
+                  <a tabIndex={10}>Escalator Parts</a>
+                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <li>
+                      <a>Step</a>
+                    </li>
+                    <li>
+                      <a>Step Roller</a>
+                    </li>
+                    <li>
+                      <a>Wheel</a>
+                    </li>
+                    <li>
+                      <a>Handrail Belt</a>
+                    </li>
+                    <li>
+                      <a>Chain</a>
+                    </li>
+                    <li>
+                      <a>Brake</a>
+                    </li>
+                    <li>
+                      <a>Safety Brush</a>
+                    </li>
+                    <li>
+                      <a>Comb Plate</a>
+                    </li>
+                    <li>
+                      <a>Yellow Side</a>
+                    </li>
+                    <li>
+                      <a>Walkway Pallet</a>
+                    </li>
+                    <li>
+                      <a>PCB</a>
+                    </li>
+                    <li>
+                      <a>Others</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a>Careers</a>
+            </li>
+
+            <li>
+              <Link to="/contact">Contact Us</Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 };
 

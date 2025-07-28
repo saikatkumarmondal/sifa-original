@@ -3,14 +3,20 @@ import Navbar from '../components/Navbar';
 import { Outlet, useLocation } from "react-router";
 import Navbar2 from "../components/Navbar2";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
+import ProfessionalNavbar from "../components/ProfessionalNavbar";
 
 const MainLayout = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   return (
     <>
+      {/* <DropdownMenu></DropdownMenu> */}
+
       <header>
-        <Navbar />
+        <Header></Header>
+        {/* <ProfessionalNavbar></ProfessionalNavbar> */}
+        <Navbar2></Navbar2>
       </header>
 
       <main>
