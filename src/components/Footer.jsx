@@ -73,7 +73,7 @@ const Footer = () => {
             <li>
               <a
                 href="tel:+8613056798250"
-                className="underline text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+                className=" text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
                 +86-13056798250
               </a>
             </li>
@@ -88,7 +88,7 @@ const Footer = () => {
             <li>
               <a
                 href="mailto:info@nbsifa.com"
-                className="underline text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+                className=" text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
                 info@nbsifa.com
               </a>
             </li>
@@ -106,7 +106,7 @@ const Footer = () => {
           <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
             <p>Panoramic Elevator</p>
           </a>
-          <a className="link link-hovertext-[13px]  hover:text-yellow-400 transition-colors duration-300">
+          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
             <p>Hospital Elevator</p>
           </a>
           <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">

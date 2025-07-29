@@ -1,23 +1,9 @@
-import { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
+
 export default function Header() {
-  const [isSticky, setIsSticky] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 100);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <>
-      <div
-        className={`navbar bg-white shadow-xl text-black px-4 py-2 transition-all duration-300 ${
-          isSticky ? "fixed top-0 left-0 right-0 z-50" : "relative"
-        }`}>
+      <div className="navbar bg-white shadow-xl text-black px-4 py-2 transition-all duration-300 relative">
         {/* Logo */}
         <div className="flex-1 flex items-center w-[200px] h-[100px]">
           <img
@@ -120,9 +106,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-
-      {/* Padding to prevent layout shift when fixed */}
-      <div className={`${isSticky ? "pt-[110px]" : ""}`}></div>
     </>
   );
 }

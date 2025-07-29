@@ -4,7 +4,8 @@ import { Outlet, useLocation } from "react-router";
 import Navbar2 from "../components/Navbar2";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import ProfessionalNavbar from "../components/ProfessionalNavbar";
+
+import ScrollNavbar from "../components/ScrollNavbar";
 
 const MainLayout = () => {
   const location = useLocation();
@@ -17,6 +18,7 @@ const MainLayout = () => {
         <Header></Header>
         {/* <ProfessionalNavbar></ProfessionalNavbar> */}
         <Navbar2></Navbar2>
+        <ScrollNavbar></ScrollNavbar>
       </header>
 
       <main>

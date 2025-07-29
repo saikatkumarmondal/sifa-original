@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { NavLink } from "react-router"; // Changed to react-router-dom for correctness
 import { RxCrossCircled } from "react-icons/rx";
 // Assuming DropdownMenu is in a separate file, you'll need to import it
-import DropdownMenu from "./DropdownMenu";
+
 
 const Navbar = () => {
   const menuItems = [

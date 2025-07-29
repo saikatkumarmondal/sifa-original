@@ -117,41 +117,45 @@ const Navbar2 = () => {
                     </li>
                   </ul>
                 </a>
-                <li className="dropdown dropdown-hover relative">
+                <li className="dropdown dropdown-hover whitespace-nowrap relative">
                   <a tabIndex={1}>Elevator COP & LOP</a>
-                  <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                  <ul className="menu  dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                     <li>
-                      <a>Box Type COP</a>
+                      <a className="whitespace-nowrap">Box Type COP</a>
+                    </li>
+                    <li className="">
+                      <a className="whitespace-nowrap">Wall Mounted COP</a>
                     </li>
                     <li>
-                      <a>Wall Mounted COP</a>
+                      <a className="whitespace-nowrap">Full Hight COP</a>
                     </li>
                     <li>
-                      <a>Full Hight COP</a>
+                      <a className="whitespace-nowrap">
+                        Disabled-Accessible COP
+                      </a>
                     </li>
                     <li>
-                      <a>Disabled-Accessible COP</a>
+                      <a className="whitespace-nowrap">Touch Type COP</a>
                     </li>
                     <li>
-                      <a>Touch Type COP</a>
+                      <a className="whitespace-nowrap">Box Type LOP</a>
                     </li>
                     <li>
-                      <a>Box Type LOP</a>
+                      <a className="whitespace-nowrap">Wall Mounted LOP</a>
                     </li>
                     <li>
-                      <a>Wall Mounted LOP</a>
+                      <a className="whitespace-nowrap">Villa Elevator LOP</a>
                     </li>
                     <li>
-                      <a>Villa Elevator LOP</a>
+                      <a className="whitespace-nowrap">Hall Lantern</a>
                     </li>
                     <li>
-                      <a>Hall Lantern</a>
+                      <a className="whitespace-nowrap">
+                        Landing Overhead Panel
+                      </a>
                     </li>
                     <li>
-                      <a>Landing Overhead Panel</a>
-                    </li>
-                    <li>
-                      <a>Fireman Switch</a>
+                      <a className="whitespace-nowrap">Fireman Switch</a>
                     </li>
                   </ul>
                 </li>
@@ -493,45 +497,45 @@ const Navbar2 = () => {
               </a>
               <li className="dropdown dropdown-hover relative">
                 <a tabIndex={1}>Elevator COP & LOP</a>
-                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                   <li>
-                    <a>Box Type COP</a>
+                    <a className="whitespace-nowrap">Box Type COP</a>
                   </li>
                   <li>
-                    <a>Wall Mounted COP</a>
+                    <a className="whitespace-nowrap">Wall Mounted COP</a>
                   </li>
                   <li>
-                    <a>Full Hight COP</a>
+                    <a className="whitespace-nowrap">Full Hight COP</a>
                   </li>
                   <li>
-                    <a>Disabled-Accessible COP</a>
+                    <a className="whitespace-nowrap">Disabled-Accessible COP</a>
                   </li>
                   <li>
-                    <a>Touch Type COP</a>
+                    <a className="whitespace-nowrap">Touch Type COP</a>
                   </li>
                   <li>
-                    <a>Box Type LOP</a>
+                    <a className="whitespace-nowrap">Box Type LOP</a>
                   </li>
                   <li>
-                    <a>Wall Mounted LOP</a>
+                    <a className="whitespace-nowrap">Wall Mounted LOP</a>
                   </li>
                   <li>
-                    <a>Villa Elevator LOP</a>
+                    <a className="whitespace-nowrap">Villa Elevator LOP</a>
                   </li>
                   <li>
-                    <a>Hall Lantern</a>
+                    <a className="whitespace-nowrap">Hall Lantern</a>
                   </li>
                   <li>
-                    <a>Landing Overhead Panel</a>
+                    <a className="whitespace-nowrap">Landing Overhead Panel</a>
                   </li>
                   <li>
-                    <a>Fireman Switch</a>
+                    <a className="whitespace-nowrap">Fireman Switch</a>
                   </li>
                 </ul>
               </li>
               <li className="dropdown dropdown-hover relative">
                 <a tabIndex={2}>Traction Machine </a>
-                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                   <li>
                     <a>XINDA</a>
                   </li>
@@ -554,7 +558,7 @@ const Navbar2 = () => {
               </li>
               <li className="dropdown dropdown-hover relative">
                 <a tabIndex={3}>Elevator Cabin</a>
-                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                   <li>
                     <a>Cabin Design </a>
                   </li>
@@ -573,7 +577,7 @@ const Navbar2 = () => {
                 </ul>
               </li>
               <li>
-                <a>Elevator Push Button</a>
+                <a className="whitespace-nowrap">Elevator Push Button</a>
               </li>
               <li>
                 <a>Elevator Encoder</a>
@@ -583,120 +587,122 @@ const Navbar2 = () => {
               </li>
               <li className="dropdown dropdown-hover relative">
                 <a tabIndex={4}>Elevator Cable</a>
-                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                   <li>
-                    <a>Traveling Cable</a>
+                    <a className="whitespace-nowrap">Traveling Cable</a>
                   </li>
                   <li>
-                    <a>Connection Cable</a>
+                    <a className="whitespace-nowrap">Connection Cable</a>
                   </li>
                   <li>
-                    <a>Cable Clamp</a>
+                    <a className="whitespace-nowrap">Cable Clamp</a>
                   </li>
                 </ul>
               </li>
               <li className="dropdown dropdown-hover relative">
                 <a tabIndex={5}>Elevator Rope</a>
-                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                   <li>
-                    <a>Steel Wire Rope</a>
+                    <a className="whitespace-nowrap">Steel Wire Rope</a>
                   </li>
                   <li>
-                    <a>Rope Fastening</a>
+                    <a className="whitespace-nowrap">Rope Fastening</a>
                   </li>
                   <li>
-                    <a>Rope Clip</a>
+                    <a className="whitespace-nowrap">Rope Clip</a>
                   </li>
                 </ul>
               </li>
               <li className="dropdown dropdown-hover relative">
                 <a tabIndex={6}>Elevator Door Parts</a>
-                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                   <li>
-                    <a>Door Operator</a>
+                    <a className="whitespace-nowrap">Door Operator</a>
                   </li>
                   <li>
-                    <a>Door Vane</a>
+                    <a className="whitespace-nowrap">Door Vane</a>
                   </li>
                   <li>
-                    <a>Door Motor</a>
+                    <a className="whitespace-nowrap">Door Motor</a>
                   </li>
                   <li>
-                    <a>Door Contact</a>
+                    <a className="whitespace-nowrap">Door Contact</a>
                   </li>
                   <li>
-                    <a>Door Slider</a>
+                    <a className="whitespace-nowrap">Door Slider</a>
                   </li>
                   <li>
-                    <a>Door Lock</a>
+                    <a className="whitespace-nowrap">Door Lock</a>
                   </li>
                 </ul>
               </li>
               <li className="dropdown dropdown-hover relative">
                 <a tabIndex={7}>Elevator Safety Parts</a>
-                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                   <li>
-                    <a>Elevator Speed Governor</a>
+                    <a className="whitespace-nowrap">Elevator Speed Governor</a>
                   </li>
                   <li>
-                    <a>Elevator Safety Gear</a>
+                    <a className="whitespace-nowrap">Elevator Safety Gear</a>
                   </li>
                   <li className="dropdown dropdown-hover relative">
                     <a tabIndex={0}>Elevator Buffer</a>
-                    <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                    <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                       <li>
-                        <a>Oil Buffer</a>
+                        <a className="whitespace-nowrap">Oil Buffer</a>
                       </li>
                       <li>
-                        <a>Polyurethane Buffer</a>
+                        <a className="whitespace-nowrap">Polyurethane Buffer</a>
                       </li>
                     </ul>
                   </li>
                   <li>
-                    <a>Door Contact</a>
+                    <a className="whitespace-nowrap">Door Contact</a>
                   </li>
                   <li>
-                    <a>Door Slider</a>
+                    <a className="whitespace-nowrap">Door Slider</a>
                   </li>
                   <li>
-                    <a>Door Lock</a>
+                    <a className="whitespace-nowrap">Door Lock</a>
                   </li>
                 </ul>
               </li>
               <li className="dropdown dropdown-hover relative">
                 <a tabIndex={8}>Elevator Guide Rail & Shoe</a>
-                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                   <li>
-                    <a>Guide Rail</a>
+                    <a className="whitespace-nowrap">Guide Rail</a>
                   </li>
                   <li>
-                    <a>Guide Rail Supporting Parts</a>
+                    <a className="whitespace-nowrap">
+                      Guide Rail Supporting Parts
+                    </a>
                   </li>
                   <li>
-                    <a>Oil Can</a>
+                    <a className="whitespace-nowrap">Oil Can</a>
                   </li>
                   <li>
-                    <a>Guide Shoe Lining</a>
+                    <a className="whitespace-nowrap">Guide Shoe Lining</a>
                   </li>
                 </ul>
               </li>
               <li>
-                <a>Elevator Cabin Flow Fan</a>
+                <a className="whitespace-nowrap">Elevator Cabin Flow Fan</a>
               </li>
               <li>
-                <a>Elevator Wheel</a>
+                <a className="whitespace-nowrap">Elevator Wheel</a>
               </li>
               <li className="dropdown dropdown-hover relative">
                 <a tabIndex={9}>Elevator Lock & Key</a>
-                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                   <li>
-                    <a>Power Supply Lock</a>
+                    <a className="whitespace-nowrap">Power Supply Lock</a>
                   </li>
                   <li>
-                    <a>COP Lock</a>
+                    <a className="whitespace-nowrap">COP Lock</a>
                   </li>
                   <li>
-                    <a>Triangle Lock</a>
+                    <a className="whitespace-nowrap">Triangle Lock</a>
                   </li>
                   <li>
                     <a>Key</a>
@@ -704,14 +710,14 @@ const Navbar2 = () => {
                 </ul>
               </li>
               <li>
-                <a>Elevator Intercom</a>
+                <a className="whitespace-nowrap">Elevator Intercom</a>
               </li>
               <li>
-                <a>Elevator Station Clock</a>
+                <a className="whitespace-nowrap">Elevator Station Clock</a>
               </li>
               <li className="dropdown dropdown-hover relative">
                 <a tabIndex={10}>Escalator Parts</a>
-                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
+                <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
                   <li>
                     <a>Step</a>
                   </li>
@@ -740,7 +746,7 @@ const Navbar2 = () => {
                     <a>Yellow Side</a>
                   </li>
                   <li>
-                    <a>Walkway Pallet</a>
+                    <a className="whitespace-nowrap">Walkway Pallet</a>
                   </li>
                   <li>
                     <a>PCB</a>

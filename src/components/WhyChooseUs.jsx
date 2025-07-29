@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { TbHeadphonesFilled } from "react-icons/tb";
 import { IoShieldCheckmarkOutline } from "react-icons/io5";

@@ -9,7 +9,7 @@ import TechnicalStrength from "./TechnicalStrength";
 import GlobalCase from "./GlobalCase";
 import TechnicalStrength1st from "./TechnicalStrength1st";
 import TechnicalStrength2nd from "./TechnicalStrength2nd";
-import DropdownMenu from "./DropdownMenu";
+
 
 const Home = () => {
   return (
