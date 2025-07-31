@@ -3,7 +3,7 @@ import { IoIosSearch } from "react-icons/io";
 export default function Header() {
   return (
     <>
-      <div className="navbar bg-white shadow-xl text-black px-4 py-2 h-[90px] transition-all duration-300 relative">
+      <div className="navbar bg-white shadow-xl text-black px-4 py-2 h-[75px] transition-all duration-300 relative">
         {/* Logo */}
         <div className="flex-1 flex items-center w-[200px] h-[100px]">
           <img
