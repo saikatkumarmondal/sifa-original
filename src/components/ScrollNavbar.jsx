@@ -40,7 +40,7 @@ const ScrollNavbar = () => {
               className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[80px] lg:h-[45px] object-contain mr-2 relative -left-25 -top-1"
             />
 
-            <ul className="flex space-x-13 text-lg font-medium text-gray-800 relative ">
+            <ul className="flex space-x-20 text-lg font-medium text-gray-800 relative ">
               <li className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap">
                 Home
               </li>
@@ -521,8 +521,8 @@ const ScrollNavbar = () => {
                 Newsroom
               </li>
 
-              <li>
-                <button className="btn whitespace-nowrap rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-4 py-1 hidden md:flex font-semibold relative -right-15 -top-2 ">
+              <li className="mt-1">
+                <button className="btn whitespace-nowrap rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-4 py-1 hidden md:flex font-semibold relative -right-5 -top-2 ">
                   Contact Us
                 </button>
               </li>
