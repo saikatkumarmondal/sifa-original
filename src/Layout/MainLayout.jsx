@@ -7,16 +7,15 @@ import Header from "../components/Header";
 
 import ScrollNavbar from "../components/ScrollNavbar";
 
+
 const MainLayout = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   return (
     <>
-      {/* <DropdownMenu></DropdownMenu> */}
-
       <header>
         <Header></Header>
-        {/* <ProfessionalNavbar></ProfessionalNavbar> */}
+
         <Navbar2></Navbar2>
         <ScrollNavbar></ScrollNavbar>
       </header>

@@ -140,14 +140,16 @@ const Slider = () => {
   return (
     <div
       ref={wrapperRef}
-      className="w-full h-[350px] md:w-full md:h-[600px] bg-black overflow-hidden relative mb-10">
+      className="w-full h-[350px] md:w-full md:h-[800px] bg-black overflow-hidden relative mb-10"
+    >
       {/* Slides */}
       <div className="w-full h-full relative">
         {slidesData.map(({ image, video, text }, i) => (
           <div
             key={i}
             ref={(el) => (slidesRef.current[i] = el)}
-            className="absolute top-0 left-0 w-full h-full flex items-center justify-between px-6 sm:px-16">
+            className="absolute top-0 left-0 w-full h-full flex items-center justify-between px-6 sm:px-16"
+          >
             {/* Background Image */}
             <div className="absolute inset-0 w-full h-full z-0">
               <img
@@ -192,7 +194,8 @@ const Slider = () => {
             onClick={() => gotoSlide(i)}
             className={`text-white font-semibold text-sm ${
               i === currentIndex ? "opacity-100" : "opacity-50"
-            }`}>
+            }`}
+          >
             {label}
           </button>
         ))}
@@ -201,7 +204,8 @@ const Slider = () => {
       {/* Next Button */}
       <button
         onClick={handleNext}
-        className="absolute bottom-8 right-8 sm:right-20 z-30 text-white border border-white px-4 py-1 rounded hover:bg-white hover:text-black transition">
+        className="absolute bottom-8 right-8 sm:right-20 z-30 text-white border border-white px-4 py-1 rounded hover:bg-white hover:text-black transition"
+      >
         Next
       </button>
     </div>

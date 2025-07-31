@@ -3,15 +3,26 @@ import { Link, NavLink } from "react-router";
 
 const ScrollNavbar = () => {
   const [showNavbar, setShowNavbar] = useState(false);
-
+  const [showSpareParts, setShowSpareParts] = useState(false);
+  const [showControlSystem, setShowControlSystem] = useState(false);
+  const [showCopLop, setShowCopLop] = useState(false);
+  const [tractionMachine, setTractionMachine] = useState(false);
+  const [elevatorBuffer, setElevatorBuffer] = useState(false);
+  const [elevatorCable, setElevatorCable] = useState(false);
+  const [elevatorRope, setElevatorRope] = useState(false);
+  const [elevatorDoor, setElevatorDoor] = useState(false);
+  const [elevatorSafetyParts, setElevatorSafetyParts] = useState(false);
+  const [elevatorSafetyPart, setElevatorSafetyPart] = useState(false);
+  const [elevatorGuideRail, setElevatorGuideRail] = useState(false);
+  const [elevatorLockKey, setElevatorLockKey] = useState(false);
+  const [escalatorParts, setEscalatorParts] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const scrollHeight =
         document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = (scrollTop / scrollHeight) * 100;
-
-      setShowNavbar(scrollPercent >= 1); 
+      setShowNavbar(scrollPercent >= 1);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -22,420 +33,500 @@ const ScrollNavbar = () => {
     <>
       {showNavbar && (
         <div className="fixed top-0 left-0 w-full bg-white shadow-md z-50 transition-all duration-300">
-          <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <img
               src="/Photo/Photo/LOGO/SIFA LOGO Dark G.png"
-              alt=""
-              className="w-[100px] h-[100px]"
+              alt="Sifa Logo"
+              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[130px] lg:h-[95px] object-contain mr-2 relative -left-15"
             />
-            <nav className="space-x-4">
-              <div className="navbar-center hidden lg:flex w-full">
-                {/* Apply flex properties to the ul directly */}
-                <ul className="menu menu-horizontal px-1 w-full justify-around">
-                  <li>
-                    <NavLink to="/" className="text-2xl">
-                      Home
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/about" className="text-2xl">
-                      About Us
-                    </NavLink>
-                  </li>
 
-                  <li className="dropdown dropdown-hover relative">
-                    <a
-                      tabIndex={0}
-                      role="button"
-                      className="hover:bg-base-200 text-2xl">
-                      Elevator
-                    </a>
-                    <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
-                      <li>
-                        <a>Passenger Elevator</a>
-                      </li>
-                      <li>
-                        <a>Villa Elevator</a>
-                      </li>
-                      <li>
-                        <a>Panoramic Elevator</a>
-                      </li>
-                      <li>
-                        <a>Hospital Elevator</a>
-                      </li>
-                      <li>
-                        <a>Freight Elevator</a>
-                      </li>
-                      <li>
-                        <a>Hydraulic Elevator</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="dropdown dropdown-hover relative">
-                    <a
-                      tabIndex={0}
-                      role="button"
-                      className="hover:bg-base-200 text-2xl">
-                      Escalator
-                    </a>
-                    <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
-                      <li>
-                        <a>Indoor Escalator</a>
-                      </li>
-                      <li>
-                        <a>Outdoor Escalator</a>
-                      </li>
-                      <li>
-                        <a>Moving Walks</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="dropdown dropdown-hover relative">
-                    <a
-                      tabIndex={0}
-                      role="button"
-                      className="hover:bg-base-200 text-2xl">
-                      Spare Parts
-                    </a>
-                    <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
-                      <li>
-                        <a>Elevator Door Inverter</a>
-                      </li>
-                      <li>
-                        <a>Elevator Light Curtain</a>
-                      </li>
-                      <a className="dropdown dropdown-hover relative">
-                        <a tabIndex={0}>
-                          &nbsp;&nbsp;&nbsp;Elevator Control System
-                        </a>
-                        <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-40 z-50">
-                          <li>
-                            <a>Monarch</a>
-                          </li>
-                          <li>
-                            <a>Step</a>
-                          </li>
-                          <li>
-                            <a>ARD</a>
-                          </li>
-                          <li>
-                            <a>Resistance</a>
-                          </li>
-                          <li>
-                            <a>IGBT</a>
-                          </li>
-                          <li>
-                            <a>Modernization</a>
-                          </li>
-                          <li>
-                            <a>Switch & Power Box</a>
-                          </li>
-                        </ul>
-                      </a>
-                      <li className="dropdown dropdown-hover relative">
-                        <a tabIndex={1}>Elevator COP & LOP</a>
-                        <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
-                          <li>
-                            <a className="whitespace-nowrap">Box Type COP</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">
-                              Wall Mounted COP
-                            </a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Full Hight COP</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">
-                              Disabled-Accessible COP
-                            </a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Touch Type COP</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Box Type LOP</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">
-                              Wall Mounted LOP
-                            </a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">
-                              Villa Elevator LOP
-                            </a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Hall Lantern</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">
-                              Landing Overhead Panel
-                            </a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Fireman Switch</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li className="dropdown dropdown-hover relative">
-                        <a tabIndex={2}>Traction Machine </a>
-                        <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
-                          <li>
-                            <a>XINDA</a>
-                          </li>
-                          <li>
-                            <a>Mona Drive</a>
-                          </li>
-                          <li>
-                            <a>Torin Drive</a>
-                          </li>
-                          <li>
-                            <a>Motor Base & Conter Parts</a>
-                          </li>
-                          <li>
-                            <a>Damping Pad </a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a>Elevator Nylon Pully</a>
-                      </li>
-                      <li className="dropdown dropdown-hover relative">
-                        <a tabIndex={3}>Elevator Cabin</a>
-                        <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
-                          <li>
-                            <a>Cabin Design </a>
-                          </li>
-                          <li>
-                            <a>Hall Door Design</a>
-                          </li>
-                          <li>
-                            <a>Ceiling Design</a>
-                          </li>
-                          <li>
-                            <a>Floor Design</a>
-                          </li>
-                          <li>
-                            <a>Handrail Design </a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a className="whitespace-nowrap">
-                          Elevator Push Button
-                        </a>
-                      </li>
-                      <li>
-                        <a>Elevator Encoder</a>
-                      </li>
-                      <li>
-                        <a>Elevator Switch Sensor</a>
-                      </li>
-                      <li className="dropdown dropdown-hover relative">
-                        <a tabIndex={4}>Elevator Cable</a>
-                        <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
-                          <li>
-                            <a className="whitespace-nowrap">Traveling Cable</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">
-                              Connection Cable
-                            </a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Cable Clamp</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li className="dropdown dropdown-hover relative">
-                        <a tabIndex={5}>Elevator Rope</a>
-                        <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
-                          <li>
-                            <a className="whitespace-nowrap">Steel Wire Rope</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Rope Fastening</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Rope Clip</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li className="dropdown dropdown-hover relative">
-                        <a tabIndex={6}>Elevator Door Parts</a>
-                        <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
-                          <li>
-                            <a className="whitespace-nowrap">Door Operator</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Door Vane</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Door Motor</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Door Contact</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Door Slider</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Door Lock</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li className="dropdown dropdown-hover relative">
-                        <a tabIndex={7}>Elevator Safety Parts</a>
-                        <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
-                          <li>
-                            <a className="whitespace-nowrap">
-                              Elevator Speed Governor
-                            </a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">
-                              Elevator Safety Gear
-                            </a>
-                          </li>
-                          <li className="dropdown dropdown-hover relative">
-                            <a tabIndex={0}>Elevator Buffer</a>
-                            <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
-                              <li>
-                                <a className="whitespace-nowrap">Oil Buffer</a>
-                              </li>
-                              <li>
-                                <a className="whitespace-nowrap">
-                                  Polyurethane Buffer
-                                </a>
-                              </li>
-                            </ul>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Door Contact</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Door Slider</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Door Lock</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li className="dropdown dropdown-hover relative">
-                        <a tabIndex={8}>Elevator Guide Rail & Shoe</a>
-                        <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
-                          <li>
-                            <a className="whitespace-nowrap">Guide Rail</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">
-                              Guide Rail Supporting Parts
-                            </a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Oil Can</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">
-                              Guide Shoe Lining
-                            </a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a className="whitespace-nowrap">
-                          Elevator Cabin Flow Fan
-                        </a>
-                      </li>
-                      <li>
-                        <a className="whitespace-nowrap">Elevator Wheel</a>
-                      </li>
-                      <li className="dropdown dropdown-hover relative">
-                        <a tabIndex={9}>Elevator Lock & Key</a>
-                        <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
-                          <li>
-                            <a className="whitespace-nowrap">
-                              Power Supply Lock
-                            </a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">COP Lock</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Triangle Lock</a>
-                          </li>
-                          <li>
-                            <a>Key</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a className="whitespace-nowrap">Elevator Intercom</a>
-                      </li>
-                      <li>
-                        <a className="whitespace-nowrap">
-                          Elevator Station Clock
-                        </a>
-                      </li>
-                      <li className="dropdown dropdown-hover relative">
-                        <a tabIndex={10}>Escalator Parts</a>
-                        <ul className="menu dropdown-content absolute left-full top-0 mt-0 ml-1 p-2 shadow bg-base-100 rounded-box w-80 z-50">
-                          <li>
-                            <a>Step</a>
-                          </li>
-                          <li>
-                            <a>Step Roller</a>
-                          </li>
-                          <li>
-                            <a>Wheel</a>
-                          </li>
-                          <li>
-                            <a>Handrail Belt</a>
-                          </li>
-                          <li>
-                            <a>Chain</a>
-                          </li>
-                          <li>
-                            <a>Brake</a>
-                          </li>
-                          <li>
-                            <a>Safety Brush</a>
-                          </li>
-                          <li>
-                            <a>Comb Plate</a>
-                          </li>
-                          <li>
-                            <a>Yellow Side</a>
-                          </li>
-                          <li>
-                            <a className="whitespace-nowrap">Walkway Pallet</a>
-                          </li>
-                          <li>
-                            <a>PCB</a>
-                          </li>
-                          <li>
-                            <a>Others</a>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
+            <ul className="flex space-x-8 text-lg font-medium text-gray-800 relative ">
+              <li className="hover:text-green-700 cursor-pointer text-2xl">
+                Home
+              </li>
+              <li className="hover:text-green-700 cursor-pointer text-2xl">
+                About Us
+              </li>
 
-                  <li>
-                    <a className="text-2xl">Careers</a>
+              {/* Elevator Dropdown */}
+              <li className="group relative cursor-pointer">
+                <span className="hover:text-green-700 text-2xl">Elevator</span>
+                <ul className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all z-50 max-h-48 overflow-y-auto">
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    Passenger Elevator
                   </li>
-
-                  <li>
-                    <Link to="/contact" className="text-2xl">
-                      Newsroom
-                    </Link>
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    Villa Elevator
+                  </li>
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    Panoramic Elevator
+                  </li>
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    Hospital Elevator
+                  </li>
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    Freight Elevator
+                  </li>
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    Hydraulic Elevator
                   </li>
                 </ul>
-              </div>
-            </nav>
+              </li>
+
+              {/* Escalator Dropdown */}
+              <li className="group relative cursor-pointer">
+                <span className="hover:text-green-700 text-2xl">Escalator</span>
+                <ul className="absolute top-full left-0 mt-2 w-70 - bg-white shadow-lg rounded-md border border-gray-100 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all z-50">
+                  <li className="px-4 py-2 hover:bg-gray-100">Moving Walks</li>
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    Commercial Escalator
+                  </li>
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    Heavy-Duty Escalator
+                  </li>
+                </ul>
+              </li>
+
+              {/* Spare Parts Click Dropdown */}
+              <li className="relative">
+                <span
+                  onClick={() => setShowSpareParts(!showSpareParts)}
+                  className="hover:text-green-700 cursor-pointer text-2xl"
+                >
+                  Spare Parts
+                </span>
+
+                {showSpareParts && (
+                  <ul className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 z-50 grid grid-cols-1 h-[400px] overflow-y-auto p-2">
+                    {/* Elevator Control System (click to expand child) */}
+
+                    <li className="relative">
+                      &nbsp;&nbsp; Elevator Door Inverter
+                    </li>
+                    <li className="relative">
+                      &nbsp;&nbsp; Elevator Light Curtain
+                    </li>
+                    <li className="relative">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowControlSystem(!showControlSystem);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                      >
+                        Elevator Control System
+                        <span>{showControlSystem ? "▲" : "▼"}</span>
+                      </div>
+
+                      {showControlSystem && (
+                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Monarch
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">Step</li>
+                          <li className="px-4 py-2 hover:bg-gray-100">ARD</li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Resistance
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Modernization
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Switch & Power Box
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                    <li className="relative">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowCopLop(!showCopLop);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                      >
+                        Elevator COP & LOP
+                        <span>{showCopLop ? "▲" : "▼"}</span>
+                      </div>
+
+                      {showCopLop && (
+                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Box Type COP
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Wall Mounted COP
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Full Hight COP
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Disabled-Accessible COP
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Touch Type COP
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Box Type LOP
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Wall Mounted LOP
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Villa Elevator LOP
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Hall Lantern
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Landing Overhead Panel
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Fireman Switch
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                    <li className="relative">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setTractionMachine(!tractionMachine);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                      >
+                        Traction Machine
+                        <span>{tractionMachine ? "▲" : "▼"}</span>
+                      </div>
+
+                      {tractionMachine && (
+                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
+                          <li className="px-4 py-2 hover:bg-gray-100">XINDA</li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Mona Drive
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Torin Drive
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Motor Base & Conter Parts
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Damping Pad
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                    <li className="relative">
+                      &nbsp; &nbsp; Elevator Nylon Pully
+                    </li>
+                    <li className="relative">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setElevatorRope(!elevatorRope);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                      >
+                        Elevator Cable
+                        <span>{elevatorRope ? "▲" : "▼"}</span>
+                      </div>
+
+                      {elevatorRope && (
+                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Traveling Cable
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Connection Cable
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Cable Clamp
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                    <li className="relative">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setElevatorCable(!elevatorCable);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                      >
+                        Elevator Rope
+                        <span>{elevatorCable ? "▲" : "▼"}</span>
+                      </div>
+
+                      {elevatorCable && (
+                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Steel Wire Rope
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Rope Fastening
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Rope Clip
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                    {/* Other parts */}
+                    <li className="px-4 py-2 hover:bg-gray-100">
+                      Elevator Display
+                    </li>
+                    <li className="px-4 py-2 hover:bg-gray-100">
+                      Elevator Push Button
+                    </li>
+                    <li className="px-4 py-2 hover:bg-gray-100">
+                      Elevator Encoder
+                    </li>
+                    <li className="px-4 py-2 hover:bg-gray-100">
+                      Elevator Switch Sensor
+                    </li>
+                    <li className="relative">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setElevatorRope(!elevatorRope);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                      >
+                        Elevator Cabin
+                        <span>{elevatorRope ? "▲" : "▼"}</span>
+                      </div>
+
+                      {elevatorRope && (
+                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Cabin Design
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Hall Door Design
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Ceiling Design
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Floor Design
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Handrail Design
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                    <li className="relative">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setElevatorSafetyParts(!elevatorSafetyParts);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                      >
+                        Elevator Safety Parts
+                        <span>{elevatorSafetyParts ? "▲" : "▼"}</span>
+                      </div>
+
+                      {elevatorSafetyParts && (
+                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Elevator Speed Governor
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Elevator Safety Gear
+                          </li>
+                          <li className="relative">
+                            <div
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setElevatorBuffer(!elevatorBuffer);
+                              }}
+                              className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                            >
+                              <span>Elevator Buffer</span>
+                              <span>{elevatorBuffer ? "▲" : "▼"}</span>
+                            </div>
+
+                            {elevatorBuffer && (
+                              <ul className="ml-4 mt-1 pl-2 border-l border-gray-300 bg-white shadow absolute z-50">
+                                <li className="px-4 py-2 hover:bg-gray-100">
+                                  Oil Buffer
+                                </li>
+                                <li className="px-4 py-2 hover:bg-gray-100">
+                                  Polyurethane Buffer
+                                </li>
+                              </ul>
+                            )}
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                    <li className="relative">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setElevatorDoor(!elevatorDoor);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                      >
+                        Elevator Door Parts
+                        <span>{elevatorDoor ? "▲" : "▼"}</span>
+                      </div>
+
+                      {elevatorDoor && (
+                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Door Operator
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Door Vane
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Door Motor
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Door Contact
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Door Slider
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Door Lock
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+
+                    <li className="relative">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setElevatorGuideRail(!elevatorGuideRail);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                      >
+                        Elevator Guide Rail & Shoe
+                        <span>{elevatorGuideRail ? "▲" : "▼"}</span>
+                      </div>
+
+                      {elevatorGuideRail && (
+                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Guide Rail
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Guide Rail Supporting Parts
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Guide Shoe
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Oil Can
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Guide Shoe Lining
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                    <li className="px-4 py-2 hover:bg-gray-100">
+                      Elevator Cabin Flow Fan
+                    </li>
+                    <li className="px-4 py-2 hover:bg-gray-100">
+                      Elevator Intercom
+                    </li>
+                    <li className="px-4 py-2 hover:bg-gray-100">
+                      Elevator Station Clock
+                    </li>
+                    <li className="relative">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setElevatorLockKey(!elevatorLockKey);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                      >
+                        Elevator Lock & Key
+                        <span>{elevatorLockKey ? "▲" : "▼"}</span>
+                      </div>
+
+                      {elevatorLockKey && (
+                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Power Supply Lock
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            COP Lock
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Triangle Lock
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">Key</li>
+                        </ul>
+                      )}
+                    </li>
+                    <li className="px-4 py-2 hover:bg-gray-100">Lock & Key</li>
+
+                    <li className="relative">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEscalatorParts(!escalatorParts);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                      >
+                        Escalator Parts
+                        <span>{escalatorParts ? "▲" : "▼"}</span>
+                      </div>
+
+                      {escalatorParts && (
+                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
+                          <li className="px-4 py-2 hover:bg-gray-100">Step</li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Step Roller
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Handrail Belt
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">Chain</li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Safety Brush
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Comb Plate
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Yellow Side
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Walkway Pallet
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100">PCB</li>
+                          <li className="px-4 py-2 hover:bg-gray-100">
+                            Others
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              <li className="hover:text-green-700 cursor-pointer text-2xl">
+                Careers
+              </li>
+              <li className="hover:text-green-700 cursor-pointer text-2xl">
+                Newsroom
+              </li>
+
+              <li>
+                <button className="btn rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-6 py-2 hidden md:flex font-semibold relative left-20">
+                  Contact Us
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       )}
