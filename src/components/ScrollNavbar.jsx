@@ -32,12 +32,12 @@ const ScrollNavbar = () => {
   return (
     <>
       {showNavbar && (
-        <div className="fixed top-0 left-0 w-full bg-white shadow-md z-50 transition-all duration-300">
+        <div className="fixed top-0 left-0 w-full h-[60px] bg-white shadow-md z-50 transition-all duration-300">
           <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <img
               src="/Photo/Photo/LOGO/SIFA LOGO Dark G.png"
               alt="Sifa Logo"
-              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[130px] lg:h-[95px] object-contain mr-2 relative -left-25"
+              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[80px] lg:h-[45px] object-contain mr-2 relative -left-25 -top-1"
             />
 
             <ul className="flex space-x-13 text-lg font-medium text-gray-800 relative ">
@@ -522,7 +522,7 @@ const ScrollNavbar = () => {
               </li>
 
               <li>
-                <button className="btn whitespace-nowrap rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-6 py-2 hidden md:flex font-semibold relative -right-15">
+                <button className="btn whitespace-nowrap rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-4 py-1 hidden md:flex font-semibold relative -right-15 -top-2 ">
                   Contact Us
                 </button>
               </li>
