@@ -401,22 +401,18 @@ const Navbar2 = () => {
         {/* Apply flex properties to the ul directly */}
         <ul className="menu menu-horizontal px-1 w-full justify-around">
           <li>
-            <NavLink to="/" className="text-2xl">
+            <NavLink to="/" className="text-lg">
               Home
             </NavLink>
           </li>
           <li>
-            <NavLink to="/about" className="text-2xl">
+            <NavLink to="/about" className="text-lg">
               About Us
             </NavLink>
           </li>
 
           <li className="dropdown dropdown-hover relative">
-            <a
-              tabIndex={0}
-              role="button"
-              className="hover:bg-base-200 text-2xl"
-            >
+            <a tabIndex={0} role="button" className="hover:bg-base-200 text-lg">
               Elevator
             </a>
             <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
@@ -441,11 +437,7 @@ const Navbar2 = () => {
             </ul>
           </li>
           <li className="dropdown dropdown-hover relative">
-            <a
-              tabIndex={0}
-              role="button"
-              className="hover:bg-base-200 text-2xl"
-            >
+            <a tabIndex={0} role="button" className="hover:bg-base-200 text-lg">
               Escalator
             </a>
             <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
@@ -461,11 +453,7 @@ const Navbar2 = () => {
             </ul>
           </li>
           <li className="dropdown dropdown-hover relative">
-            <a
-              tabIndex={0}
-              role="button"
-              className="hover:bg-base-200 text-2xl"
-            >
+            <a tabIndex={0} role="button" className="hover:bg-base-200 text-lg">
               Spare Parts
             </a>
             <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
@@ -766,11 +754,11 @@ const Navbar2 = () => {
           </li>
 
           <li>
-            <a className="text-2xl">Careers</a>
+            <a className="text-lg">Careers</a>
           </li>
 
           <li>
-            <Link to="/contact" className="text-2xl">
+            <Link to="/contact" className="text-lg">
               Newsroom
             </Link>
           </li>

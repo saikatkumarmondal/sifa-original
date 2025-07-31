@@ -37,20 +37,20 @@ const ScrollNavbar = () => {
             <img
               src="/Photo/Photo/LOGO/SIFA LOGO Dark G.png"
               alt="Sifa Logo"
-              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[130px] lg:h-[95px] object-contain mr-2 relative -left-15"
+              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[130px] lg:h-[95px] object-contain mr-2 relative -left-25"
             />
 
-            <ul className="flex space-x-8 text-lg font-medium text-gray-800 relative ">
-              <li className="hover:text-green-700 cursor-pointer text-2xl">
+            <ul className="flex space-x-13 text-lg font-medium text-gray-800 relative ">
+              <li className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap">
                 Home
               </li>
-              <li className="hover:text-green-700 cursor-pointer text-2xl">
+              <li className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap">
                 About Us
               </li>
 
               {/* Elevator Dropdown */}
               <li className="group relative cursor-pointer">
-                <span className="hover:text-green-700 text-2xl">Elevator</span>
+                <span className="hover:text-green-700 text-lg">Elevator</span>
                 <ul className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all z-50 max-h-48 overflow-y-auto">
                   <li className="px-4 py-2 hover:bg-gray-100">
                     Passenger Elevator
@@ -75,7 +75,7 @@ const ScrollNavbar = () => {
 
               {/* Escalator Dropdown */}
               <li className="group relative cursor-pointer">
-                <span className="hover:text-green-700 text-2xl">Escalator</span>
+                <span className="hover:text-green-700 text-lg">Escalator</span>
                 <ul className="absolute top-full left-0 mt-2 w-70 - bg-white shadow-lg rounded-md border border-gray-100 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all z-50">
                   <li className="px-4 py-2 hover:bg-gray-100">Moving Walks</li>
                   <li className="px-4 py-2 hover:bg-gray-100">
@@ -91,7 +91,7 @@ const ScrollNavbar = () => {
               <li className="relative">
                 <span
                   onClick={() => setShowSpareParts(!showSpareParts)}
-                  className="hover:text-green-700 cursor-pointer text-2xl"
+                  className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap"
                 >
                   Spare Parts
                 </span>
@@ -514,15 +514,15 @@ const ScrollNavbar = () => {
                 )}
               </li>
 
-              <li className="hover:text-green-700 cursor-pointer text-2xl">
+              <li className="hover:text-green-700 cursor-pointer text-lg">
                 Careers
               </li>
-              <li className="hover:text-green-700 cursor-pointer text-2xl">
+              <li className="hover:text-green-700 cursor-pointer text-lg">
                 Newsroom
               </li>
 
               <li>
-                <button className="btn rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-6 py-2 hidden md:flex font-semibold relative left-20">
+                <button className="btn whitespace-nowrap rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-6 py-2 hidden md:flex font-semibold relative -right-15">
                   Contact Us
                 </button>
               </li>

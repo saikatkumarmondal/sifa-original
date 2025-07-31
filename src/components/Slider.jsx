@@ -140,7 +140,7 @@ const Slider = () => {
   return (
     <div
       ref={wrapperRef}
-      className="w-full h-[350px] md:w-full md:h-[800px] bg-black overflow-hidden relative mb-10"
+      className="w-full h-[350px] md:w-full md:h-[680px] bg-black overflow-hidden relative mb-10"
     >
       {/* Slides */}
       <div className="w-full h-full relative">
