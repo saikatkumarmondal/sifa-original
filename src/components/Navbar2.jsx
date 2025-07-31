@@ -6,7 +6,7 @@ const Navbar2 = () => {
   //
   //   <div className="navbar bg-base-100 shadow-sm">
   return (
-    <div className="navbar bg-base-100 shadow-sm w-full">
+    <div className="navbar bg-base-100 shadow-sm w-full max-h-4">
       <div className="navbar-start">
         <div className="dropdown">
           <div
