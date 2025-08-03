@@ -1,4 +1,5 @@
 import { IoIosSearch } from "react-icons/io";
+import { Link } from "react-router";
 
 export default function Header() {
   return (
@@ -55,9 +56,12 @@ export default function Header() {
 
           {/* Contact Us */}
           <div className="pl-17">
-            <button className="btn rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-6 py-2 hidden md:flex font-semibold relative -left-8">
+            <Link
+              to="/contact"
+              className="btn rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-6 py-2 hidden md:flex font-semibold relative -left-8"
+            >
               Contact Us
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Dropdown */}
@@ -106,9 +110,12 @@ export default function Header() {
                 </div>
               </li>
               <li>
-                <button className="btn btn-sm bg-blue-600 text-white hover:bg-blue-700 mt-2 w-full">
+                <Link
+                  to="/contact"
+                  className="btn btn-sm bg-blue-600 text-white hover:bg-blue-700 mt-2 w-full"
+                >
                   Contact Us
-                </button>
+                </Link>
               </li>
             </ul>
           </div>

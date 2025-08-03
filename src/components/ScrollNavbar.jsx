@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, Links, NavLink } from "react-router";
 
 const ScrollNavbar = () => {
   const [showNavbar, setShowNavbar] = useState(false);
@@ -515,16 +515,19 @@ const ScrollNavbar = () => {
               </li>
 
               <li className="hover:text-green-700 cursor-pointer text-lg">
-                Careers
+                <Link to="/career"> Careers</Link>
               </li>
               <li className="hover:text-green-700 cursor-pointer text-lg">
                 Newsroom
               </li>
 
               <li className="mt-1">
-                <button className="btn whitespace-nowrap rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-4 py-1 hidden md:flex font-semibold relative -right-5 -top-2 ">
+                <Link
+                  to="/contact"
+                  className="btn whitespace-nowrap rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-4 py-1 hidden md:flex font-semibold relative -right-5 -top-2 "
+                >
                   Contact Us
-                </button>
+                </Link>
               </li>
             </ul>
           </div>

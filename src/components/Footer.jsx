@@ -3,6 +3,7 @@ import { IoCall, IoLocation } from "react-icons/io5";
 import { MdAlternateEmail } from "react-icons/md";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { Link } from "react-router";
 
 const Footer = () => {
   const logoRef = useRef(null);
@@ -43,7 +44,8 @@ const Footer = () => {
           </div>
           <a
             className="link link-hover hover:text-yellow-400 transition-colors duration-300"
-            href="/">
+            href="/"
+          >
             <p className="text-xm sm:text-2xl font-semibold">
               NINGBO SIFA ELEVATOR CO., LTD.
             </p>
@@ -73,7 +75,8 @@ const Footer = () => {
             <li>
               <a
                 href="tel:+8613056798250"
-                className=" text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+                className=" text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300"
+              >
                 +86-13056798250
               </a>
             </li>
@@ -88,7 +91,8 @@ const Footer = () => {
             <li>
               <a
                 href="mailto:info@nbsifa.com"
-                className=" text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300">
+                className=" text-sm sm:text-base hover:text-yellow-400 transition-colors duration-300"
+              >
                 info@nbsifa.com
               </a>
             </li>
@@ -144,7 +148,7 @@ const Footer = () => {
               <p>Newsroom</p>
             </a>
             <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
-              <p>Careers</p>
+              <Link to="/career">Careers</Link>
             </a>
           </div>
         </nav>
@@ -161,7 +165,8 @@ const Footer = () => {
       />
       <div
         className="flex items-center justify-center gap-2 bg-blue-500 text-white py-2"
-        style={{ marginTop: "-10px" }}>
+        style={{ marginTop: "-10px" }}
+      >
         <p className="m-0 text-sm sm:text-base text-center py-2">
           © {new Date().getFullYear()} NINGBO SIFA ELEVATOR CO., LTD. — Designed
           By
@@ -170,7 +175,8 @@ const Footer = () => {
           href="https://neutron.com.bd/"
           target="_blank"
           rel="noopener noreferrer"
-          className="pl-3">
+          className="pl-3"
+        >
           <img
             ref={logoRef}
             src="/Photo/Photo/LOGO/neutron-logo-white (1) (1).webp"

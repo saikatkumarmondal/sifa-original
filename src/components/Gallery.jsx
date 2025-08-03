@@ -88,15 +88,17 @@ const Gallery = () => {
   }, []);
 
   return (
-    <div className="max-w-7xl  mx-auto px-4 py-6">
+    <div className="max-w-7xl  mx-auto px-4 py-6 mt-6">
       <div
         ref={containerRef}
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5"
+      >
         {images.map((src, i) => (
           <div
             key={i}
             className="gallery-img rounded-xl overflow-hidden shadow-xl cursor-pointer"
-            style={{ perspective: "600px" }}>
+            style={{ perspective: "600px" }}
+          >
             <img
               src={src}
               alt={`Gallery ${i + 1}`}

@@ -12,6 +12,7 @@
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "@headlessui/react": "^2.2.6",
+    "@react-spring/parallax": "^10.0.1",
     "@szhsin/react-menu": "^4.4.1",
     "@tailwindcss/vite": "^4.1.11",
     "aos": "^2.3.4",

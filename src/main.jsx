@@ -12,6 +12,7 @@ import Escalator from "./components/Escalator.jsx";
 import Sparepartss from "./components/Sparepartss.jsx";
 import ContactUs from "./components/ContactUs.jsx";
 import NewsRoom from "./components/NewsRoom.jsx";
+import Career from "./components/Career.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "newsroom",
         Component: NewsRoom,
+      },
+      {
+        path: "career",
+        Component: Career,
       },
     ],
   },
