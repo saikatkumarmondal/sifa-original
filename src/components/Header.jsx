@@ -7,11 +7,13 @@ export default function Header() {
       <div className="navbar bg-white shadow-xl text-black px-4 py-2 h-[90px] transition-all duration-300 relative">
         {/* Logo */}
         <div className="flex-1 flex items-center w-[200px] h-[100px]">
-          <img
-            src="/Photo/Photo/LOGO/SIFA LOGO Dark G.png"
-            alt="SIFA Logo"
-            className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[130px] lg:h-[95px] object-contain mr-2 relative -right-8"
-          />
+          <Link to="/">
+            <img
+              src="/Photo/Photo/LOGO/SIFA LOGO Dark G.png"
+              alt="SIFA Logo"
+              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[130px] lg:h-[95px] object-contain mr-2 relative -right-8"
+            />
+          </Link>
         </div>
 
         {/* Right Section */}

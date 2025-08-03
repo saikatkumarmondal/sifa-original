@@ -147,9 +147,13 @@ const Footer = () => {
             <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
               <p>Newsroom</p>
             </a>
-            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
-              <Link to="/career">Careers</Link>
-            </a>
+
+            <Link
+              to="/career"
+              className="text-[13px] hover:text-yellow-400 transition-colors duration-300"
+            >
+              Careers
+            </Link>
           </div>
         </nav>
       </footer>
