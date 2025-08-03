@@ -10,7 +10,7 @@ const ContactUs = () => {
       />
 
       {/* Hero Section with Transparent Background */}
-      <div className="min-h-screen flex items-center justify-center text-white text-center bg-black/40">
+      <div className="min-h-screen flex items-center justify-center ">
         <h1 className="text-5xl font-bold">Contact Us</h1>
       </div>
 

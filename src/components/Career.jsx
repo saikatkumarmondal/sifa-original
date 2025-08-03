@@ -11,7 +11,7 @@ const Career = () => {
       <Header></Header>
       <Navbar2></Navbar2>
       <div
-        className="h-screen bg-fixed bg-center bg-cover flex items-center justify-center"
+        className="h-[500px] bg-fixed bg-center bg-cover flex items-center justify-center "
         style={{ backgroundImage: "url('/Photo/career/1.jpg')" }}
       >
         <h1 className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold leading-snug px-4 sm:px-10 ml-4 sm:ml-12 text-left drop-shadow-lg">
@@ -28,18 +28,18 @@ const Career = () => {
       <div className="min-h-screen bg-white text-gray-800 text-lg leading-relaxed">
         {/* Container for "Be a Part of Something Great at SIFA!" section */}
         {/* Added pt-16 to create space from the top of the scrollable content */}
-        <div className="min-h-screen bg-white flex justify-center items-center py-16 px-4 sm:px-8">
+        <div className="min-h-screen bg-white flex justify-center items-center  px-4 sm:px-8">
           {/* Grey Box: Removed -top-80 which was causing overlap */}
           <div
-            className="w-full h-[500px] max-w-6xl bg-gray-200 rounded-md shadow-md p-4 sm:p-6 relative -top-50"
+            className="w-full h-[550px] max-w-6xl bg-gray-200 rounded-md shadow-md p-4 sm:p-6 relative -top-50 flex flex-col justify-center items-center"
             data-aos="fade-up"
             data-aos-duration="3000"
           >
-            <h1 className="text-green-700 text-center text-xl sm:text-2xl font-semibold mt-8">
+            <h1 className="text-green-700 text-center  sm:text-2xl md:text-5xl font-semibold mb-7 relative -top-10">
               Be a Part of Something Great at SIFA!
             </h1>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8 w-full">
               {/* Left Column */}
               <div className="p-3 text-center sm:text-left">
                 <h2 className="text-lg font-semibold text-green-900">
@@ -82,7 +82,7 @@ const Career = () => {
 
         {/* Our Commitment Section */}
         <div
-          className="grid grid-cols-1 lg:grid-cols-2 items-center bg-white p-4 sm:p-6 md:p-8 lg:p-10 mb-6 md:mb-8 lg:mb-10"
+          className="grid relative -top-[300px] grid-cols-1 lg:grid-cols-2 items-center bg-white p-4 sm:p-6 md:p-8 lg:p-10 mb-6 md:mb-8 lg:mb-10"
           data-aos="fade-up"
           data-aos-duration="3000"
         >
@@ -117,7 +117,7 @@ const Career = () => {
 
         {/* Application Process Section */}
         <div
-          className="w-full max-w-screen-xl mx-auto bg-white border-[6px] border-black rounded-lg shadow-lg p-6 sm:p-10"
+          className="w-full max-w-screen-xl relative -top-70 mx-auto bg-white border-[6px] border-black rounded-lg shadow-lg p-6 sm:p-10"
           data-aos="fade-up"
           data-aos-duration="3000"
         >
@@ -166,7 +166,7 @@ const Career = () => {
 
         {/* Work Environment Section */}
         <div
-          className="flex flex-col lg:flex-row min-h-screen bg-white py-16"
+          className="flex flex-col lg:flex-row min-h-screen bg-white py-16 relative -top-50"
           data-aos="fade-up"
           data-aos-duration="3000"
         >
@@ -241,94 +241,65 @@ const Career = () => {
           data-aos="fade-up"
           data-aos-duration="3000"
         >
-          <form className="space-y-8">
+          <form className="space-y-10">
             {/* Name Input */}
-            <div className="relative border-b border-gray-300 focus-within:border-black">
+            <div className="relative border-b border-gray-300 focus-within:border-green-600">
               <input
                 type="text"
-                className="block w-full py-2 px-0 text-lg text-gray-900 bg-transparent appearance-none focus:outline-none focus:ring-0 peer"
-                placeholder=" "
                 id="name"
+                placeholder="Name"
+                className="w-full bg-transparent py-2.5 text-gray-900 placeholder-gray-500 focus:outline-none"
               />
-              <label
-                htmlFor="name"
-                className="absolute text-gray-500 text-lg duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                Name
-              </label>
             </div>
 
             {/* Email and Phone Inputs */}
             <div className="flex flex-col sm:flex-row gap-8">
               {/* Email */}
-              <div className="relative border-b border-gray-300 focus-within:border-black flex-1">
+              <div className="relative flex-1 border-b border-gray-300 focus-within:border-green-600">
                 <input
                   type="email"
-                  className="block w-full py-2 px-0 text-lg text-gray-900 bg-transparent appearance-none focus:outline-none focus:ring-0 peer"
-                  placeholder=" "
                   id="email"
+                  placeholder="Email"
+                  className="w-full bg-transparent py-2.5 text-gray-900 placeholder-gray-500 focus:outline-none"
                 />
-                <label
-                  htmlFor="email"
-                  className="absolute text-gray-500 text-lg duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                >
-                  Email
-                </label>
               </div>
 
               {/* Phone */}
-              <div className="relative border-b border-gray-300 focus-within:border-black flex-1">
+              <div className="relative flex-1 border-b border-gray-300 focus-within:border-green-600">
                 <input
                   type="text"
-                  className="block w-full py-2 px-0 text-lg text-gray-900 bg-transparent appearance-none focus:outline-none focus:ring-0 peer"
-                  placeholder=" "
                   id="phone"
+                  placeholder="Phone"
+                  className="w-full bg-transparent py-2.5 text-gray-900 placeholder-gray-500 focus:outline-none"
                 />
-                <label
-                  htmlFor="phone"
-                  className="absolute text-gray-500 text-lg duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                >
-                  Phone
-                </label>
               </div>
             </div>
 
             {/* Address */}
-            <div className="relative border-b border-gray-300 focus-within:border-black">
+            <div className="relative border-b border-gray-300 focus-within:border-green-600">
               <input
                 type="text"
-                className="block w-full py-2 px-0 text-lg text-gray-900 bg-transparent appearance-none focus:outline-none focus:ring-0 peer"
-                placeholder=" "
                 id="address"
+                placeholder="Address"
+                className="w-full bg-transparent py-2.5 text-gray-900 placeholder-gray-500 focus:outline-none"
               />
-              <label
-                htmlFor="address"
-                className="absolute text-gray-500 text-lg duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                Address
-              </label>
             </div>
 
             {/* About You */}
-            <div className="relative border-b border-gray-300 focus-within:border-black">
+            <div className="relative border-b border-gray-300 focus-within:border-green-600">
               <textarea
-                className="block w-full py-2 px-0 text-lg text-gray-900 bg-transparent appearance-none focus:outline-none focus:ring-0 peer resize-none h-24"
-                placeholder=" "
                 id="aboutyou"
+                placeholder="About You"
+                rows={4}
+                className="w-full bg-transparent py-2.5 text-gray-900 placeholder-gray-500 focus:outline-none resize-none"
               ></textarea>
-              <label
-                htmlFor="aboutyou"
-                className="absolute text-gray-500 text-lg duration-300 transform -translate-y-6 scale-75 top-3 z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                About You
-              </label>
             </div>
 
             {/* Button */}
             <div className="flex justify-center mt-10">
-              <button className="flex items-center space-x-2 text-black text-lg font-semibold py-2 px-4 rounded-full transition-colors duration-300 hover:text-gray-700">
+              <button className="flex items-center space-x-2 text-black text-lg font-semibold py-3 px-6 rounded-full border-2 border-green-600 hover:bg-green-600 hover:text-white transition-colors duration-300">
                 <span>SEND YOUR INFO</span>
-                <div className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full border-2 border-green-600 flex items-center justify-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -346,6 +317,7 @@ const Career = () => {
             </div>
           </form>
         </div>
+
         <Footer></Footer>
       </div>
     </div>
