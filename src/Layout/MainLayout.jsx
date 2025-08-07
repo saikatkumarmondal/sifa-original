@@ -24,14 +24,10 @@ const MainLayout = () => {
   return (
     <>
       <header>
-        {!isCareer && (
-          <>
-            <Header></Header>
+        <Header></Header>
 
-            <Navbar2></Navbar2>
-            {!isContact && <ScrollNavbar />}
-          </>
-        )}
+        <Navbar2></Navbar2>
+        <ScrollNavbar />
       </header>
 
       <main>

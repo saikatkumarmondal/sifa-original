@@ -49,26 +49,32 @@ const ScrollNavbar = () => {
               </li>
 
               {/* Elevator Dropdown */}
-              <li className="group relative cursor-pointer">
-                <span className="hover:text-green-700 text-lg">Elevator</span>
-                <ul className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all z-50 max-h-48 overflow-y-auto">
-                  <li className="px-4 py-2 hover:bg-gray-100">
-                    Passenger Elevator
+              <li className="dropdown dropdown-hover relative cursor-pointer">
+                <a
+                  tabIndex={0}
+                  role="button"
+                  className="hover:bg-base-200 text-lg"
+                >
+                  Elevator
+                </a>
+                <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
+                  <li>
+                    <Link to="/elevators/passenger">Passenger Elevator</Link>
                   </li>
-                  <li className="px-4 py-2 hover:bg-gray-100">
-                    Villa Elevator
+                  <li>
+                    <Link to="/elevators/villa">Villa Elevator</Link>
                   </li>
-                  <li className="px-4 py-2 hover:bg-gray-100">
-                    Panoramic Elevator
+                  <li>
+                    <Link to="/elevators/panoramic">Panoramic Elevator</Link>
                   </li>
-                  <li className="px-4 py-2 hover:bg-gray-100">
-                    Hospital Elevator
+                  <li>
+                    <Link to="/elevators/hospital">Hospital Elevator</Link>
                   </li>
-                  <li className="px-4 py-2 hover:bg-gray-100">
-                    Freight Elevator
+                  <li>
+                    <Link to="/elevators/freight">Freight Elevator</Link>
                   </li>
-                  <li className="px-4 py-2 hover:bg-gray-100">
-                    Hydraulic Elevator
+                  <li>
+                    <Link to="/elevators/hydraulic">Hydraulic Elevator</Link>
                   </li>
                 </ul>
               </li>

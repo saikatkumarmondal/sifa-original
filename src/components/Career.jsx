@@ -8,8 +8,7 @@ const Career = () => {
   return (
     <div>
       {/* Fixed Background Section */}
-      <Header></Header>
-      <Navbar2></Navbar2>
+
       <div
         className="h-[500px] bg-fixed bg-center bg-cover flex items-center justify-center "
         style={{ backgroundImage: "url('/Photo/career/1.jpg')" }}
@@ -31,7 +30,7 @@ const Career = () => {
         <div className="min-h-screen bg-white flex justify-center items-center  px-4 sm:px-8">
           {/* Grey Box: Removed -top-80 which was causing overlap */}
           <div
-            className="w-full h-[550px] max-w-6xl bg-gray-200 rounded-md shadow-md p-4 sm:p-6 relative -top-50 flex flex-col justify-center items-center"
+            className="w-full h-[550px] max-w-6xl bg-gray-200 rounded-md shadow-md p-4 sm:p-6 relative -top-45 flex flex-col justify-center items-center"
             data-aos="fade-up"
             data-aos-duration="3000"
           >
@@ -175,7 +174,7 @@ const Career = () => {
             <img
               src="/Photo/career/3.jpg"
               alt="Work Environment"
-              className="w-[300px] sm:w-[350px] md:w-[400px] h-[300px] sm:h-[350px] md:h-[400px] object-cover rounded-lg shadow-lg"
+              className="w-[300px] sm:w-[350px] md:w-[650px] h-[300px] sm:h-[350px] md:h-[550px] object-cover rounded-lg shadow-lg"
             />
           </div>
 

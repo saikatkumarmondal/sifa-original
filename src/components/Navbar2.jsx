@@ -59,22 +59,22 @@ const Navbar2 = () => {
               </a>
               <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
                 <li>
-                  <a>Passenger Elevator</a>
+                  <Link to="/elevators/passenger">Passenger Elevator</Link>
                 </li>
                 <li>
-                  <a>Villa Elevator</a>
+                  <Link to="/elevators/villa">Villa Elevator</Link>
                 </li>
                 <li>
-                  <a>Panoramic Elevator</a>
+                  <Link to="/elevators/panoramic">Panoramic Elevator</Link>
                 </li>
                 <li>
-                  <a>Hospital Elevator</a>
+                  <Link to="/elevators/hospital">Hospital Elevator</Link>
                 </li>
                 <li>
-                  <a>Freight Elevator</a>
+                  <Link to="/elevators/freight">Freight Elevator</Link>
                 </li>
                 <li>
-                  <a>Hydraulic Elevator</a>
+                  <Link to="/elevators/hydraulic">Hydraulic Elevator</Link>
                 </li>
               </ul>
             </li>
@@ -544,22 +544,22 @@ const Navbar2 = () => {
             </a>
             <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
               <li>
-                <a>Passenger Elevator</a>
+                <Link to="/elevators/passenger">Passenger Elevator</Link>
               </li>
               <li>
-                <a>Villa Elevator</a>
+                <Link to="/elevators/villa">Villa Elevator</Link>
               </li>
               <li>
-                <a>Panoramic Elevator</a>
+                <Link to="/elevators/panoramic">Panoramic Elevator</Link>
               </li>
               <li>
-                <a>Hospital Elevator</a>
+                <Link to="/elevators/hospital">Hospital Elevator</Link>
               </li>
               <li>
-                <a>Freight Elevator</a>
+                <Link to="/elevators/freight">Freight Elevator</Link>
               </li>
               <li>
-                <a>Hydraulic Elevator</a>
+                <Link to="/elevators/hydraulic">Hydraulic Elevator</Link>
               </li>
             </ul>
           </li>
@@ -592,10 +592,10 @@ const Navbar2 = () => {
                 {/* Elevator Control System (click to expand child) */}
 
                 <li className="relative">
-                  &nbsp;&nbsp; Elevator Door Inverter
+                  &nbsp;&nbsp;&nbsp;&nbsp;Elevator Door Inverter
                 </li>
                 <li className="relative">
-                  &nbsp;&nbsp; Elevator Light Curtain
+                  &nbsp;&nbsp;&nbsp;&nbsp;Elevator Light Curtain
                 </li>
                 <li className="relative">
                   <div
