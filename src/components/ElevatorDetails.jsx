@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router";
+import { Link, useParams } from "react-router";
 import Footer from "./Footer";
 
 const ElevatorDetails = () => {
@@ -106,18 +106,14 @@ const ElevatorDetails = () => {
   };
   const elevator = elevatorData[type];
 
-  const [currentPage, setCurrentPage] = useState(0);
-  let imagesPerPage = 9;
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [thumbnailStartIndex, setThumbnailStartIndex] = useState(0);
+  const thumbnailsPerPage = 3;
 
   useEffect(() => {
-    setCurrentPage(0);
+    setCurrentImageIndex(0);
+    setThumbnailStartIndex(0);
   }, [type]);
-  const startIndex = currentPage * imagesPerPage;
-  const paginatedImages = elevator?.images?.slice(
-    startIndex,
-    startIndex + imagesPerPage
-  );
-  const totalPages = Math.ceil((elevator?.images?.length || 0) / imagesPerPage);
 
   if (!elevator) {
     return (
@@ -127,94 +123,223 @@ const ElevatorDetails = () => {
     );
   }
 
+  // Prev and Next functions for the main image
+  const handleMainPrev = () => {
+    const newIndex = Math.max(currentImageIndex - 1, 0);
+    setCurrentImageIndex(newIndex);
+    // Adjust thumbnail view if main image goes out of range
+    if (newIndex < thumbnailStartIndex) {
+      setThumbnailStartIndex(newIndex);
+    }
+  };
+
+  const handleMainNext = () => {
+    const newIndex = Math.min(
+      currentImageIndex + 1,
+      elevator.images.length - 1
+    );
+    setCurrentImageIndex(newIndex);
+    // Adjust thumbnail view if main image goes out of range
+    if (newIndex >= thumbnailStartIndex + thumbnailsPerPage) {
+      setThumbnailStartIndex(newIndex - thumbnailsPerPage + 1);
+    }
+  };
+
+  const handleThumbnailPrev = () => {
+    setThumbnailStartIndex((prev) => Math.max(prev - 1, 0));
+  };
+
+  const handleThumbnailNext = () => {
+    setThumbnailStartIndex((prev) =>
+      Math.min(prev + 1, elevator.images.length - thumbnailsPerPage)
+    );
+  };
+
   return (
     <>
-      <div className="max-w-7xl mx-auto my-10 px-4">
-        {/* Header Image */}
-        <div
-          className="w-full h-[300px] bg-cover bg-center flex items-center justify-center"
-          style={{
-            backgroundImage: `url('/Photo/Image_20250806171845.jpg')`,
-          }}
-        >
-          <h1 className="text-3xl font-bold text-white text-center">
-            Elevators
-          </h1>
-        </div>
-
-        <div className="grid grid-cols-12 gap-4 mt-8 px-4">
-          {/* Left Menu (col-span-4) */}
-          <div className="col-span-12 md:col-span-4 bg-gray-100 p-4 rounded">
-            <h2 className="text-xl font-semibold mb-2">Elevator Types</h2>
-            <ul className="space-y-2">
-              {Object.entries(elevatorData).map(([key, value]) => (
-                <li key={key}>
-                  <Link
-                    to={`/elevators/${key}`}
-                    className="block p-2 bg-white rounded hover:bg-blue-100"
-                  >
-                    {value.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Right Content (col-span-8) */}
-          <div className="col-span-12 md:col-span-8 bg-white p-4 rounded shadow">
-            <h1 className="text-2xl font-bold mb-4">{elevator.title}</h1>
-            <p className="mb-6">{elevator.description}</p>
-
-            {/* Image Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {paginatedImages.map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  alt={`${type} elevator ${i + 1}`}
-                  className="w-full rounded border"
-                />
-              ))}
+      <div className="bg-gray-50 min-h-screen">
+        <div className="max-w-7xl mx-auto p-6">
+          <div className="grid grid-cols-12 gap-8">
+            <div className="col-span-12 md:col-span-4 hidden md:block bg-white p-6 rounded-xl shadow-lg h-fit">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-blue-500 pb-2">
+                Elevator Types
+              </h2>
+              <ul className="space-y-3">
+                {Object.entries(elevatorData).map(([key, value]) => (
+                  <li key={key}>
+                    <Link
+                      to={`/elevators/${key}`}
+                      className={`block p-3 rounded-lg transition-all duration-200 ${
+                        type === key
+                          ? "bg-blue-600 text-white shadow-md font-semibold"
+                          : "bg-gray-100 text-gray-800 hover:bg-blue-50 hover:text-blue-600"
+                      }`}
+                    >
+                      {value.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
+            <div className="col-span-12 md:col-span-8 bg-white p-6 rounded-xl shadow-lg">
+              {/* Title */}
+              <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
+                {elevator.title}
+              </h1>
 
-            {/* Pagination Buttons */}
-            <div className="flex justify-center items-center gap-4 mt-6">
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
-                disabled={currentPage === 0}
-                className={`py-1 px-3 rounded ${
-                  currentPage === 0
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
-              >
-                Prev
-              </button>
+              {/* Description */}
+              <p className="mb-8 text-gray-600 leading-relaxed">
+                {elevator.description}
+              </p>
 
-              <span>
-                Page {currentPage + 1} of {totalPages}
-              </span>
+              {/* Main Image with Prev/Next Buttons */}
+              <div className="relative w-full max-w-2xl mx-auto mb-6">
+                <img
+                  src={elevator.images[currentImageIndex]}
+                  alt={`${type} elevator ${currentImageIndex + 1}`}
+                  className="w-full h-[450px] object-contain rounded-xl shadow-xl"
+                />
 
-              <button
-                onClick={() =>
-                  setCurrentPage((prev) =>
-                    prev < totalPages - 1 ? prev + 1 : prev
-                  )
-                }
-                disabled={currentPage >= totalPages - 1}
-                className={`py-1 px-3 rounded ${
-                  currentPage >= totalPages - 1
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
-              >
-                Next
-              </button>
+                {/* Main Prev Button */}
+                <button
+                  onClick={handleMainPrev}
+                  disabled={currentImageIndex === 0}
+                  className={`absolute left-4 top-1/2 transform -translate-y-1/2 p-3 rounded-full bg-white bg-opacity-80 hover:bg-opacity-100 transition-all duration-300 shadow-lg z-10 ${
+                    currentImageIndex === 0
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:scale-110"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-gray-800"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                </button>
+
+                {/* Main Next Button */}
+                <button
+                  onClick={handleMainNext}
+                  disabled={currentImageIndex === elevator.images.length - 1}
+                  className={`absolute right-4 top-1/2 transform -translate-y-1/2 p-3 rounded-full bg-white bg-opacity-80 hover:bg-opacity-100 transition-all duration-300 shadow-lg z-10 ${
+                    currentImageIndex === elevator.images.length - 1
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:scale-110"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-gray-800"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <hr className="my-6 border-gray-200" />
+
+              {/* Thumbnails Gallery with Prev/Next Buttons and 3 images per view */}
+              <div className="relative w-full max-w-2xl mx-auto flex items-center justify-center gap-2">
+                {/* Prev Button for Thumbnails */}
+                <button
+                  onClick={handleThumbnailPrev}
+                  disabled={thumbnailStartIndex === 0}
+                  className={`p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors shadow-md z-10 ${
+                    thumbnailStartIndex === 0 && "opacity-50 cursor-not-allowed"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gray-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                </button>
+
+                {/* Thumbnails Container */}
+                <div className="flex-grow flex justify-center overflow-hidden">
+                  <div className="flex gap-3">
+                    {elevator.images
+                      .slice(
+                        thumbnailStartIndex,
+                        thumbnailStartIndex + thumbnailsPerPage
+                      )
+                      .map((img, index) => (
+                        <img
+                          key={index}
+                          src={img}
+                          alt={`Thumbnail ${index + thumbnailStartIndex + 1}`}
+                          className={`w-20 h-20 object-cover cursor-pointer rounded-lg transition-all duration-300 ${
+                            index + thumbnailStartIndex === currentImageIndex
+                              ? "border-4 border-blue-500 transform scale-105 shadow-md"
+                              : "border-2 border-transparent hover:border-blue-400"
+                          }`}
+                          onClick={() =>
+                            setCurrentImageIndex(index + thumbnailStartIndex)
+                          }
+                        />
+                      ))}
+                  </div>
+                </div>
+
+                {/* Next Button for Thumbnails */}
+                <button
+                  onClick={handleThumbnailNext}
+                  disabled={
+                    thumbnailStartIndex >=
+                    elevator.images.length - thumbnailsPerPage
+                  }
+                  className={`p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors shadow-md z-10 ${
+                    thumbnailStartIndex >=
+                      elevator.images.length - thumbnailsPerPage &&
+                    "opacity-50 cursor-not-allowed"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gray-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
       <Footer />
     </>
   );
