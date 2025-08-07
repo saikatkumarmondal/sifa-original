@@ -84,13 +84,13 @@ const Navbar2 = () => {
               </a>
               <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
                 <li>
-                  <a>Indoor Escalator</a>
+                  <Link to="escalator/indoor">Indoor Escalator</Link>
                 </li>
                 <li>
-                  <a>Outdoor Escalator</a>
+                  <Link to="escalator/out-door">Outdoor Escalator</Link>
                 </li>
                 <li>
-                  <a>Moving Walks</a>
+                  <Link to="escalator/moving-walks">Moving Walk</Link>
                 </li>
               </ul>
             </li>
@@ -569,13 +569,15 @@ const Navbar2 = () => {
             </a>
             <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
               <li>
-                <a>Indoor Escalator</a>
+                <Link to="/escalator/indoor">Indoor Escalator</Link>
               </li>
+
               <li>
-                <a>Outdoor Escalator</a>
+                <Link to="/escalator/out-door">Outdoor Escalator</Link>
               </li>
+
               <li>
-                <a>Moving Walks</a>
+                <Link to="/escalator/moving-walks">Moving Walks</Link>
               </li>
             </ul>
           </li>

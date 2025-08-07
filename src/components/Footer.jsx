@@ -101,22 +101,40 @@ const Footer = () => {
 
         <nav>
           <h6 className=" text-[18px]  font-bold mb-3 text-white">ELEVATOR</h6>
-          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
+          <a
+            href="/elevators/passenger"
+            className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300"
+          >
             <p>Passenger Elevator</p>
           </a>
-          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
+          <a
+            href="/elevators/villa"
+            className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300"
+          >
             <p>Villa Elevator</p>
           </a>
-          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
+          <a
+            href="/elevators/panoramic"
+            className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300"
+          >
             <p>Panoramic Elevator</p>
           </a>
-          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
+          <a
+            href="/elevators/hospital"
+            className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300"
+          >
             <p>Hospital Elevator</p>
           </a>
-          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
+          <a
+            to="/elevators/freight"
+            className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300"
+          >
             <p>Freight Elevator</p>
           </a>
-          <a className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300">
+          <a
+            href="/elevators/hydraulic"
+            className="link link-hover text-[13px]  hover:text-yellow-400 transition-colors duration-300"
+          >
             <p>Hydraulic Elevator</p>
           </a>
         </nav>
@@ -124,13 +142,22 @@ const Footer = () => {
         <nav>
           <h6 className="text-white text-[18px] font-bold mb-3">ESCALATOR</h6>
           <div className="grid grid-rows gap-4">
-            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
+            <a
+              href="/escalator/out-door"
+              className="text-[13px] hover:text-yellow-400 transition-colors duration-300"
+            >
               <p>Outdoor Escalator</p>
             </a>
-            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
+            <a
+              href="/escalator/indoor"
+              className="text-[13px] hover:text-yellow-400 transition-colors duration-300"
+            >
               <p>Indoor Escalator</p>
             </a>
-            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
+            <a
+              href="/escalator/moving-walks"
+              className="text-[13px] hover:text-yellow-400 transition-colors duration-300"
+            >
               <p>Moving Walkway</p>
             </a>
           </div>

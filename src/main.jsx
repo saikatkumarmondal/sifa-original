@@ -14,6 +14,7 @@ import ContactUs from "./components/ContactUs.jsx";
 import NewsRoom from "./components/NewsRoom.jsx";
 import Career from "./components/Career.jsx";
 import ElevatorDetails from "./components/ElevatorDetails.jsx";
+import EscalatorDetails from "./components/EscalatorDetails.jsx";
 
 const router = createBrowserRouter([
   {
@@ -51,8 +52,12 @@ const router = createBrowserRouter([
         Component: Career,
       },
       {
-        path: "/elevators/:type",
+        path: "elevators/:type",
         Component: ElevatorDetails,
+      },
+      {
+        path: "escalator/:type",
+        Component: EscalatorDetails,
       },
     ],
   },

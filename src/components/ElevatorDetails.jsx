@@ -158,6 +158,16 @@ const ElevatorDetails = () => {
   return (
     <>
       <div className="bg-gray-50 min-h-screen">
+        <div
+          className="w-[80%] h-[300px] bg-cover bg-center flex items-center justify-center mx-auto mt-10"
+          style={{
+            backgroundImage: `url('/Photo/Image_20250806171845.jpg')`,
+          }}
+        >
+          <h1 className="text-3xl font-bold text-white text-center">
+            Elevators
+          </h1>
+        </div>
         <div className="max-w-7xl mx-auto p-6">
           <div className="grid grid-cols-12 gap-8">
             <div className="col-span-12 md:col-span-4 hidden md:block bg-white p-6 rounded-xl shadow-lg h-fit">
