@@ -99,7 +99,7 @@ const EscalatorDetails = () => {
     <>
       <div className="bg-gray-50 min-h-screen">
         <div
-          className="w-[80%] h-[300px] bg-cover bg-center flex items-center justify-center object-contain mx-auto mt-10"
+          className="w-full h-[300px] bg-cover bg-center flex items-center justify-center object-contain mx-auto "
           style={{
             backgroundImage: `url('/Photo/esclavator.jpg')`,
           }}
