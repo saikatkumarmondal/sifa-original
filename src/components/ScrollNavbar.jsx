@@ -82,13 +82,20 @@ const ScrollNavbar = () => {
               {/* Escalator Dropdown */}
               <li className="group relative cursor-pointer">
                 <span className="hover:text-green-700 text-lg">Escalator</span>
-                <ul className="absolute top-full left-0 mt-2 w-70 - bg-white shadow-lg rounded-md border border-gray-100 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all z-50">
-                  <li className="px-4 py-2 hover:bg-gray-100">Moving Walks</li>
-                  <li className="px-4 py-2 hover:bg-gray-100">
-                    Commercial Escalator
+                <ul
+                  className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 
+  opacity-0 group-hover:opacity-100 invisible group-hover:visible 
+  translate-y-2 group-hover:translate-y-0 
+  transition-all duration-300 ease-in-out z-50 p-5"
+                >
+                  <li className="hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200 px-3 py-2 rounded-md">
+                    <Link to="escalator/indoor">Indoor Escalator</Link>
                   </li>
-                  <li className="px-4 py-2 hover:bg-gray-100">
-                    Heavy-Duty Escalator
+                  <li className="hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200 px-3 py-2 rounded-md">
+                    <Link to="escalator/out-door">Outdoor Escalator</Link>
+                  </li>
+                  <li className="hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200 px-3 py-2 rounded-md">
+                    <Link to="escalator/moving-walks">Moving Walk</Link>
                   </li>
                 </ul>
               </li>
