@@ -203,11 +203,11 @@ const ElevatorDetails = () => {
               </p>
 
               {/* Main Image with Prev/Next Buttons */}
-              <div className="relative w-full max-w-2xl mx-auto mb-6">
+              <div className="relative w-full max-w-2xl mx-auto mb-6  overflow-hidden ">
                 <img
                   src={elevator.images[currentImageIndex]}
                   alt={`${type} elevator ${currentImageIndex + 1}`}
-                  className="w-full h-[450px] object-contain rounded-xl shadow-xl"
+                  className="w-full h-[450px] object-contain cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-120"
                 />
 
                 {/* Main Prev Button */}

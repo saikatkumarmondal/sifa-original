@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import Footer from "./Footer";
+import ImageZoom from "react-image-zoom";
 
 const EscalatorDetails = () => {
   const { type } = useParams();
@@ -44,8 +45,8 @@ const EscalatorDetails = () => {
       ],
     },
   };
-  const escalator = escalatorData[type];
 
+  const escalator = escalatorData[type];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [thumbnailStartIndex, setThumbnailStartIndex] = useState(0);
   const thumbnailsPerPage = 3;
@@ -63,14 +64,10 @@ const EscalatorDetails = () => {
     );
   }
 
-  // Prev and Next functions for the main image
   const handleMainPrev = () => {
     const newIndex = Math.max(currentImageIndex - 1, 0);
     setCurrentImageIndex(newIndex);
-    // Adjust thumbnail view if main image goes out of range
-    if (newIndex < thumbnailStartIndex) {
-      setThumbnailStartIndex(newIndex);
-    }
+    if (newIndex < thumbnailStartIndex) setThumbnailStartIndex(newIndex);
   };
 
   const handleMainNext = () => {
@@ -79,10 +76,8 @@ const EscalatorDetails = () => {
       escalator.images.length - 1
     );
     setCurrentImageIndex(newIndex);
-    // Adjust thumbnail view if main image goes out of range
-    if (newIndex >= thumbnailStartIndex + thumbnailsPerPage) {
+    if (newIndex >= thumbnailStartIndex + thumbnailsPerPage)
       setThumbnailStartIndex(newIndex - thumbnailsPerPage + 1);
-    }
   };
 
   const handleThumbnailPrev = () => {
@@ -95,14 +90,21 @@ const EscalatorDetails = () => {
     );
   };
 
+  // Zoom props for main image
+  const zoomProps = {
+    width: 700,
+    height: 650,
+    zoomWidth: 300,
+    img: escalator.images[currentImageIndex],
+    zoomPosition: "left",
+  };
+
   return (
     <>
       <div className="bg-gray-50 min-h-screen">
         <div
           className="w-full h-[300px] bg-cover bg-center flex items-center justify-center object-contain mx-auto "
-          style={{
-            backgroundImage: `url('/Photo/esclavator.jpg')`,
-          }}
+          style={{ backgroundImage: `url('/Photo/esclavator.jpg')` }}
         >
           <h1 className="text-3xl font-bold text-white text-center">
             Escalators
@@ -132,25 +134,16 @@ const EscalatorDetails = () => {
               </ul>
             </div>
             <div className="col-span-12 md:col-span-8 bg-white p-6 rounded-xl shadow-lg">
-              {/* Title */}
               <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
                 {escalator.title}
               </h1>
-
-              {/* Description */}
               <p className="mb-8 text-gray-600 leading-relaxed">
                 {escalator.description}
               </p>
 
-              {/* Main Image with Prev/Next Buttons */}
+              {/* Main Image with zoom */}
               <div className="relative w-full max-w-2xl mx-auto mb-6">
-                <img
-                  src={escalator.images[currentImageIndex]}
-                  alt={`${type} escalator ${currentImageIndex + 1}`}
-                  className="w-full h-[450px] object-contain rounded-xl shadow-xl"
-                />
-
-                {/* Main Prev Button */}
+                <ImageZoom {...zoomProps} />
                 <button
                   onClick={handleMainPrev}
                   disabled={currentImageIndex === 0}
@@ -176,7 +169,6 @@ const EscalatorDetails = () => {
                   </svg>
                 </button>
 
-                {/* Main Next Button */}
                 <button
                   onClick={handleMainNext}
                   disabled={currentImageIndex === escalator.images.length - 1}
@@ -205,9 +197,8 @@ const EscalatorDetails = () => {
 
               <hr className="my-6 border-gray-200" />
 
-              {/* Thumbnails Gallery with Prev/Next Buttons and 3 images per view */}
+              {/* Thumbnails */}
               <div className="relative w-full max-w-2xl mx-auto flex items-center justify-center gap-2">
-                {/* Prev Button for Thumbnails */}
                 <button
                   onClick={handleThumbnailPrev}
                   disabled={thumbnailStartIndex === 0}
@@ -231,7 +222,6 @@ const EscalatorDetails = () => {
                   </svg>
                 </button>
 
-                {/* Thumbnails Container */}
                 <div className="flex-grow flex justify-center overflow-hidden">
                   <div className="flex gap-3">
                     {escalator.images
@@ -239,25 +229,28 @@ const EscalatorDetails = () => {
                         thumbnailStartIndex,
                         thumbnailStartIndex + thumbnailsPerPage
                       )
-                      .map((img, index) => (
-                        <img
-                          key={index}
-                          src={img}
-                          alt={`Thumbnail ${index + thumbnailStartIndex + 1}`}
-                          className={`w-20 h-20 object-cover cursor-pointer rounded-lg transition-all duration-300 ${
-                            index + thumbnailStartIndex === currentImageIndex
-                              ? "border-4 border-blue-500 transform scale-105 shadow-md"
-                              : "border-2 border-transparent hover:border-blue-400"
-                          }`}
-                          onClick={() =>
-                            setCurrentImageIndex(index + thumbnailStartIndex)
-                          }
-                        />
-                      ))}
+                      .map((img, index) => {
+                        const actualIndex = index + thumbnailStartIndex;
+                        return (
+                          <img
+                            key={actualIndex}
+                            src={img}
+                            alt={`Thumbnail ${actualIndex + 1}`}
+                            className={`w-20 h-20 object-cover cursor-pointer rounded-lg transition-all duration-300 ${
+                              actualIndex === currentImageIndex
+                                ? "border-4 border-blue-500 transform scale-105 shadow-md"
+                                : "border-2 border-transparent hover:border-blue-400"
+                            }`}
+                            onMouseEnter={() =>
+                              setCurrentImageIndex(actualIndex)
+                            }
+                            onClick={() => setCurrentImageIndex(actualIndex)}
+                          />
+                        );
+                      })}
                   </div>
                 </div>
 
-                {/* Next Button for Thumbnails */}
                 <button
                   onClick={handleThumbnailNext}
                   disabled={
