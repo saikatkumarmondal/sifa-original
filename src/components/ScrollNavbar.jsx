@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, Links, NavLink } from "react-router";
 
@@ -28,6 +29,66 @@ const ScrollNavbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const [spareParts, setSpareParts] = useState([]);
+  const [openIds, setOpenIds] = useState({});
+
+  // Fetch spare parts from API
+  useEffect(() => {
+    const fetchSpareParts = async () => {
+      try {
+        const { data } = await axios.get(
+          "http://localhost:7777/api/spareparts"
+        );
+        setSpareParts(data);
+      } catch (error) {
+        console.error("Failed to fetch spare parts:", error);
+      }
+    };
+
+    fetchSpareParts();
+  }, []);
+  // toggle open/close for a specific id
+  const toggleOpen = (id) => {
+    setOpenIds((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+  const renderParts = (parts) => {
+    return (
+      <ul className="ml-2 mt-1">
+        {parts.map((part) => {
+          const id = part._id || part.title;
+
+          return (
+            <li key={id} className="relative">
+              {part.children && part.children.length > 0 ? (
+                <>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleOpen(id);
+                    }}
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                  >
+                    <span>{part.title}</span>
+                    <span>{openIds[id] ? "▲" : "▼"}</span>
+                  </div>
+                  {openIds[id] && renderParts(part.children)}
+                </>
+              ) : (
+                <Link
+                  to={`/spareparts/${id}`}
+                  state={{ sparePart: part }} // Pass selected part as props
+                  className="px-4 py-2 hover:bg-gray-100 block"
+                >
+                  {part.title}
+                </Link>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  };
 
   return (
     <>
@@ -111,418 +172,11 @@ const ScrollNavbar = () => {
 
                 {showSpareParts && (
                   <ul className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 z-50 grid grid-cols-1 h-[400px] overflow-y-auto p-2">
-                    {/* Elevator Control System (click to expand child) */}
-
-                    <li className="relative">
-                      &nbsp;&nbsp; Elevator Door Inverter
-                    </li>
-                    <li className="relative">
-                      &nbsp;&nbsp; Elevator Light Curtain
-                    </li>
-                    <li className="relative">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowControlSystem(!showControlSystem);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                      >
-                        Elevator Control System
-                        <span>{showControlSystem ? "▲" : "▼"}</span>
-                      </div>
-
-                      {showControlSystem && (
-                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Monarch
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">Step</li>
-                          <li className="px-4 py-2 hover:bg-gray-100">ARD</li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Resistance
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Modernization
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Switch & Power Box
-                          </li>
-                        </ul>
-                      )}
-                    </li>
-                    <li className="relative">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowCopLop(!showCopLop);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                      >
-                        Elevator COP & LOP
-                        <span>{showCopLop ? "▲" : "▼"}</span>
-                      </div>
-
-                      {showCopLop && (
-                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Box Type COP
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Wall Mounted COP
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Full Hight COP
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Disabled-Accessible COP
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Touch Type COP
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Box Type LOP
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Wall Mounted LOP
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Villa Elevator LOP
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Hall Lantern
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Landing Overhead Panel
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Fireman Switch
-                          </li>
-                        </ul>
-                      )}
-                    </li>
-                    <li className="relative">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setTractionMachine(!tractionMachine);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                      >
-                        Traction Machine
-                        <span>{tractionMachine ? "▲" : "▼"}</span>
-                      </div>
-
-                      {tractionMachine && (
-                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
-                          <li className="px-4 py-2 hover:bg-gray-100">XINDA</li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Mona Drive
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Torin Drive
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Motor Base & Conter Parts
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Damping Pad
-                          </li>
-                        </ul>
-                      )}
-                    </li>
-                    <li className="relative">
-                      &nbsp; &nbsp; Elevator Nylon Pully
-                    </li>
-                    <li className="relative">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setElevatorRope(!elevatorRope);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                      >
-                        Elevator Cable
-                        <span>{elevatorRope ? "▲" : "▼"}</span>
-                      </div>
-
-                      {elevatorRope && (
-                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Traveling Cable
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Connection Cable
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Cable Clamp
-                          </li>
-                        </ul>
-                      )}
-                    </li>
-                    <li className="relative">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setElevatorCable(!elevatorCable);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                      >
-                        Elevator Rope
-                        <span>{elevatorCable ? "▲" : "▼"}</span>
-                      </div>
-
-                      {elevatorCable && (
-                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Steel Wire Rope
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Rope Fastening
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Rope Clip
-                          </li>
-                        </ul>
-                      )}
-                    </li>
-                    {/* Other parts */}
-                    <li className="px-4 py-2 hover:bg-gray-100">
-                      Elevator Display
-                    </li>
-                    <li className="px-4 py-2 hover:bg-gray-100">
-                      Elevator Push Button
-                    </li>
-                    <li className="px-4 py-2 hover:bg-gray-100">
-                      Elevator Encoder
-                    </li>
-                    <li className="px-4 py-2 hover:bg-gray-100">
-                      Elevator Switch Sensor
-                    </li>
-                    <li className="relative">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setElevatorRope(!elevatorRope);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                      >
-                        Elevator Cabin
-                        <span>{elevatorRope ? "▲" : "▼"}</span>
-                      </div>
-
-                      {elevatorRope && (
-                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Cabin Design
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Hall Door Design
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Ceiling Design
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Floor Design
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Handrail Design
-                          </li>
-                        </ul>
-                      )}
-                    </li>
-                    <li className="relative">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setElevatorSafetyParts(!elevatorSafetyParts);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                      >
-                        Elevator Safety Parts
-                        <span>{elevatorSafetyParts ? "▲" : "▼"}</span>
-                      </div>
-
-                      {elevatorSafetyParts && (
-                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Elevator Speed Governor
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Elevator Safety Gear
-                          </li>
-                          <li className="relative">
-                            <div
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setElevatorBuffer(!elevatorBuffer);
-                              }}
-                              className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                            >
-                              <span>Elevator Buffer</span>
-                              <span>{elevatorBuffer ? "▲" : "▼"}</span>
-                            </div>
-
-                            {elevatorBuffer && (
-                              <ul className="ml-4 mt-1 pl-2 border-l border-gray-300 bg-white shadow absolute z-50">
-                                <li className="px-4 py-2 hover:bg-gray-100">
-                                  Oil Buffer
-                                </li>
-                                <li className="px-4 py-2 hover:bg-gray-100">
-                                  Polyurethane Buffer
-                                </li>
-                              </ul>
-                            )}
-                          </li>
-                        </ul>
-                      )}
-                    </li>
-                    <li className="relative">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setElevatorDoor(!elevatorDoor);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                      >
-                        Elevator Door Parts
-                        <span>{elevatorDoor ? "▲" : "▼"}</span>
-                      </div>
-
-                      {elevatorDoor && (
-                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Door Operator
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Door Vane
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Door Motor
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Door Contact
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Door Slider
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Door Lock
-                          </li>
-                        </ul>
-                      )}
-                    </li>
-
-                    <li className="relative">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setElevatorGuideRail(!elevatorGuideRail);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                      >
-                        Elevator Guide Rail & Shoe
-                        <span>{elevatorGuideRail ? "▲" : "▼"}</span>
-                      </div>
-
-                      {elevatorGuideRail && (
-                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Guide Rail
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Guide Rail Supporting Parts
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Guide Shoe
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Oil Can
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Guide Shoe Lining
-                          </li>
-                        </ul>
-                      )}
-                    </li>
-                    <li className="px-4 py-2 hover:bg-gray-100">
-                      Elevator Cabin Flow Fan
-                    </li>
-                    <li className="px-4 py-2 hover:bg-gray-100">
-                      Elevator Intercom
-                    </li>
-                    <li className="px-4 py-2 hover:bg-gray-100">
-                      Elevator Station Clock
-                    </li>
-                    <li className="relative">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setElevatorLockKey(!elevatorLockKey);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                      >
-                        Elevator Lock & Key
-                        <span>{elevatorLockKey ? "▲" : "▼"}</span>
-                      </div>
-
-                      {elevatorLockKey && (
-                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Power Supply Lock
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            COP Lock
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Triangle Lock
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">Key</li>
-                        </ul>
-                      )}
-                    </li>
-                    <li className="px-4 py-2 hover:bg-gray-100">Lock & Key</li>
-
-                    <li className="relative">
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setEscalatorParts(!escalatorParts);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                      >
-                        Escalator Parts
-                        <span>{escalatorParts ? "▲" : "▼"}</span>
-                      </div>
-
-                      {escalatorParts && (
-                        <ul className="ml-4 mt-1 pl-2 border-l border-gray-300">
-                          <li className="px-4 py-2 hover:bg-gray-100">Step</li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Step Roller
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Handrail Belt
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">Chain</li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Safety Brush
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Comb Plate
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Yellow Side
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Walkway Pallet
-                          </li>
-                          <li className="px-4 py-2 hover:bg-gray-100">PCB</li>
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Others
-                          </li>
-                        </ul>
-                      )}
-                    </li>
+                    {spareParts.length > 0 ? (
+                      renderParts(spareParts)
+                    ) : (
+                      <li className="px-4 py-2">Loading...</li>
+                    )}
                   </ul>
                 )}
               </li>
