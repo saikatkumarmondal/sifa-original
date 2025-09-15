@@ -5,18 +5,7 @@ import { Link, Links, NavLink } from "react-router";
 const ScrollNavbar = () => {
   const [showNavbar, setShowNavbar] = useState(false);
   const [showSpareParts, setShowSpareParts] = useState(false);
-  const [showControlSystem, setShowControlSystem] = useState(false);
-  const [showCopLop, setShowCopLop] = useState(false);
-  const [tractionMachine, setTractionMachine] = useState(false);
-  const [elevatorBuffer, setElevatorBuffer] = useState(false);
-  const [elevatorCable, setElevatorCable] = useState(false);
-  const [elevatorRope, setElevatorRope] = useState(false);
-  const [elevatorDoor, setElevatorDoor] = useState(false);
-  const [elevatorSafetyParts, setElevatorSafetyParts] = useState(false);
-  const [elevatorSafetyPart, setElevatorSafetyPart] = useState(false);
-  const [elevatorGuideRail, setElevatorGuideRail] = useState(false);
-  const [elevatorLockKey, setElevatorLockKey] = useState(false);
-  const [escalatorParts, setEscalatorParts] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
