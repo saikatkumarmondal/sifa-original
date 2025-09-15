@@ -1,22 +1,40 @@
 import React, { useState } from "react";
-
-// This is a professional and responsive React login component.
-// It features a modern dark theme and a clean layout using Tailwind CSS and DaisyUI.
-// The component is self-contained in a single file for easy integration.
+import { useNavigate, useLocation } from "react-router";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = (e) => {
+  // Get the page the user tried to access or fallback to "/dashboard"
+  const from = location.state?.from?.pathname || "/dashboard";
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate a successful login for demonstration
-    console.log("Login attempt with:", { email, password });
-    setMessage("Login successful! Redirecting...");
-    // In a real application, you would handle the API call and authentication here.
-    // The "message" state can be used to display success or error messages to the user.
-    setTimeout(() => setMessage(""), 3000); // Clear message after 3 seconds
+    setMessage("");
+    setError("");
+
+    try {
+      const res = await axios.post(
+        "http://localhost:7777/api/login",
+        { email, password },
+        { withCredentials: true } // important: send cookies
+      );
+
+      setMessage("Login successful! Redirecting...");
+
+      setTimeout(() => {
+        setMessage("");
+        navigate(from, { replace: true }); // go to original page
+      }, 1000);
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.error || "Login failed. Please try again.");
+    }
   };
 
   return (
@@ -59,6 +77,7 @@ const Login = () => {
                 required
               />
             </div>
+
             <div className="form-control">
               <label className="label">
                 <span className="label-text text-gray-300 font-medium">
@@ -73,19 +92,17 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <label className="label mt-2">
-                <a
-                  href="#"
-                  className="label-text-alt link link-hover text-sm text-blue-400 hover:text-blue-300 transition-colors"
-                >
-                  Forgot password?
-                </a>
-              </label>
             </div>
 
             {message && (
               <div className="p-4 rounded-lg text-center font-semibold text-green-400 bg-green-900 bg-opacity-30">
                 {message}
+              </div>
+            )}
+
+            {error && (
+              <div className="p-4 rounded-lg text-center font-semibold text-red-400 bg-red-900 bg-opacity-30">
+                {error}
               </div>
             )}
 

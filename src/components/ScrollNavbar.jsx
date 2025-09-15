@@ -98,7 +98,7 @@ const ScrollNavbar = () => {
             <img
               src="/Photo/Photo/LOGO/SIFA LOGO Dark G.png"
               alt="Sifa Logo"
-              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[80px] lg:h-[45px] object-contain mr-2 relative -left-25 -top-1"
+              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[80px] lg:h-[45px] object-contain mr-2 relative -left-4 -top-1"
             />
 
             <ul className="flex space-x-20 text-lg font-medium text-gray-800 relative ">
@@ -191,7 +191,7 @@ const ScrollNavbar = () => {
               <li className="mt-1">
                 <Link
                   to="/contact"
-                  className="btn whitespace-nowrap rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-4 py-1 hidden md:flex font-semibold relative -right-5 -top-2 "
+                  className="btn whitespace-nowrap rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-4 py-1 hidden md:flex font-semibold relative right-7 -top-2 "
                 >
                   Contact Us
                 </Link>

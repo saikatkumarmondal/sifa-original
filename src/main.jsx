@@ -25,18 +25,12 @@ import SparePartDetails from "./components/SparePartDetails.jsx";
 import Login from "./components/Login.jsx";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import Forbidden from "./components/Forbidden.jsx";
+import AdminRoute from "./routes/AdminRoute.jsx";
 
 const queryClient = new QueryClient();
 
 // Get the user from localStorage (or context)
-const getUser = () => {
-  try {
-    return JSON.parse(localStorage.getItem("user"));
-  } catch {
-    return null;
-  }
-};
 
 const router = createBrowserRouter([
   {
@@ -56,6 +50,7 @@ const router = createBrowserRouter([
       { path: "elevators/:type", Component: ElevatorDetails },
       { path: "escalator/:type", Component: EscalatorDetails },
       { path: "login", Component: Login },
+      { path: "/forbidden", Component: Forbidden },
     ],
   },
   {
@@ -64,25 +59,19 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: () => {
-          const user = getUser();
-          return (
-            <ProtectedRoute user={user} allowedRoles={["admin"]}>
-              <SparePartsTable />
-            </ProtectedRoute>
-          );
-        },
+        Component: () => (
+          <AdminRoute>
+            <SparePartsTable />
+          </AdminRoute>
+        ),
       },
       {
         path: "add",
-        Component: () => {
-          const user = getUser();
-          return (
-            <ProtectedRoute user={user} allowedRoles={["admin"]}>
-              <SparePartsForm />
-            </ProtectedRoute>
-          );
-        },
+        Component: () => (
+          <AdminRoute>
+            <SparePartsForm />
+          </AdminRoute>
+        ),
       },
     ],
   },

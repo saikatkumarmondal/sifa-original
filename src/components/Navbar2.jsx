@@ -1,13 +1,14 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, NavLink } from "react-router";
+import Loading from "./Loading";
 
 const Navbar2 = () => {
   const [show, setShow] = useState(false);
   const [showSpareParts, setShowSpareParts] = useState(false);
-
   const [spareParts, setSpareParts] = useState([]);
   const [openIds, setOpenIds] = useState({});
+  const dropdownRef = useRef(null);
 
   // Fetch spare parts from API
   useEffect(() => {
@@ -21,16 +22,23 @@ const Navbar2 = () => {
         console.error("Failed to fetch spare parts:", error);
       }
     };
-
     fetchSpareParts();
   }, []);
 
-  // toggle open/close for a specific id
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowSpareParts(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const toggleOpen = (id) => {
     setOpenIds((prev) => ({ ...prev, [id]: !prev[id] }));
   };
-
-  // Recursive dropdown renderer
 
   // Recursive render with Link passing state
   const renderParts = (parts) => {
@@ -48,7 +56,7 @@ const Navbar2 = () => {
                       e.stopPropagation();
                       toggleOpen(id);
                     }}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between rounded-md"
                   >
                     <span>{part.title}</span>
                     <span>{openIds[id] ? "▲" : "▼"}</span>
@@ -58,8 +66,8 @@ const Navbar2 = () => {
               ) : (
                 <Link
                   to={`/spareparts/${id}`}
-                  state={{ sparePart: part }} // Pass selected part as props
-                  className="px-4 py-2 hover:bg-gray-100 block"
+                  state={{ sparePart: part }}
+                  className="px-4 py-2 hover:bg-gray-100 block rounded-md"
                 >
                   {part.title}
                 </Link>
@@ -72,7 +80,7 @@ const Navbar2 = () => {
   };
 
   return (
-    <div className="navbar bg-base-100 shadow-sm w-full max-h-4">
+    <div className="navbar bg-base-100 shadow-sm w-full relative">
       <div className="navbar-start">
         <div className="dropdown">
           <div
@@ -88,18 +96,18 @@ const Navbar2 = () => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              {" "}
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
                 d="M4 6h16M4 12h8m-8 6h16"
-              />{" "}
+              />
             </svg>
           </div>
+
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
           >
             <li>
               <NavLink to="/">Home</NavLink>
@@ -108,6 +116,7 @@ const Navbar2 = () => {
               <Link to="/about">About Us</Link>
             </li>
 
+            {/* Elevator Dropdown */}
             <li className="dropdown dropdown-hover relative">
               <a tabIndex={0} role="button" className="hover:bg-base-200">
                 Elevator
@@ -133,6 +142,8 @@ const Navbar2 = () => {
                 </li>
               </ul>
             </li>
+
+            {/* Escalator Dropdown */}
             <li className="dropdown dropdown-hover relative">
               <a tabIndex={0} role="button" className="hover:bg-base-200">
                 Escalator
@@ -145,35 +156,46 @@ const Navbar2 = () => {
                   <Link to="escalator/out-door">Outdoor Escalator</Link>
                 </li>
                 <li>
-                  <Link to="escalator/moving-walks">Moving Walk</Link>
+                  <Link to="escalator/moving-walks">Moving Walks</Link>
                 </li>
               </ul>
             </li>
-            <li className="relative">
+
+            {/* Spare Parts Dropdown */}
+            <li className="relative group" ref={dropdownRef}>
               <span
-                onClick={() => toggleOpen("spareParts")}
-                className="hover:text-green-500 cursor-pointer text-lg whitespace-nowrap"
+                onClick={() => setShowSpareParts(!showSpareParts)}
+                className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap px-3 py-2 rounded-md"
               >
                 Spare Parts
               </span>
 
-              {openIds["spareParts"] && (
-                <div className="absolute top-full left-0 mt-2 w-80 bg-white text-black shadow-lg rounded-md border border-gray-100 z-50 h-[400px] overflow-y-auto p-2">
-                  {renderParts(spareParts)}
+              {showSpareParts && (
+                <div className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 z-50 max-h-96 overflow-y-auto p-2">
+                  {spareParts.length > 0 ? (
+                    renderParts(spareParts)
+                  ) : (
+                    <Loading></Loading>
+                  )}
                 </div>
               )}
             </li>
-            <Link to="/career" className="text-lg">
-              Career
-            </Link>
 
             <li>
-              <Link to="/newsroom">Newsroom</Link>
+              <Link to="/career" className="text-lg">
+                Career
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="text-lg">
+                Newsroom
+              </Link>
             </li>
           </ul>
         </div>
       </div>
-      {/* DaisyUI Navbar Center Modification */}
+
+      {/* Desktop Navbar */}
       <div className="navbar-center hidden lg:flex w-full">
         <ul className="menu menu-horizontal px-1 w-full justify-around">
           <li>
@@ -187,6 +209,7 @@ const Navbar2 = () => {
             </NavLink>
           </li>
 
+          {/* Reuse dropdowns for desktop */}
           <li className="dropdown dropdown-hover relative">
             <a tabIndex={0} role="button" className="hover:bg-base-200 text-lg">
               Elevator
@@ -212,38 +235,41 @@ const Navbar2 = () => {
               </li>
             </ul>
           </li>
+
           <li className="dropdown dropdown-hover relative">
             <a tabIndex={0} role="button" className="hover:bg-base-200 text-lg">
               Escalator
             </a>
             <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
               <li>
-                <Link to="/escalator/indoor">Indoor Escalator</Link>
+                <Link to="escalator/indoor">Indoor Escalator</Link>
               </li>
               <li>
-                <Link to="/escalator/out-door">Outdoor Escalator</Link>
+                <Link to="escalator/out-door">Outdoor Escalator</Link>
               </li>
               <li>
-                <Link to="/escalator/moving-walks">Moving Walks</Link>
+                <Link to="escalator/moving-walks">Moving Walks</Link>
               </li>
             </ul>
           </li>
-          <li className="relative">
+
+          {/* Spare Parts Desktop Dropdown */}
+          <li className="relative group" ref={dropdownRef}>
             <span
               onClick={() => setShowSpareParts(!showSpareParts)}
-              className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap"
+              className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap px-3 py-2 rounded-md"
             >
               Spare Parts
             </span>
 
             {showSpareParts && (
-              <ul className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 z-50 grid grid-cols-1 h-[400px] overflow-y-auto p-2">
+              <div className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 z-50 max-h-96 overflow-y-auto p-2">
                 {spareParts.length > 0 ? (
                   renderParts(spareParts)
                 ) : (
-                  <li className="px-4 py-2">Loading...</li>
+                  <li>Loading...</li>
                 )}
-              </ul>
+              </div>
             )}
           </li>
 
@@ -252,7 +278,6 @@ const Navbar2 = () => {
               Career
             </Link>
           </li>
-
           <li>
             <Link to="/contact" className="text-lg">
               Newsroom
