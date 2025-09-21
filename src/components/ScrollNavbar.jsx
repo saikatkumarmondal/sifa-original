@@ -1,10 +1,14 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Link, Links, NavLink } from "react-router";
+import React, { useEffect, useState, useRef } from "react";
+import { Link, NavLink } from "react-router";
+import Loading from "./Loading";
 
 const ScrollNavbar = () => {
   const [showNavbar, setShowNavbar] = useState(false);
   const [showSpareParts, setShowSpareParts] = useState(false);
+  const [spareParts, setSpareParts] = useState([]);
+  const [openIds, setOpenIds] = useState({});
+  const dropdownRef = useRef(null); // ✅ define the ref
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,10 +23,7 @@ const ScrollNavbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const [spareParts, setSpareParts] = useState([]);
-  const [openIds, setOpenIds] = useState({});
-
-  // Fetch spare parts from API
+  // Fetch spare parts
   useEffect(() => {
     const fetchSpareParts = async () => {
       try {
@@ -34,29 +35,42 @@ const ScrollNavbar = () => {
         console.error("Failed to fetch spare parts:", error);
       }
     };
-
     fetchSpareParts();
   }, []);
-  // toggle open/close for a specific id
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowSpareParts(false);
+        setOpenIds({});
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const toggleOpen = (id) => {
     setOpenIds((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
   const renderParts = (parts) => {
     return (
       <ul className="ml-2 mt-1">
         {parts.map((part) => {
           const id = part._id || part.title;
+          const hasChildren = part.children && part.children.length > 0;
 
           return (
             <li key={id} className="relative">
-              {part.children && part.children.length > 0 ? (
+              {hasChildren ? (
                 <>
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
                       toggleOpen(id);
                     }}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between rounded-md"
                   >
                     <span>{part.title}</span>
                     <span>{openIds[id] ? "▲" : "▼"}</span>
@@ -66,8 +80,13 @@ const ScrollNavbar = () => {
               ) : (
                 <Link
                   to={`/spareparts/${id}`}
-                  state={{ sparePart: part }} // Pass selected part as props
-                  className="px-4 py-2 hover:bg-gray-100 block"
+                  state={{ sparePart: part }}
+                  className="px-4 py-2 hover:bg-gray-100 block rounded-md"
+                  onClick={() => {
+                    // close mobile dropdown when link clicked
+                    setShowSpareParts(false);
+                    setOpenIds({});
+                  }}
                 >
                   {part.title}
                 </Link>
@@ -90,7 +109,7 @@ const ScrollNavbar = () => {
               className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[80px] lg:h-[45px] object-contain mr-2 relative -left-4 -top-1"
             />
 
-            <ul className="flex space-x-20 text-lg font-medium text-gray-800 relative ">
+            <ul className="flex space-x-20 text-lg font-medium text-gray-800 relative">
               <li className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap">
                 Home
               </li>
@@ -132,12 +151,7 @@ const ScrollNavbar = () => {
               {/* Escalator Dropdown */}
               <li className="group relative cursor-pointer">
                 <span className="hover:text-green-700 text-lg">Escalator</span>
-                <ul
-                  className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 
-  opacity-0 group-hover:opacity-100 invisible group-hover:visible 
-  translate-y-2 group-hover:translate-y-0 
-  transition-all duration-300 ease-in-out z-50 p-5"
-                >
+                <ul className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 opacity-0 group-hover:opacity-100 invisible group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 ease-in-out z-50 p-5">
                   <li className="hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200 px-3 py-2 rounded-md">
                     <Link to="escalator/indoor">Indoor Escalator</Link>
                   </li>
@@ -150,23 +164,23 @@ const ScrollNavbar = () => {
                 </ul>
               </li>
 
-              {/* Spare Parts Click Dropdown */}
-              <li className="relative">
+              {/* Spare Parts Dropdown */}
+              <li className="relative group" ref={dropdownRef}>
                 <span
                   onClick={() => setShowSpareParts(!showSpareParts)}
-                  className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap"
+                  className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap px-3 py-2 rounded-md"
                 >
                   Spare Parts
                 </span>
 
                 {showSpareParts && (
-                  <ul className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 z-50 grid grid-cols-1 h-[400px] overflow-y-auto p-2">
+                  <div className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 z-50 max-h-96 overflow-y-auto p-2">
                     {spareParts.length > 0 ? (
                       renderParts(spareParts)
                     ) : (
-                      <li className="px-4 py-2">Loading...</li>
+                      <Loading />
                     )}
-                  </ul>
+                  </div>
                 )}
               </li>
 
@@ -180,7 +194,7 @@ const ScrollNavbar = () => {
               <li className="mt-1">
                 <Link
                   to="/contact"
-                  className="btn whitespace-nowrap rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-4 py-1 hidden md:flex font-semibold relative right-7 -top-2 "
+                  className="btn whitespace-nowrap rounded-full bg-blue-700 text-white hover:bg-blue-800 border-none transition-colors duration-200 px-4 py-1 hidden md:flex font-semibold relative right-15 -top-2 "
                 >
                   Contact Us
                 </Link>

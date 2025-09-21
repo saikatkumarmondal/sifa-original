@@ -1,15 +1,22 @@
-// src/utils/uploadToCloudinary.js
-export const uploadToCloudinary = async (file) => {
+import axios from "axios";
+
+const BASE_URL = "http://localhost:7777"; // must match backend
+
+export const uploadToServer = async (file) => {
+  if (!file) throw new Error("No file provided");
+
   const formData = new FormData();
-  formData.append("image", file);
+  formData.append("image", file); // must match backend multer key
 
-  const res = await fetch("http://localhost:7777/api/upload", {
-    method: "POST",
-    body: formData,
-  });
-
-  if (!res.ok) throw new Error("Upload failed");
-
-  const data = await res.json();
-  return data.url; // ✅ Cloudinary hosted URL (saved in MongoDB)
+  try {
+    const res = await axios.post(`${BASE_URL}/api/upload`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true, // in case you need auth cookie
+    });
+    console.log("Upload success:", res.data);
+    return res.data.url; // return uploaded image URL
+  } catch (err) {
+    console.error("Upload failed:", err);
+    throw err;
+  }
 };

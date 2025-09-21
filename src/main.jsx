@@ -59,19 +59,11 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: () => (
-          <AdminRoute>
-            <SparePartsTable />
-          </AdminRoute>
-        ),
+        Component: () => <SparePartsTable />,
       },
       {
         path: "add",
-        Component: () => (
-          <AdminRoute>
-            <SparePartsForm />
-          </AdminRoute>
-        ),
+        Component: () => <SparePartsForm />,
       },
     ],
   },

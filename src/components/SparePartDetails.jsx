@@ -1,140 +1,109 @@
-// src/components/SparePartDetails.jsx
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router";
-import ChildItem from "./ChildItem";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import axios from "axios";
+import Loading from "./Loading";
+import { FaCogs, FaTimes } from "react-icons/fa";
+import { MdDescription } from "react-icons/md";
 
-const getMainImage = (part) => {
-  if (part?.images?.length > 0) return part.images[0];
-  if (part?.image) return part.image;
-  return null;
-};
-
-const SparePartDetails = ({ allParts = [] }) => {
-  const location = useLocation();
-  const initialFromLocation = location.state?.sparePart ?? null;
-
-  const [selectedPart, setSelectedPart] = useState(
-    initialFromLocation ?? allParts[0] ?? null
-  );
-  const [globalExpand, setGlobalExpand] = useState(null);
+const SparePartDetails = () => {
+  const { id } = useParams();
+  const [category, setCategory] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [zoomed, setZoomed] = useState(false); // track image zoom state
 
   useEffect(() => {
-    if (initialFromLocation) {
-      setSelectedPart(initialFromLocation);
-    } else if (!selectedPart && allParts.length > 0) {
-      setSelectedPart(allParts[0]);
-    }
-  }, [initialFromLocation, allParts]);
+    const fetchCategory = async () => {
+      try {
+        const res = await axios.get(`http://localhost:7777/category/${id}`);
+        if (res.data.success) {
+          setCategory(res.data.data);
+        } else {
+          setError("Category not found");
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!selectedPart)
-    return (
-      <p className="p-6 text-center text-gray-500 italic">
-        No spare part selected.
-      </p>
-    );
+    fetchCategory();
+  }, [id]);
 
-  const mainImage = getMainImage(selectedPart);
+  if (loading) return <Loading />;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <main className="col-span-9">
-        <div className="bg-white shadow-lg rounded-xl p-6 transition-transform hover:scale-[1.01]">
-          {mainImage && (
-            <figure className="mb-6 rounded overflow-hidden">
-              <img
-                src={mainImage}
-                alt={selectedPart.title}
-                className="object-contain h-80 w-full rounded-lg border border-gray-200"
-              />
-            </figure>
-          )}
-
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-3">
-            {selectedPart.title}
-          </h2>
-          <p className="text-gray-600 text-base leading-relaxed mb-5">
-            {selectedPart.description}
-          </p>
-
-          {/* Extra images */}
-          {selectedPart?.images?.length > 1 && (
-            <div className="flex gap-3 mt-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-              {selectedPart.images.slice(1).map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  alt={`${selectedPart.title}-${i}`}
-                  className="w-28 h-28 object-cover rounded-lg border border-gray-200 hover:scale-105 transition-transform cursor-pointer"
-                />
-              ))}
+    <div className="flex justify-center p-6 relative">
+      <div className="card w-full max-w-4xl bg-base-100 shadow-xl rounded-2xl">
+        {/* Image Section */}
+        <figure className="px-10 pt-10 cursor-pointer">
+          {category.image ? (
+            <img
+              src={`http://localhost:7777/${category.image}`}
+              alt={category.name}
+              className="rounded-xl w-full h-96 object-contain transition-transform duration-300 hover:scale-105"
+              onClick={() => setZoomed(true)} // open zoom
+            />
+          ) : (
+            <div className="w-full h-96 flex items-center justify-center bg-gray-100 rounded-xl">
+              <FaCogs className="text-6xl text-gray-400" />
             </div>
           )}
+        </figure>
 
-          {/* Children + global expand/collapse */}
-          {selectedPart.children?.length > 0 && (
-            <div className="mt-8">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-xl text-gray-700">
-                  Children Parts
-                </h3>
+        {/* Content Section */}
+        <div className="card-body">
+          <h2 className="card-title text-3xl font-bold text-gray-800 flex items-center gap-2">
+            <FaCogs className="text-green-600" />
+            {category.name}
+          </h2>
 
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setGlobalExpand(true)}
-                    className="px-4 py-2 text-sm rounded-lg bg-green-500 text-white hover:bg-green-600 shadow"
-                  >
-                    Expand All
-                  </button>
-                  <button
-                    onClick={() => setGlobalExpand(false)}
-                    className="px-4 py-2 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 shadow"
-                  >
-                    Collapse All
-                  </button>
-                </div>
-              </div>
+          {/* Description */}
+          <div className="mt-4">
+            <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-700 mb-2">
+              <MdDescription className="text-blue-500" /> Description
+            </h3>
+            <p className="text-gray-600 leading-relaxed">
+              {category.description
+                ? category.description
+                : "No description available for this spare part. Please contact support for more details."}
+            </p>
+          </div>
 
-              <ul className="space-y-3">
-                {selectedPart.children?.length > 1 && (
-                  <div className="mt-8">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-semibold text-xl text-gray-700">
-                        Children Parts
-                      </h3>
-
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => setGlobalExpand(true)}
-                          className="px-4 py-2 text-sm rounded-lg bg-green-500 text-white hover:bg-green-600 shadow"
-                        >
-                          Expand All
-                        </button>
-                        <button
-                          onClick={() => setGlobalExpand(false)}
-                          className="px-4 py-2 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 shadow"
-                        >
-                          Collapse All
-                        </button>
-                      </div>
-                    </div>
-
-                    <ul className="space-y-3">
-                      {selectedPart.children.map((child, i) => (
-                        <ChildItem
-                          key={child._id || `${child.title}-${i}`}
-                          child={child}
-                          index={i}
-                          globalExpand={globalExpand}
-                        />
-                      ))}
-                    </ul>
-                  </div>
-                )}
+          {/* Subcategories */}
+          {category.children && category.children.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold text-gray-700">
+                Sub Categories
+              </h3>
+              <ul className="list-disc ml-6 mt-2 space-y-1 text-gray-600">
+                {category.children.map((child) => (
+                  <li key={child._id}>{child.name}</li>
+                ))}
               </ul>
             </div>
           )}
         </div>
-      </main>
+      </div>
+
+      {/* Fullscreen Zoom Modal */}
+      {zoomed && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
+          <button
+            className="absolute top-6 right-6 text-white text-3xl hover:text-red-400"
+            onClick={() => setZoomed(false)}
+          >
+            <FaTimes />
+          </button>
+          <img
+            src={`http://localhost:7777/${category.image}`}
+            alt={category.name}
+            className="max-w-full max-h-full object-contain rounded-lg"
+          />
+        </div>
+      )}
     </div>
   );
 };

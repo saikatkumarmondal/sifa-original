@@ -1,34 +1,20 @@
-import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import { Link, NavLink } from "react-router";
 import Loading from "./Loading";
+import { useCategories } from "../hooks/useCategories";
+import NestedCategory from "./NestedCategory";
 
 const Navbar2 = () => {
   const [show, setShow] = useState(false);
-  const [showSpareParts, setShowSpareParts] = useState(false);
-  const [spareParts, setSpareParts] = useState([]);
-  const [openIds, setOpenIds] = useState({});
+  const { categories, loading } = useCategories();
   const dropdownRef = useRef(null);
-
-  // Fetch spare parts from API
-  useEffect(() => {
-    const fetchSpareParts = async () => {
-      try {
-        const { data } = await axios.get(
-          "http://localhost:7777/api/spareparts"
-        );
-        setSpareParts(data);
-      } catch (error) {
-        console.error("Failed to fetch spare parts:", error);
-      }
-    };
-    fetchSpareParts();
-  }, []);
+  const [openIds, setOpenIds] = useState({});
+  const [showSpareParts, setShowSpareParts] = useState(false);
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowSpareParts(false);
       }
     };
@@ -36,51 +22,17 @@ const Navbar2 = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Function to toggle nested dropdowns
   const toggleOpen = (id) => {
-    setOpenIds((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  // Recursive render with Link passing state
-  const renderParts = (parts) => {
-    return (
-      <ul className="ml-2 mt-1">
-        {parts.map((part) => {
-          const id = part._id || part.title;
-
-          return (
-            <li key={id} className="relative">
-              {part.children && part.children.length > 0 ? (
-                <>
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleOpen(id);
-                    }}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between rounded-md"
-                  >
-                    <span>{part.title}</span>
-                    <span>{openIds[id] ? "▲" : "▼"}</span>
-                  </div>
-                  {openIds[id] && renderParts(part.children)}
-                </>
-              ) : (
-                <Link
-                  to={`/spareparts/${id}`}
-                  state={{ sparePart: part }}
-                  className="px-4 py-2 hover:bg-gray-100 block rounded-md"
-                >
-                  {part.title}
-                </Link>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    );
+    setOpenIds((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
   };
 
   return (
     <div className="navbar bg-base-100 shadow-sm w-full relative">
+      {/* Mobile Navbar */}
       <div className="navbar-start">
         <div className="dropdown">
           <div
@@ -162,7 +114,7 @@ const Navbar2 = () => {
             </li>
 
             {/* Spare Parts Dropdown */}
-            <li className="relative group" ref={dropdownRef}>
+            <li className="relative" ref={dropdownRef}>
               <span
                 onClick={() => setShowSpareParts(!showSpareParts)}
                 className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap px-3 py-2 rounded-md"
@@ -171,25 +123,22 @@ const Navbar2 = () => {
               </span>
 
               {showSpareParts && (
-                <div className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 z-50 max-h-96 overflow-y-auto p-2">
-                  {spareParts.length > 0 ? (
-                    renderParts(spareParts)
+                <div className="absolute top-full left-0 mt-2 w-96 max-h-96 overflow-y-auto bg-white shadow-lg rounded-md border border-gray-100 z-50 p-2">
+                  {loading ? (
+                    <Loading />
+                  ) : categories.length > 0 ? (
+                    <ul className="flex flex-col justify-center h-full">
+                      {categories.map((cat) => (
+                        <NestedCategory key={cat._id} category={cat} />
+                      ))}
+                    </ul>
                   ) : (
-                    <Loading></Loading>
+                    <p className="text-center text-gray-500">
+                      No categories found
+                    </p>
                   )}
                 </div>
               )}
-            </li>
-
-            <li>
-              <Link to="/career" className="text-lg">
-                Career
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className="text-lg">
-                Newsroom
-              </Link>
             </li>
           </ul>
         </div>
@@ -209,7 +158,7 @@ const Navbar2 = () => {
             </NavLink>
           </li>
 
-          {/* Reuse dropdowns for desktop */}
+          {/* Elevator Dropdown */}
           <li className="dropdown dropdown-hover relative">
             <a tabIndex={0} role="button" className="hover:bg-base-200 text-lg">
               Elevator
@@ -236,6 +185,7 @@ const Navbar2 = () => {
             </ul>
           </li>
 
+          {/* Escalator Dropdown */}
           <li className="dropdown dropdown-hover relative">
             <a tabIndex={0} role="button" className="hover:bg-base-200 text-lg">
               Escalator
@@ -254,7 +204,7 @@ const Navbar2 = () => {
           </li>
 
           {/* Spare Parts Desktop Dropdown */}
-          <li className="relative group" ref={dropdownRef}>
+          <li className="relative" ref={dropdownRef}>
             <span
               onClick={() => setShowSpareParts(!showSpareParts)}
               className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap px-3 py-2 rounded-md"
@@ -263,16 +213,38 @@ const Navbar2 = () => {
             </span>
 
             {showSpareParts && (
-              <div className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 z-50 max-h-96 overflow-y-auto p-2">
-                {spareParts.length > 0 ? (
-                  renderParts(spareParts)
+              <div className="absolute top-full left-0 mt-2 w-96 max-h-96 overflow-y-auto bg-white shadow-lg rounded-md border border-gray-100 z-50 p-2">
+                {loading ? (
+                  <Loading />
+                ) : categories.length > 0 ? (
+                  <ul className="flex flex-col justify-center h-full">
+                    {categories.map((cat) => (
+                      <NestedCategory key={cat._id} category={cat} />
+                    ))}
+                  </ul>
                 ) : (
-                  <li>Loading...</li>
+                  <p className="text-center text-gray-500">
+                    No categories found
+                  </p>
                 )}
               </div>
             )}
           </li>
 
+          {/* Other nav items */}
+          <li>
+            <Link to="/" className="hover:text-green-700 px-3 py-2 rounded-md">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/about"
+              className="hover:text-green-700 px-3 py-2 rounded-md"
+            >
+              About
+            </Link>
+          </li>
           <li>
             <Link to="/career" className="text-lg">
               Career

@@ -168,10 +168,10 @@ const Footer = () => {
             COMPANY
           </h6>
           <div className="grid grid-rows gap-4">
-            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
+            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300 cursor-pointer">
               <p>About Us</p>
             </a>
-            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300">
+            <a className="text-[13px] hover:text-yellow-400 transition-colors duration-300 cursor-pointer">
               <p>Newsroom</p>
             </a>
 
