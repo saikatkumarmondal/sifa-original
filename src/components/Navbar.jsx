@@ -1,267 +1,391 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router";
+import { Link } from "react-router";
+import { HiChevronDown, HiChevronRight, HiMenu, HiX } from "react-icons/hi";
 
-const Navbar2 = () => {
-  const [show, setShow] = useState(false);
-  const [showSpareParts, setShowSpareParts] = useState(false);
-
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false); // Mobile menu toggle
+  const [mobileDropdowns, setMobileDropdowns] = useState({}); // Nested dropdown states
   const [spareParts, setSpareParts] = useState([]);
-  const [openIds, setOpenIds] = useState({});
 
-  // Fetch spare parts from API
   useEffect(() => {
-    const fetchSpareParts = async () => {
-      try {
-        const { data } = await axios.get(
-          "http://localhost:7777/api/spareparts"
-        );
-        setSpareParts(data);
-      } catch (error) {
-        console.error("Failed to fetch spare parts:", error);
-      }
-    };
-
-    fetchSpareParts();
+    fetch("http://localhost:7777/get-categories")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && Array.isArray(data.data)) setSpareParts(data.data);
+        else setSpareParts([]);
+      })
+      .catch((err) => {
+        console.error("Error fetching spare parts:", err);
+        setSpareParts([]);
+      });
   }, []);
 
-  // toggle open/close for a specific id
-  const toggleOpen = (id) => {
-    setOpenIds((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  // Recursive dropdown renderer
-
-  // Recursive render with Link passing state
-  const renderParts = (parts) => {
-    return (
-      <ul className="ml-2 mt-1">
-        {parts.map((part) => {
-          const id = part._id || part.title;
-
-          return (
-            <li key={id} className="relative">
-              {part.children && part.children.length > 0 ? (
-                <>
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleOpen(id);
-                    }}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between"
-                  >
-                    <span>{part.title}</span>
-                    <span>{openIds[id] ? "▲" : "▼"}</span>
-                  </div>
-                  {openIds[id] && renderParts(part.children)}
-                </>
-              ) : (
-                <Link
-                  to={`/spareparts/${id}`}
-                  state={{ sparePart: part }} // Pass selected part as props
-                  className="px-4 py-2 hover:bg-gray-100 block"
-                >
-                  {part.title}
-                </Link>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    );
+  // toggle function
+  const toggleMobileDropdown = (id) => {
+    setMobileDropdowns((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
   };
 
   return (
-    <div className="navbar bg-base-100 shadow-sm w-full max-h-4">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <div
-            tabIndex={0}
-            role="button"
-            onClick={() => setShow(!show)}
-            className="btn btn-ghost lg:hidden"
+    <header className="w-full bg-white shadow sticky top-0 z-50">
+      <nav className="w-full">
+        <div className="w-full px-4 lg:px-8 py-3 flex items-center justify-between">
+          {/* MOBILE BUTTON */}
+          <button
+            className="lg:hidden text-2xl"
+            onClick={() => setIsOpen(!isOpen)}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {" "}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />{" "}
-            </svg>
-          </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-          >
+            {isOpen ? <HiX /> : <HiMenu />}
+          </button>
+
+          {/* DESKTOP MENU */}
+          <ul className="hidden lg:flex lg:flex-1 items-center justify-around gap-6">
             <li>
-              <NavLink to="/">Home</NavLink>
+              <Link to="/" className="hover:text-blue-600">
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/about">About Us</Link>
+              <Link to="/about" className="hover:text-blue-600">
+                About Us
+              </Link>
             </li>
 
-            <li className="dropdown dropdown-hover relative">
-              <a tabIndex={0} role="button" className="hover:bg-base-200">
+            {/* Elevator */}
+            <li className="relative group">
+              <button className="flex items-center cursor-pointer">
                 Elevator
-              </a>
-              <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
-                <li>
-                  <Link to="/elevators/passenger">Passenger Elevator</Link>
-                </li>
-                <li>
-                  <Link to="/elevators/villa">Villa Elevator</Link>
-                </li>
-                <li>
-                  <Link to="/elevators/panoramic">Panoramic Elevator</Link>
-                </li>
-                <li>
-                  <Link to="/elevators/hospital">Hospital Elevator</Link>
-                </li>
-                <li>
-                  <Link to="/elevators/freight">Freight Elevator</Link>
-                </li>
-                <li>
-                  <Link to="/elevators/hydraulic">Hydraulic Elevator</Link>
-                </li>
+                <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
+              </button>
+              <ul className="absolute left-0 top-full w-56 bg-white shadow-lg rounded hidden group-hover:block z-50">
+                {[
+                  "Passenger",
+                  "Villa",
+                  "Panoramic",
+                  "Hospital",
+                  "Freight",
+                  "Hydraulic",
+                ].map((name, i) => (
+                  <li key={i}>
+                    <Link
+                      to={`/elevators/${name.toLowerCase()}`}
+                      className="block px-3 py-2 hover:bg-gray-50"
+                    >
+                      {name} Elevator
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </li>
-            <li className="dropdown dropdown-hover relative">
-              <a tabIndex={0} role="button" className="hover:bg-base-200">
-                Escalator
-              </a>
-              <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
-                <li>
-                  <Link to="escalator/indoor">Indoor Escalator</Link>
-                </li>
-                <li>
-                  <Link to="escalator/out-door">Outdoor Escalator</Link>
-                </li>
-                <li>
-                  <Link to="escalator/moving-walks">Moving Walk</Link>
-                </li>
-              </ul>
-            </li>
-            <li className="relative">
-              <span
-                onClick={() => toggleOpen("spareParts")}
-                className="hover:text-green-500 cursor-pointer text-lg whitespace-nowrap"
-              >
-                Spare Parts
-              </span>
 
-              {openIds["spareParts"] && (
-                <div className="absolute top-full left-0 mt-2 w-80 bg-white text-black shadow-lg rounded-md border border-gray-100 z-50 h-[400px] overflow-y-auto p-2">
-                  {renderParts(spareParts)}
+            {/* Escalator */}
+            <li className="relative group">
+              <button className="flex items-center cursor-pointer">
+                Escalator
+                <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
+              </button>
+              <ul className="absolute left-0 top-full w-56 bg-white shadow-lg rounded hidden group-hover:block z-50">
+                {["Indoor", "Outdoor", "Moving Walks"].map((name, i) => (
+                  <li key={i}>
+                    <Link
+                      to={`/escalator/${name.toLowerCase().replace(" ", "-")}`}
+                      className="block px-3 py-2 hover:bg-gray-50"
+                    >
+                      {name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
+
+            {/* Spare Parts */}
+            <li className="relative group">
+              <button className="flex items-center cursor-pointer">
+                Spare Parts
+                <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
+              </button>
+              {spareParts.length === 0 ? (
+                <div className="absolute left-0 top-full bg-white shadow-lg w-56 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50">
+                  No categories
                 </div>
+              ) : (
+                <ul className="absolute left-0 top-full w-56 bg-white shadow-lg rounded hidden group-hover:block z-50">
+                  {spareParts.map((parent) => (
+                    <li key={parent._id} className="relative group/child">
+                      <Link
+                        to={`/spare-parts/${parent._id}`}
+                        className="flex justify-between items-center px-4 py-2 hover:bg-gray-100"
+                      >
+                        {parent.name}
+                        {parent.children?.length > 0 && <HiChevronRight />}
+                      </Link>
+                      {/* Child Level */}
+                      {parent.children?.length > 0 && (
+                        <ul className="absolute left-full top-0 w-48 bg-white shadow-lg rounded hidden group-hover/child:block z-50">
+                          {parent.children.map((child) => (
+                            <li
+                              key={child._id}
+                              className="relative group/grand"
+                            >
+                              <Link
+                                to={`/spare-parts/${child._id}`}
+                                className="flex justify-between items-center px-4 py-2 hover:bg-gray-100"
+                              >
+                                {child.name}
+                                {child.children?.length > 0 && (
+                                  <HiChevronRight />
+                                )}
+                              </Link>
+                              {/* Grandchild */}
+                              {child.children?.length > 0 && (
+                                <ul className="absolute left-full top-0 w-44 bg-white shadow-lg rounded hidden group-hover/grand:block z-50">
+                                  {child.children.map((grand) => (
+                                    <li key={grand._id}>
+                                      <Link
+                                        to={`/spare-parts/${grand._id}`}
+                                        className="block px-4 py-2 hover:bg-gray-100"
+                                      >
+                                        {grand.name}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+                </ul>
               )}
             </li>
-            <Link to="/career" className="text-lg">
-              Career
-            </Link>
 
             <li>
-              <Link to="/newsroom">Newsroom</Link>
+              <Link to="/career" className="hover:text-blue-600">
+                Career
+              </Link>
+            </li>
+            <li>
+              <Link to="/newsroom" className="hover:text-blue-600">
+                Newsroom
+              </Link>
             </li>
           </ul>
         </div>
-      </div>
-      {/* DaisyUI Navbar Center Modification */}
-      <div className="navbar-center hidden lg:flex w-full">
-        <ul className="menu menu-horizontal px-1 w-full justify-around">
-          <li>
-            <NavLink to="/" className="text-lg">
-              Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/about" className="text-lg">
-              About Us
-            </NavLink>
-          </li>
 
-          <li className="dropdown dropdown-hover relative">
-            <a tabIndex={0} role="button" className="hover:bg-base-200 text-lg">
-              Elevator
-            </a>
-            <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
+        {/* MOBILE MENU */}
+        {isOpen && (
+          <div className="lg:hidden bg-white border-t shadow-md">
+            <ul className="flex flex-col p-4 space-y-2">
               <li>
-                <Link to="/elevators/passenger">Passenger Elevator</Link>
+                <Link
+                  to="/"
+                  className="block py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Home
+                </Link>
               </li>
               <li>
-                <Link to="/elevators/villa">Villa Elevator</Link>
+                <Link
+                  to="/about"
+                  className="block py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  About Us
+                </Link>
+              </li>
+
+              {/* Elevator */}
+              <li>
+                <button
+                  className="flex justify-between items-center w-full py-2"
+                  onClick={() => toggleMobileDropdown("elevator")}
+                >
+                  Elevator{" "}
+                  <HiChevronDown
+                    className={`${
+                      mobileDropdowns["elevator"] ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${
+                    mobileDropdowns["elevator"] ? "max-h-60" : "max-h-0"
+                  }`}
+                >
+                  <ul className="ml-4 border-l pl-3 space-y-1">
+                    {[
+                      "Passenger",
+                      "Villa",
+                      "Panoramic",
+                      "Hospital",
+                      "Freight",
+                      "Hydraulic",
+                    ].map((name, i) => (
+                      <li key={i}>
+                        <Link
+                          to={`/elevators/${name.toLowerCase()}`}
+                          className="block py-1"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {name} Elevator
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+
+              {/* Escalator */}
+              <li>
+                <button
+                  className="flex justify-between items-center w-full py-2"
+                  onClick={() => toggleMobileDropdown("escalator")}
+                >
+                  Escalator{" "}
+                  <HiChevronDown
+                    className={`${
+                      mobileDropdowns["escalator"] ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${
+                    mobileDropdowns["escalator"] ? "max-h-40" : "max-h-0"
+                  }`}
+                >
+                  <ul className="ml-4 border-l pl-3 space-y-1">
+                    {["Indoor", "Outdoor", "Moving Walks"].map((name, i) => (
+                      <li key={i}>
+                        <Link
+                          to={`/escalator/${name
+                            .toLowerCase()
+                            .replace(" ", "-")}`}
+                          className="block py-1"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+
+              {/* Spare Parts */}
+              <li>
+                <button
+                  className="flex justify-between items-center w-full py-2"
+                  onClick={() => toggleMobileDropdown("spare")}
+                >
+                  Spare Parts{" "}
+                  <HiChevronDown
+                    className={`${
+                      mobileDropdowns["spare"] ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${
+                    mobileDropdowns["spare"] ? "max-h-[1000px]" : "max-h-0"
+                  }`}
+                >
+                  <ul className="ml-4 border-l pl-3 space-y-1">
+                    {spareParts.length === 0 ? (
+                      <li className="text-sm text-gray-600">No categories</li>
+                    ) : (
+                      spareParts.map((parent) => (
+                        <li key={parent._id}>
+                          <button
+                            className="flex justify-between items-center w-full py-1"
+                            onClick={() => toggleMobileDropdown(parent._id)}
+                          >
+                            {parent.name}
+                            {parent.children?.length > 0 && <HiChevronRight />}
+                          </button>
+
+                          {/* Child Level */}
+                          <div
+                            className={`overflow-hidden transition-all duration-300 ${
+                              mobileDropdowns[parent._id]
+                                ? "max-h-[800px]"
+                                : "max-h-0"
+                            }`}
+                          >
+                            <ul className="ml-4 border-l pl-3 space-y-1">
+                              {parent.children?.map((child) => (
+                                <li key={child._id}>
+                                  <button
+                                    className="flex justify-between items-center w-full py-1"
+                                    onClick={() =>
+                                      toggleMobileDropdown(child._id)
+                                    }
+                                  >
+                                    {child.name}
+                                    {child.children?.length > 0 && (
+                                      <HiChevronRight />
+                                    )}
+                                  </button>
+
+                                  {/* Grandchild Level */}
+                                  <div
+                                    className={`overflow-hidden transition-all duration-300 ${
+                                      mobileDropdowns[child._id]
+                                        ? "max-h-[600px]"
+                                        : "max-h-0"
+                                    }`}
+                                  >
+                                    <ul className="ml-4 border-l pl-3 space-y-1">
+                                      {child.children?.map((grand) => (
+                                        <li key={grand._id}>
+                                          <Link
+                                            to={`/spare-parts/${grand._id}`}
+                                            className="block py-1"
+                                            onClick={() => setIsOpen(false)}
+                                          >
+                                            {grand.name}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                </div>
+              </li>
+
+              <li>
+                <Link
+                  to="/career"
+                  className="block py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Career
+                </Link>
               </li>
               <li>
-                <Link to="/elevators/panoramic">Panoramic Elevator</Link>
-              </li>
-              <li>
-                <Link to="/elevators/hospital">Hospital Elevator</Link>
-              </li>
-              <li>
-                <Link to="/elevators/freight">Freight Elevator</Link>
-              </li>
-              <li>
-                <Link to="/elevators/hydraulic">Hydraulic Elevator</Link>
+                <Link
+                  to="/newsroom"
+                  className="block py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Newsroom
+                </Link>
               </li>
             </ul>
-          </li>
-          <li className="dropdown dropdown-hover relative">
-            <a tabIndex={0} role="button" className="hover:bg-base-200 text-lg">
-              Escalator
-            </a>
-            <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
-              <li>
-                <Link to="/escalator/indoor">Indoor Escalator</Link>
-              </li>
-              <li>
-                <Link to="/escalator/out-door">Outdoor Escalator</Link>
-              </li>
-              <li>
-                <Link to="/escalator/moving-walks">Moving Walks</Link>
-              </li>
-            </ul>
-          </li>
-          <li className="relative">
-            <span
-              onClick={() => setShowSpareParts(!showSpareParts)}
-              className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap"
-            >
-              Spare Parts
-            </span>
-
-            {showSpareParts && (
-              <ul className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border border-gray-100 z-50 grid grid-cols-1 h-[400px] overflow-y-auto p-2">
-                {spareParts.length > 0 ? (
-                  renderParts(spareParts)
-                ) : (
-                  <li className="px-4 py-2">Loading...</li>
-                )}
-              </ul>
-            )}
-          </li>
-
-          <li>
-            <Link to="/career" className="text-lg">
-              Career
-            </Link>
-          </li>
-
-          <li>
-            <Link to="/contact" className="text-lg">
-              Newsroom
-            </Link>
-          </li>
-        </ul>
-      </div>
-    </div>
+          </div>
+        )}
+      </nav>
+    </header>
   );
-};
-
-export default Navbar2;
+}

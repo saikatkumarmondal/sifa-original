@@ -204,47 +204,19 @@ const Navbar2 = () => {
           </li>
 
           {/* Spare Parts Desktop Dropdown */}
-          <li className="relative" ref={dropdownRef}>
-            <span
-              onClick={() => setShowSpareParts(!showSpareParts)}
-              className="hover:text-green-700 cursor-pointer text-lg whitespace-nowrap px-3 py-2 rounded-md"
-            >
-              Spare Parts
-            </span>
+          {/* Spare Parts Dropdown (Desktop) */}
 
-            {showSpareParts && (
-              <div className="absolute top-full left-0 mt-2 w-96 max-h-96 overflow-y-auto bg-white shadow-lg rounded-md border border-gray-100 z-50 p-2">
-                {loading ? (
-                  <Loading />
-                ) : categories.length > 0 ? (
-                  <ul className="flex flex-col justify-center h-full">
-                    {categories.map((cat) => (
-                      <NestedCategory key={cat._id} category={cat} />
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-center text-gray-500">
-                    No categories found
-                  </p>
-                )}
-              </div>
-            )}
-          </li>
+          <span className="cursor-pointer text-lg px-3 py-2 peer">
+            Spare Parts
+          </span>
+          <div className="absolute  top-full left-0 hidden group-hover:block peer-hover:block hover:block bg-white border shadow z-50 max-h-96 overflow-y-auto w-72 p-2">
+            <ul className="">
+              {categories.map((cat) => (
+                <NestedCategory key={cat._id} category={cat} />
+              ))}
+            </ul>
+          </div>
 
-          {/* Other nav items */}
-          <li>
-            <Link to="/" className="hover:text-green-700 px-3 py-2 rounded-md">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/about"
-              className="hover:text-green-700 px-3 py-2 rounded-md"
-            >
-              About
-            </Link>
-          </li>
           <li>
             <Link to="/career" className="text-lg">
               Career

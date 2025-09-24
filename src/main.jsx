@@ -46,7 +46,7 @@ const router = createBrowserRouter([
       { path: "contact", Component: ContactUs },
       { path: "newsroom", Component: NewsRoom },
       { path: "career", Component: Career },
-      { path: "/spareparts/:id", Component: SparePartDetails },
+      { path: "/spare-parts/:id", Component: SparePartDetails },
       { path: "elevators/:type", Component: ElevatorDetails },
       { path: "escalator/:type", Component: EscalatorDetails },
       { path: "login", Component: Login },
@@ -55,15 +55,23 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    Component: DashboardLayout,
+    element: <DashboardLayout />, // ✅ use 'element' instead of 'Component'
     children: [
       {
         index: true,
-        Component: () => <SparePartsTable />,
+        element: (
+          <AdminRoute>
+            <SparePartsTable />
+          </AdminRoute>
+        ),
       },
       {
         path: "add",
-        Component: () => <SparePartsForm />,
+        element: (
+          <AdminRoute>
+            <SparePartsForm />
+          </AdminRoute>
+        ),
       },
     ],
   },

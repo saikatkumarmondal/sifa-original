@@ -65,62 +65,6 @@ export default function Header() {
               Contact Us
             </Link>
           </div>
-
-          {/* Mobile Dropdown */}
-          <div className="dropdown dropdown-end md:hidden">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost text-black hover:bg-gray-100"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </div>
-
-            {/* Mobile Dropdown Menu */}
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-gray-800"
-            >
-              <li>
-                <div className="flex justify-center items-center space-x-2 font-medium text-sm">
-                  <a
-                    href="#"
-                    className="text-gray-800 hover:bg-gray-200 px-2 py-1 rounded"
-                  >
-                    English
-                  </a>
-                  <span className="font-bold text-gray-500 select-none">|</span>
-                  <a
-                    href="#"
-                    className="text-gray-800 hover:bg-gray-200 px-2 py-1 rounded"
-                  >
-                    Chinese
-                  </a>
-                </div>
-              </li>
-              <li>
-                <Link
-                  to="/contact"
-                  className="btn btn-sm bg-blue-600 text-white hover:bg-blue-700 mt-2 w-full"
-                >
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
     </>

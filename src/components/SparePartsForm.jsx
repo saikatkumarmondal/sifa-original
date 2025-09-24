@@ -25,6 +25,7 @@ const SparePartsForm = () => {
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     name: "",
+    description: "",
     parent_category_id: "",
     image: null,
   });
@@ -42,7 +43,12 @@ const SparePartsForm = () => {
     },
     onSuccess: (res) => {
       queryClient.invalidateQueries(["categories"]);
-      setFormData({ name: "", parent_category_id: "", image: null });
+      setFormData({
+        name: "",
+        description: "",
+        parent_category_id: "",
+        image: null,
+      });
 
       Swal.fire({
         title: "✅ Success!",
@@ -76,6 +82,7 @@ const SparePartsForm = () => {
     e.preventDefault();
     const fd = new FormData();
     fd.append("name", formData.name);
+    fd.append("description", formData.description); // added description
     if (formData.parent_category_id)
       fd.append("parent_category_id", formData.parent_category_id);
     if (formData.image) fd.append("image", formData.image);
@@ -96,7 +103,13 @@ const SparePartsForm = () => {
         className="input input-bordered w-full"
         required
       />
-
+      <textarea
+        name="description"
+        value={formData.description}
+        onChange={handleChange}
+        placeholder="Description (Optional)"
+        className="textarea textarea-xl w-full"
+      ></textarea>
       <select
         name="parent_category_id"
         value={formData.parent_category_id}

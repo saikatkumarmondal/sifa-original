@@ -26,7 +26,7 @@ const MainLayout = () => {
       <header>
         <Header></Header>
 
-        <Navbar2></Navbar2>
+        <Navbar></Navbar>
         <ScrollNavbar />
       </header>
 
