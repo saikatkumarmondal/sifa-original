@@ -1,43 +1,62 @@
-// SparePartsForm.jsx
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import "sweetalert2/dist/sweetalert2.min.css";
 
-const fetchCategories = async () => {
-  const { data } = await axios.get("http://localhost:7777/get-categories");
-  return data.data;
-};
-
-const renderOptions = (cats, level = 0) => {
-  return cats.map((c) => (
-    <React.Fragment key={c._id}>
-      <option value={c._id}>
-        {Array(level).fill("⎯⎯").join("")} {c.name}
-      </option>
-      {c.children && renderOptions(c.children, level + 1)}
-    </React.Fragment>
-  ));
-};
-
-const SparePartsForm = () => {
+export default function AddCategoryForm() {
   const queryClient = useQueryClient();
+  const [step, setStep] = useState(1);
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     parent_category_id: "",
-    image: null,
+    child_category_id: "",
+    grandchild_category_id: "",
+    brand: "",
+    partType: "",
+    placeOfOrigin: "",
+    material: "",
+    dimensions: "",
+    installSize: "",
+    faceplateSize: "",
+    weight: "",
+    application: "",
+    warrantyTime: "",
+    certificates: "",
+    moq: "",
+    shippingTerms: "",
+    paymentTerms: "",
+    paymentCurrency: "",
+    packing: "",
+    images: [],
   });
 
-  const { data: categories = [] } = useQuery({
-    queryKey: ["categories"],
-    queryFn: fetchCategories,
-  });
+  // ✅ Handle input
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
+  // ✅ Handle file upload
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, images: e.target.files });
+  };
+
+  // ✅ Mutation
   const mutation = useMutation({
-    mutationFn: async (formData) => {
-      return axios.post("http://localhost:7777/add-category", formData, {
+    mutationFn: async (data) => {
+      const form = new FormData();
+      for (let key in data) {
+        if (key === "images") {
+          for (let i = 0; i < data.images.length; i++) {
+            form.append("images", data.images[i]);
+          }
+        } else {
+          form.append(key, data[key]);
+        }
+      }
+
+      return axios.post("http://localhost:7777/add-category", form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
     },
@@ -47,17 +66,31 @@ const SparePartsForm = () => {
         name: "",
         description: "",
         parent_category_id: "",
-        image: null,
+        child_category_id: "",
+        grandchild_category_id: "",
+        brand: "",
+        partType: "",
+        placeOfOrigin: "",
+        material: "",
+        dimensions: "",
+        installSize: "",
+        faceplateSize: "",
+        weight: "",
+        application: "",
+        warrantyTime: "",
+        certificates: "",
+        moq: "",
+        shippingTerms: "",
+        paymentTerms: "",
+        paymentCurrency: "",
+        packing: "",
+        images: [],
       });
 
       Swal.fire({
         title: "✅ Success!",
         text: res.data.message || "Category added successfully",
         icon: "success",
-        background: "#f9fafb",
-        color: "#1f2937",
-        confirmButtonColor: "#2563eb",
-        confirmButtonText: "Great!",
       });
     },
     onError: (error) => {
@@ -65,74 +98,137 @@ const SparePartsForm = () => {
         title: "❌ Error",
         text: error.response?.data?.message || "Something went wrong",
         icon: "error",
-        background: "#fef2f2",
-        color: "#991b1b",
-        confirmButtonColor: "#dc2626",
-        confirmButtonText: "Try Again",
       });
     },
   });
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({ ...formData, [name]: files ? files[0] : value });
-  };
+  // ✅ Fields in steps (5 per step)
+  const fields = [
+    { name: "name", label: "Name" },
+    { name: "description", label: "Description" },
+    { name: "brand", label: "Brand" },
+    { name: "partType", label: "Part Type" },
+    { name: "placeOfOrigin", label: "Place of Origin" },
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const fd = new FormData();
-    fd.append("name", formData.name);
-    fd.append("description", formData.description); // added description
-    if (formData.parent_category_id)
-      fd.append("parent_category_id", formData.parent_category_id);
-    if (formData.image) fd.append("image", formData.image);
-    mutation.mutate(fd);
-  };
+    { name: "material", label: "Material" },
+    { name: "dimensions", label: "Dimensions" },
+    { name: "installSize", label: "Install Size" },
+    { name: "faceplateSize", label: "Faceplate Size" },
+    { name: "weight", label: "Weight" },
+
+    { name: "application", label: "Application" },
+    { name: "warrantyTime", label: "Warranty Time" },
+    { name: "certificates", label: "Certificates" },
+    { name: "moq", label: "MOQ" },
+    { name: "shippingTerms", label: "Shipping Terms" },
+
+    { name: "paymentTerms", label: "Payment Terms" },
+    { name: "paymentCurrency", label: "Payment Currency" },
+    { name: "packing", label: "Packing" },
+  ];
+
+  const start = (step - 1) * 5;
+  const currentFields = fields.slice(start, start + 5);
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4 max-w-md mx-auto p-6 border rounded shadow-lg bg-white"
-    >
-      <input
-        type="text"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        placeholder="Category name"
-        className="input input-bordered w-full"
-        required
-      />
-      <textarea
-        name="description"
-        value={formData.description}
-        onChange={handleChange}
-        placeholder="Description (Optional)"
-        className="textarea textarea-xl w-full"
-      ></textarea>
-      <select
-        name="parent_category_id"
-        value={formData.parent_category_id}
-        onChange={handleChange}
-        className="select select-bordered w-full"
-      >
-        <option value="">None (Parent Category)</option>
-        {renderOptions(categories)}
-      </select>
+    <div className="max-w-lg mx-auto p-6 bg-white shadow rounded">
+      <h2 className="text-xl font-bold mb-4">Step {step}</h2>
 
-      <input
-        type="file"
-        name="image"
-        accept="image/*"
-        onChange={handleChange}
-        className="file-input w-full"
-      />
+      {/* Parent - Child - Grandchild */}
+      <div className="mb-3">
+        <label className="block text-sm mb-1">Parent Category</label>
+        <select
+          name="parent_category_id"
+          value={formData.parent_category_id}
+          onChange={handleChange}
+          className="w-full border rounded p-2"
+        >
+          <option value="">-- Select Parent --</option>
+          <option value="1">Parent A</option>
+          <option value="2">Parent B</option>
+        </select>
+      </div>
 
-      <button type="submit" className="btn btn-primary w-full">
-        {mutation.isLoading ? "Adding..." : "Add Category"}
-      </button>
-    </form>
+      <div className="mb-3">
+        <label className="block text-sm mb-1">Child Category</label>
+        <select
+          name="child_category_id"
+          value={formData.child_category_id}
+          onChange={handleChange}
+          className="w-full border rounded p-2"
+        >
+          <option value="">-- Select Child --</option>
+          <option value="11">Child A1</option>
+          <option value="12">Child A2</option>
+        </select>
+      </div>
+
+      <div className="mb-3">
+        <label className="block text-sm mb-1">Grandchild Category</label>
+        <select
+          name="grandchild_category_id"
+          value={formData.grandchild_category_id}
+          onChange={handleChange}
+          className="w-full border rounded p-2"
+        >
+          <option value="">-- Select Grandchild --</option>
+          <option value="111">Grandchild A1-1</option>
+          <option value="112">Grandchild A1-2</option>
+        </select>
+      </div>
+
+      {/* Step fields */}
+      {currentFields.map((field) => (
+        <div key={field.name} className="mb-3">
+          <label className="block text-sm mb-1">{field.label}</label>
+          <input
+            type="text"
+            name={field.name}
+            value={formData[field.name]}
+            onChange={handleChange}
+            className="w-full border rounded p-2"
+          />
+        </div>
+      ))}
+
+      {/* File upload */}
+      {step === 4 && (
+        <div className="mb-3">
+          <label className="block text-sm mb-1">Images</label>
+          <input
+            type="file"
+            multiple
+            onChange={handleFileChange}
+            className="w-full"
+          />
+        </div>
+      )}
+
+      {/* Buttons */}
+      <div className="flex justify-between mt-4">
+        <button
+          disabled={step === 1}
+          onClick={() => setStep(step - 1)}
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          Prev
+        </button>
+        {step < 4 ? (
+          <button
+            onClick={() => setStep(step + 1)}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Next
+          </button>
+        ) : (
+          <button
+            onClick={() => mutation.mutate(formData)}
+            className="px-4 py-2 bg-green-500 text-white rounded"
+          >
+            Submit
+          </button>
+        )}
+      </div>
+    </div>
   );
-};
-
-export default SparePartsForm;
+}

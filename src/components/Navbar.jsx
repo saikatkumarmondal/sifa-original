@@ -86,14 +86,21 @@ export default function Navbar() {
                 Escalator
                 <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
               </button>
-              <ul className="absolute left-0 top-full w-56 bg-white shadow-lg rounded hidden group-hover:block z-50">
-                {["Indoor", "Outdoor", "Moving Walks"].map((name, i) => (
-                  <li key={i}>
+              <ul className="absolute left-0 top-full w-56 bg-white shadow-xl rounded-lg hidden group-hover:block z-50 border border-gray-100">
+                {[
+                  "Passenger",
+                  "Villa",
+                  "Panoramic",
+                  "Hospital",
+                  "Freight",
+                  "Hydraulic",
+                ].map((name, i) => (
+                  <li key={i} className="transition-colors duration-200">
                     <Link
-                      to={`/escalator/${name.toLowerCase().replace(" ", "-")}`}
-                      className="block px-3 py-2 hover:bg-gray-50"
+                      to={`/elevators/${name.toLowerCase()}`}
+                      className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded transition-all duration-200"
                     >
-                      {name}
+                      {name} Elevator
                     </Link>
                   </li>
                 ))}
@@ -107,23 +114,26 @@ export default function Navbar() {
                 <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
               </button>
               {spareParts.length === 0 ? (
-                <div className="absolute left-0 top-full bg-white shadow-lg w-56 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50">
+                <div className="absolute left-0 top-full bg-white shadow-lg w-44 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50">
                   No categories
                 </div>
               ) : (
-                <ul className="absolute left-0 top-full w-56 bg-white shadow-lg rounded hidden group-hover:block z-50">
+                <ul className="absolute left-0 top-full w-52 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover:block z-50 border border-gray-200">
                   {spareParts.map((parent) => (
                     <li key={parent._id} className="relative group/child">
                       <Link
                         to={`/spare-parts/${parent._id}`}
-                        className="flex justify-between items-center px-4 py-2 hover:bg-gray-100"
+                        className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-green-100 hover:to-green-200 hover:text-green-800 rounded-md transition-all duration-200"
                       >
                         {parent.name}
-                        {parent.children?.length > 0 && <HiChevronRight />}
+                        {parent.children?.length > 0 && (
+                          <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
+                        )}
                       </Link>
+
                       {/* Child Level */}
                       {parent.children?.length > 0 && (
-                        <ul className="absolute left-full top-0 w-48 bg-white shadow-lg rounded hidden group-hover/child:block z-50">
+                        <ul className="absolute left-full top-0 w-44 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover/child:block z-50 border border-gray-200">
                           {parent.children.map((child) => (
                             <li
                               key={child._id}
@@ -131,21 +141,22 @@ export default function Navbar() {
                             >
                               <Link
                                 to={`/spare-parts/${child._id}`}
-                                className="flex justify-between items-center px-4 py-2 hover:bg-gray-100"
+                                className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-blue-100 hover:to-blue-200 hover:text-blue-800 rounded-md transition-all duration-200"
                               >
                                 {child.name}
                                 {child.children?.length > 0 && (
-                                  <HiChevronRight />
+                                  <HiChevronRight className="text-gray-400 group-hover:text-blue-600 transition-colors" />
                                 )}
                               </Link>
+
                               {/* Grandchild */}
                               {child.children?.length > 0 && (
-                                <ul className="absolute left-full top-0 w-44 bg-white shadow-lg rounded hidden group-hover/grand:block z-50">
+                                <ul className="absolute left-full top-0 w-40 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover/grand:block z-50 border border-gray-200">
                                   {child.children.map((grand) => (
                                     <li key={grand._id}>
                                       <Link
                                         to={`/spare-parts/${grand._id}`}
-                                        className="block px-4 py-2 hover:bg-gray-100"
+                                        className="block px-4 py-2.5 text-gray-700 hover:bg-gradient-to-r hover:from-purple-100 hover:to-purple-200 hover:text-purple-800 rounded-md transition-all duration-200"
                                       >
                                         {grand.name}
                                       </Link>

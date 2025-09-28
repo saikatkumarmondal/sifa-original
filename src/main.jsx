@@ -27,6 +27,8 @@ import Login from "./components/Login.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Forbidden from "./components/Forbidden.jsx";
 import AdminRoute from "./routes/AdminRoute.jsx";
+import PrivateRoute from "./routes/PrivateRoute.jsx";
+import EditCategoryForm from "./components/EditCategoryForm.jsx";
 
 const queryClient = new QueryClient();
 
@@ -55,23 +57,17 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout />, // ✅ use 'element' instead of 'Component'
+    element: (
+      <AdminRoute>
+        <DashboardLayout />
+      </AdminRoute>
+    ),
     children: [
+      { index: true, element: <SparePartsTable /> },
+      { path: "add", element: <SparePartsForm /> },
       {
-        index: true,
-        element: (
-          <AdminRoute>
-            <SparePartsTable />
-          </AdminRoute>
-        ),
-      },
-      {
-        path: "add",
-        element: (
-          <AdminRoute>
-            <SparePartsForm />
-          </AdminRoute>
-        ),
+        path: "edit-category/:id",
+        element: <EditCategoryForm key={window.location.pathname} />,
       },
     ],
   },

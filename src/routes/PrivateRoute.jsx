@@ -1,47 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { Route, Redirect } from "react-router";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Loading from "../components/Loading";
+import { Navigate, useLocation } from "react-router";
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute = ({ children }) => {
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isAuth, setIsAuth] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const token = localStorage.getItem("token"); // or from cookie
-        if (!token) {
-          setIsAuth(false);
-          return;
-        }
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setLoading(false);
+        return;
+      }
 
+      try {
         const res = await axios.get("http://localhost:7777/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        if (res.data) setIsAuth(true);
+        setUser(res.data); // valid user
       } catch (err) {
-        setIsAuth(false);
-        console.log(err);
+        console.error("Invalid token or not authenticated:", err);
+        localStorage.removeItem("token"); // remove expired token
+        setUser(null);
       } finally {
         setLoading(false);
       }
     };
 
-    checkAuth();
+    fetchUser();
   }, []);
 
-  if (loading) return <Loading />; // optional spinner
+  if (loading) return <Loading />;
 
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuth ? <Component {...props} /> : <Redirect to="/forbidden" />
-      }
-    />
-  );
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
 };
 
 export default PrivateRoute;

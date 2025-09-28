@@ -1,29 +1,37 @@
-// CategoryList.jsx
-import React from "react";
+import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { FaTrash, FaEye, FaEdit } from "react-icons/fa";
 import Loading from "./Loading";
+import { Link, useNavigate } from "react-router";
 
 const API_URL = "http://localhost:7777"; // backend base URL
 
 // Fetch all categories (nested)
 const fetchCategories = async () => {
   const { data } = await axios.get(`${API_URL}/get-categories`);
-  return data.data || []; // Use `data.data` because your API returns { success, message, data }
+  return data.data || [];
 };
 
-const CategoryList = () => {
+const CategoryList = ({ setEditingCategoryId }) => {
   const queryClient = useQueryClient();
-
-  // Fetch categories
+  const navigate = useNavigate();
   const { data: categories = [], isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
   });
 
-  // Delete category
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(categories.length / itemsPerPage);
+  const paginatedCategories = categories.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Delete category mutation
   const deleteMutation = useMutation({
     mutationFn: (id) => axios.delete(`${API_URL}/categories/${id}`),
     onSuccess: () => {
@@ -31,23 +39,6 @@ const CategoryList = () => {
       queryClient.invalidateQueries(["categories"]);
     },
     onError: () => Swal.fire("Error", "Failed to delete category.", "error"),
-  });
-
-  // Update category
-  const updateMutation = useMutation({
-    mutationFn: ({ id, name, file }) => {
-      const formData = new FormData();
-      formData.append("name", name);
-      if (file) formData.append("image", file);
-      return axios.put(`${API_URL}/update-category/${id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-    },
-    onSuccess: () => {
-      Swal.fire("Updated!", "Category updated successfully.", "success");
-      queryClient.invalidateQueries(["categories"]);
-    },
-    onError: () => Swal.fire("Error", "Failed to update category.", "error"),
   });
 
   // View category
@@ -62,43 +53,13 @@ const CategoryList = () => {
     });
   };
 
-  // Edit category
-  const handleEdit = (cat) => {
-    const container = document.createElement("div");
+  // ✅ Edit category → navigate and update layout state
+  // const handleEdit = (id) => {
+  //   navigate(`/dashboard/edit-category/${id}`); // navigate to URL
+  //   if (setEditingCategoryId) setEditingCategoryId(id); // update DashboardLayout state
+  // };
 
-    const nameInput = document.createElement("input");
-    nameInput.type = "text";
-    nameInput.value = cat.name;
-    nameInput.className = "swal2-input";
-    container.appendChild(nameInput);
-
-    const fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.accept = "image/*";
-    fileInput.className = "swal2-file";
-    container.appendChild(fileInput);
-
-    Swal.fire({
-      title: "Edit Category",
-      html: container,
-      showCancelButton: true,
-      confirmButtonText: "Update",
-      focusConfirm: false,
-      preConfirm: () => {
-        return { name: nameInput.value, file: fileInput.files[0] };
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        updateMutation.mutate({
-          id: cat._id,
-          name: result.value.name,
-          file: result.value.file,
-        });
-      }
-    });
-  };
-
-  // Delete category (optimistic)
+  // Delete category (with confirmation)
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -130,14 +91,18 @@ const CategoryList = () => {
   // Recursive render for nested categories
   const renderCategories = (cats, level = 0) =>
     cats.map((cat) => (
-      <div key={cat._id} className={`ml-${level * 4} border-l pl-4 my-2`}>
+      <div
+        key={cat._id}
+        className={`pl-${level * 4} my-2`}
+        style={{ marginLeft: `${level * 20}px` }}
+      >
         <div className="flex justify-between items-center bg-gray-50 p-2 rounded shadow-sm">
           <div className="flex items-center gap-2">
             <img
               src={
                 cat.image
                   ? `${API_URL}/${cat.image}`
-                  : `${API_URL}/default-category.png` // fallback image
+                  : `${API_URL}/default-category.png`
               }
               alt={cat.name}
               className="w-6 h-6 object-cover rounded"
@@ -152,9 +117,13 @@ const CategoryList = () => {
             <button className="text-blue-500" onClick={() => handleView(cat)}>
               <FaEye />
             </button>
-            <button className="text-green-500" onClick={() => handleEdit(cat)}>
+            <Link
+              to={`/dashboard/edit-category/${cat._id}`}
+              className="text-green-500"
+              // onClick={() => handleEdit(cat._id)}
+            >
               <FaEdit />
-            </button>
+            </Link>
             <button
               className="text-red-500"
               onClick={() => handleDelete(cat._id)}
@@ -164,9 +133,7 @@ const CategoryList = () => {
           </div>
         </div>
         {cat.children && cat.children.length > 0 && (
-          <div className="ml-6">
-            {renderCategories(cat.children, level + 1)}
-          </div>
+          <div>{renderCategories(cat.children, level + 1)}</div>
         )}
       </div>
     ));
@@ -175,12 +142,35 @@ const CategoryList = () => {
 
   return (
     <div className="p-6 bg-white rounded shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Categories</h2>
-      {categories.length ? (
-        renderCategories(categories)
+      <h2 className="text-2xl font-bold mb-4">Spare Parts Categories</h2>
+      {paginatedCategories.length ? (
+        renderCategories(paginatedCategories)
       ) : (
         <p className="text-gray-500">No categories found</p>
       )}
+
+      {/* Pagination */}
+      <div className="flex justify-between mt-6">
+        <button
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="self-center">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

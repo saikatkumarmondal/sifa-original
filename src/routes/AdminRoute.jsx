@@ -1,41 +1,50 @@
-// src/components/AdminRoute.jsx
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import axios from "axios";
 
 const AdminRoute = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const checkAdmin = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        // Save the current location in state to redirect after login
+        navigate("/login", { replace: true, state: { from: location } });
+        return;
+      }
+
       try {
-        const res = await axios.get("http://localhost:7777/api/me", {
-          withCredentials: true, // important! sends the cookie
+        console.log("inside try");
+        const res = await axios.get("http://localhost:7777/me", {
+          headers: { Authorization: `Bearer ${token}` },
         });
 
-        setUser(res.data); // store logged-in user
+        console.log("localhost:7777/me", res);
+
         if (res.data.role === "admin") {
           setIsAdmin(true);
         } else {
-          setIsAdmin(false);
-          navigate("/login"); // redirect non-admin users
+          navigate("/login", { replace: true });
         }
       } catch (err) {
-        console.error(err);
-        navigate("/login"); // redirect if not logged in
+        localStorage.removeItem("token");
+        navigate("/login", { replace: true, state: { from: location } });
       } finally {
         setLoading(false);
       }
     };
 
     checkAdmin();
-  }, [navigate]);
+  }, [navigate, location]);
 
   if (loading) return <p>Loading...</p>;
-  if (!isAdmin) return null; // hide content for non-admin
+  if (!isAdmin) return null;
 
   return children;
 };
