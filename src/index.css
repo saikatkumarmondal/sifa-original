@@ -17,10 +17,19 @@ body {
   min-height: 200vh;
   font-family: "Poppins", sans-serif;
 }
-ul::-webkit-scrollbar {
-  width: 6px;
-}
-ul::-webkit-scrollbar-thumb {
+ul:not(.gradient-scrollbar)::-webkit-scrollbar-thumb {
   background-color: rgba(107, 114, 128, 0.5);
   border-radius: 3px;
+}
+.gradient-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #57c785 #c0d662;
+}
+.gradient-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 8px;
+}
+
+.gradient-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }

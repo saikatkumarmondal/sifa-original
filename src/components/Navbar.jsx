@@ -288,91 +288,68 @@ export default function Navbar() {
               </li>
 
               {/* Spare Parts */}
-              <li>
-                <button
-                  className="flex justify-between items-center w-full py-2"
-                  onClick={() => toggleMobileDropdown("spare")}
-                >
-                  Spare Parts{" "}
-                  <HiChevronDown
-                    className={`${
-                      mobileDropdowns["spare"] ? "rotate-180" : ""
-                    }`}
-                  />
+              <li className="relative group">
+                <button className="flex items-center cursor-pointer">
+                  Spare Parts
+                  <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
                 </button>
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    mobileDropdowns["spare"] ? "max-h-[1000px]" : "max-h-0"
-                  }`}
-                >
-                  <ul className="ml-4 border-l pl-3 space-y-1">
-                    {spareParts.length === 0 ? (
-                      <li className="text-sm text-gray-600">No categories</li>
-                    ) : (
-                      spareParts.map((parent) => (
-                        <li key={parent._id}>
-                          <button
-                            className="flex justify-between items-center w-full py-1"
-                            onClick={() => toggleMobileDropdown(parent._id)}
-                          >
-                            {parent.name}
-                            {parent.children?.length > 0 && <HiChevronRight />}
-                          </button>
-
-                          {/* Child Level */}
-                          <div
-                            className={`overflow-hidden transition-all duration-300 ${
-                              mobileDropdowns[parent._id]
-                                ? "max-h-[800px]"
-                                : "max-h-0"
-                            }`}
-                          >
-                            <ul className="ml-4 border-l pl-3 space-y-1">
-                              {parent.children?.map((child) => (
-                                <li key={child._id}>
-                                  <button
-                                    className="flex justify-between items-center w-full py-1"
-                                    onClick={() =>
-                                      toggleMobileDropdown(child._id)
-                                    }
-                                  >
-                                    {child.name}
-                                    {child.children?.length > 0 && (
-                                      <HiChevronRight />
-                                    )}
-                                  </button>
-
-                                  {/* Grandchild Level */}
-                                  <div
-                                    className={`overflow-hidden transition-all duration-300 ${
-                                      mobileDropdowns[child._id]
-                                        ? "max-h-[600px]"
-                                        : "max-h-0"
-                                    }`}
-                                  >
-                                    <ul className="ml-4 border-l pl-3 space-y-1">
-                                      {child.children?.map((grand) => (
-                                        <li key={grand._id}>
-                                          <Link
-                                            to={`/spare-parts/${grand._id}`}
-                                            className="block py-1"
-                                            onClick={() => setIsOpen(false)}
-                                          >
-                                            {grand.name}
-                                          </Link>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </li>
-                      ))
-                    )}
+                {spareParts.length === 0 ? (
+                  <div className="absolute left-0 top-full bg-white shadow-lg w-44 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50">
+                    No categories
+                  </div>
+                ) : (
+                  <ul className="absolute left-0 top-full w-56 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover:block z-50 border border-gray-200 overflow-y-auto max-h-96 gradient-scrollbar">
+                    {spareParts.map((parent) => (
+                      <li key={parent._id} className="relative group/parent">
+                        <Link
+                          to={`/spare-parts/${parent._id}`}
+                          className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-green-100 hover:to-green-200 hover:text-green-800 rounded-md transition-all duration-200"
+                        >
+                          {parent.name}
+                          {parent.children?.length > 0 && (
+                            <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
+                          )}
+                        </Link>
+                        {/* Child Popup */}
+                        {parent.children?.length > 0 && (
+                          <ul className="absolute left-full top-0 w-56 bg-white shadow-xl rounded-lg border border-gray-200 hidden group-hover/parent:block z-50">
+                            {parent.children.map((child) => (
+                              <li
+                                key={child._id}
+                                className="relative group/child"
+                              >
+                                <Link
+                                  to={`/spare-parts/${child._id}`}
+                                  className="flex justify-between items-center px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                                >
+                                  {child.name}
+                                  {child.children?.length > 0 && (
+                                    <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
+                                  )}
+                                </Link>
+                                {/* Grandchild Popup */}
+                                {child.children?.length > 0 && (
+                                  <ul className="absolute left-full top-0 w-56 bg-white shadow-xl rounded-lg border border-gray-200 hidden group-hover/child:block z-50">
+                                    {child.children.map((grand) => (
+                                      <li key={grand._id}>
+                                        <Link
+                                          to={`/spare-parts/${grand._id}`}
+                                          className="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                                        >
+                                          {grand.name}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    ))}
                   </ul>
-                </div>
+                )}
               </li>
 
               <li>

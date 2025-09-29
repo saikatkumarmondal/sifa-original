@@ -1,6 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
+import { HiChevronDown, HiChevronRight } from "react-icons/hi";
+
 import Loading from "./Loading";
 
 const ScrollNavbar = () => {
@@ -10,9 +12,6 @@ const ScrollNavbar = () => {
   const [isOpen, setIsOpen] = useState(false); // Mobile menu toggle
   const [mobileDropdowns, setMobileDropdowns] = useState({}); // Nested dropdown states
   const [spareParts, setSpareParts] = useState([]);
-
-  const [showSpareParts, setShowSpareParts] = useState(false); // desktop spare parts
-  const [openIds, setOpenIds] = useState({}); // desktop nested toggle
 
   const dropdownRef = useRef(null);
 
@@ -31,35 +30,26 @@ const ScrollNavbar = () => {
 
   // ✅ Fetch spare parts (same for mobile & desktop)
   useEffect(() => {
-    const fetchSpareParts = async () => {
-      try {
-        const { data } = await axios.get(
-          "http://localhost:7777/api/spareparts"
-        );
-        setSpareParts(data);
-      } catch (error) {
-        console.error("Failed to fetch spare parts:", error);
-      }
-    };
-    fetchSpareParts();
+    fetch("http://localhost:7777/get-categories")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && Array.isArray(data.data)) setSpareParts(data.data);
+        else setSpareParts([]);
+      })
+      .catch((err) => {
+        console.error("Error fetching spare parts:", err);
+        setSpareParts([]);
+      });
   }, []);
 
   // ✅ Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowSpareParts(false);
-        setOpenIds({});
-      }
+    const handleClickOutside = () => {
+      // No-op: dropdown close logic is now handled by CSS hover
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  // ✅ toggle for desktop nested
-  const toggleOpen = (id) => {
-    setOpenIds((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
 
   // ✅ toggle for mobile nested
   const toggleMobileDropdown = (id) => {
@@ -67,88 +57,6 @@ const ScrollNavbar = () => {
       ...prev,
       [id]: !prev[id],
     }));
-  };
-
-  // ✅ recursive renderer for mobile spare parts
-  const renderMobileParts = (parts) => {
-    return (
-      <ul className="ml-4 mt-1">
-        {parts.map((part) => {
-          const id = part._id || part.title;
-          const hasChildren = part.children && part.children.length > 0;
-
-          return (
-            <li key={id}>
-              {hasChildren ? (
-                <>
-                  <button
-                    onClick={() => toggleMobileDropdown(id)}
-                    className="w-full text-left px-3 py-2 flex justify-between items-center hover:bg-gray-100"
-                  >
-                    <span>{part.title}</span>
-                    <span>{mobileDropdowns[id] ? "▲" : "▼"}</span>
-                  </button>
-                  {mobileDropdowns[id] && renderMobileParts(part.children)}
-                </>
-              ) : (
-                <Link
-                  to={`/spareparts/${id}`}
-                  state={{ sparePart: part }}
-                  className="block px-3 py-2 hover:bg-gray-100"
-                  onClick={() => setIsOpen(false)} // close menu on click
-                >
-                  {part.title}
-                </Link>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    );
-  };
-
-  // ✅ recursive renderer for desktop spare parts
-  const renderParts = (parts) => {
-    return (
-      <ul className="ml-2 mt-1">
-        {parts.map((part) => {
-          const id = part._id || part.title;
-          const hasChildren = part.children && part.children.length > 0;
-
-          return (
-            <li key={id} className="relative">
-              {hasChildren ? (
-                <>
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleOpen(id);
-                    }}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between rounded-md"
-                  >
-                    <span>{part.title}</span>
-                    <span>{openIds[id] ? "▲" : "▼"}</span>
-                  </div>
-                  {openIds[id] && renderParts(part.children)}
-                </>
-              ) : (
-                <Link
-                  to={`/spareparts/${id}`}
-                  state={{ sparePart: part }}
-                  className="px-4 py-2 hover:bg-gray-100 block rounded-md"
-                  onClick={() => {
-                    setShowSpareParts(false);
-                    setOpenIds({});
-                  }}
-                >
-                  {part.title}
-                </Link>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    );
   };
 
   return (
@@ -171,78 +79,216 @@ const ScrollNavbar = () => {
               <li className="hover:text-green-700">
                 <Link to="/about">About Us</Link>
               </li>
-
               {/* Elevator */}
-              <li className="dropdown dropdown-hover relative cursor-pointer">
-                <span className="hover:text-green-700">Elevator</span>
-                <ul className="menu dropdown-content absolute top-full left-0 mt-1 p-2 shadow bg-base-100 rounded-box w-52 z-50">
+              <li className="relative cursor-pointer group">
+                {/* Dropdown trigger */}
+                <button className="flex items-center text-gray-800 hover:text-green-700 font-medium transition-colors duration-200 peer">
+                  Elevator
+                  <HiChevronDown
+                    className="
+        ml-1 
+        text-gray-500 
+        transition-all duration-200 
+        peer-hover:rotate-180 group-hover:rotate-180
+        peer-hover:text-green-700 group-hover:text-green-700
+      "
+                  />
+                </button>
+
+                {/* Dropdown menu */}
+                <ul
+                  className="
+      absolute left-0 top-full 
+      min-w-max
+      bg-white 
+      shadow-lg 
+      rounded-lg 
+      border border-gray-100
+      invisible opacity-0 
+      peer-hover:visible peer-hover:opacity-100
+      group-hover:visible group-hover:opacity-100
+      transition-all duration-200
+      z-50 mt-2 py-2
+    "
+                >
                   <li>
-                    <Link to="/elevators/passenger">Passenger Elevator</Link>
+                    <Link
+                      to="/elevators/passenger"
+                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                    >
+                      Passenger Elevator
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/elevators/villa">Villa Elevator</Link>
+                    <Link
+                      to="/elevators/villa"
+                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                    >
+                      Villa Elevator
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/elevators/panoramic">Panoramic Elevator</Link>
+                    <Link
+                      to="/elevators/panoramic"
+                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                    >
+                      Panoramic Elevator
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/elevators/hospital">Hospital Elevator</Link>
+                    <Link
+                      to="/elevators/hospital"
+                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                    >
+                      Hospital Elevator
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/elevators/freight">Freight Elevator</Link>
+                    <Link
+                      to="/elevators/freight"
+                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                    >
+                      Freight Elevator
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/elevators/hydraulic">Hydraulic Elevator</Link>
+                    <Link
+                      to="/elevators/hydraulic"
+                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                    >
+                      Hydraulic Elevator
+                    </Link>
                   </li>
                 </ul>
               </li>
 
               {/* Escalator */}
-              <li className="group relative cursor-pointer">
-                <span className="hover:text-green-700">Escalator</span>
-                <ul className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border opacity-0 group-hover:opacity-100 invisible group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-50 p-5">
+              <li className="relative cursor-pointer group">
+                {/* Dropdown button */}
+                <button className="flex items-center text-gray-800 hover:text-green-700 font-medium transition-colors duration-200 peer">
+                  Escalator
+                  <HiChevronDown className="ml-1 transition-transform duration-200 peer-hover:rotate-180 group-hover:rotate-180" />
+                </button>
+
+                {/* Dropdown menu */}
+                <ul
+                  className="
+      absolute left-0 top-full 
+      min-w-max
+      bg-white 
+      shadow-lg 
+      rounded-lg 
+      border border-gray-100
+      invisible opacity-0 
+      peer-hover:visible peer-hover:opacity-100
+      group-hover:visible group-hover:opacity-100
+      transition-all duration-200
+      z-50 mt-2 py-2
+    "
+                >
                   <li>
-                    <Link to="escalator/indoor">Indoor Escalator</Link>
+                    <Link
+                      to="/escalator/indoor"
+                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                    >
+                      Indoor Escalator
+                    </Link>
                   </li>
                   <li>
-                    <Link to="escalator/out-door">Outdoor Escalator</Link>
+                    <Link
+                      to="/escalator/out-door"
+                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                    >
+                      Outdoor Escalator
+                    </Link>
                   </li>
                   <li>
-                    <Link to="escalator/moving-walks">Moving Walk</Link>
+                    <Link
+                      to="/escalator/moving-walks"
+                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                    >
+                      Moving Walk
+                    </Link>
                   </li>
                 </ul>
               </li>
 
-              {/* Spare Parts */}
-              <li className="relative group" ref={dropdownRef}>
-                <span
-                  onClick={() => setShowSpareParts(!showSpareParts)}
-                  className="hover:text-green-700 cursor-pointer"
-                >
+              {/* Spare Parts (from Navbar.jsx) */}
+              <li className="relative group">
+                <button className="flex items-center cursor-pointer">
                   Spare Parts
-                </span>
-
-                {showSpareParts && (
-                  <div className="absolute top-full left-0 mt-2 w-80 bg-white shadow-lg rounded-md border z-50 max-h-96 overflow-y-auto p-2">
-                    {spareParts.length > 0 ? (
-                      renderParts(spareParts)
-                    ) : (
-                      <Loading />
-                    )}
+                  <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
+                </button>
+                {spareParts.length === 0 ? (
+                  <div className="absolute left-0 top-full bg-white shadow-lg w-44 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50">
+                    No categories
                   </div>
+                ) : (
+                  <ul className="absolute left-0 top-full w-56 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover:block z-50 border border-gray-200">
+                    {spareParts.map((parent) => (
+                      <li key={parent._id} className="relative group/child">
+                        <Link
+                          to={`/spare-parts/${parent._id}`}
+                          className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-green-100 hover:to-green-200 hover:text-green-800 rounded-md transition-all duration-200"
+                        >
+                          {parent.name}
+                          {parent.children?.length > 0 && (
+                            <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
+                          )}
+                        </Link>
+                        {/* Child Level */}
+                        {parent.children?.length > 0 && (
+                          <ul className="absolute left-full top-0 w-44 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover/child:block z-50 border border-gray-200">
+                            {parent.children.map((child) => (
+                              <li
+                                key={child._id}
+                                className="relative group/grand"
+                              >
+                                <Link
+                                  to={`/spare-parts/${child._id}`}
+                                  className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-blue-100 hover:to-blue-200 hover:text-blue-800 rounded-md transition-all duration-200"
+                                >
+                                  {child.name}
+                                  {child.children?.length > 0 && (
+                                    <HiChevronRight className="text-gray-400 group-hover:text-blue-600 transition-colors" />
+                                  )}
+                                </Link>
+                                {/* Grandchild */}
+                                {child.children?.length > 0 && (
+                                  <ul className="absolute left-full top-0 w-40 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover/grand:block z-50 border border-gray-200">
+                                    {child.children.map((grand) => (
+                                      <li key={grand._id}>
+                                        <Link
+                                          to={`/spare-parts/${grand._id}`}
+                                          className="block px-4 py-2.5 text-gray-700 hover:bg-gradient-to-r hover:from-purple-100 hover:to-purple-200 hover:text-purple-800 rounded-md transition-all duration-200"
+                                        >
+                                          {grand.name}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </li>
-
               <li className="hover:text-green-700">
                 <Link to="/career">Careers</Link>
               </li>
               <li className="hover:text-green-700">
-                <Link to="/newsroom">Newsroom</Link>
+                <Link to="/newsroom" className="relative right-5">
+                  Newsroom
+                </Link>
               </li>
               <li>
                 <Link
                   to="/contact"
-                  className="btn rounded-full bg-blue-700 text-white relative right-6 hover:bg-blue-800 border-none px-4 py-1 hidden lg:flex"
+                  className="btn rounded-full bg-blue-700 text-white relative right-20 hover:bg-blue-800 border-none px-4 py-1 hidden lg:flex"
                 >
                   Contact Us
                 </Link>
@@ -282,24 +328,68 @@ const ScrollNavbar = () => {
                     Newsroom
                   </Link>
                 </li>
-
-                {/* ✅ Spare Parts Mobile Dropdown */}
-                <li>
-                  <button
-                    onClick={() => toggleMobileDropdown("spare")}
-                    className="w-full text-left px-3 py-2 flex justify-between items-center hover:bg-gray-100"
-                  >
-                    <span>Spare Parts</span>
-                    <span>{mobileDropdowns["spare"] ? "▲" : "▼"}</span>
+                {/* Spare Parts (from Navbar.jsx) */}
+                <li className="relative group">
+                  <button className="flex items-center cursor-pointer">
+                    Spare Parts
+                    <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
                   </button>
-                  {mobileDropdowns["spare"] && (
-                    <div className="pl-3">
-                      {spareParts.length > 0 ? (
-                        renderMobileParts(spareParts)
-                      ) : (
-                        <Loading />
-                      )}
+                  {spareParts.length === 0 ? (
+                    <div className="absolute left-0 top-full bg-white shadow-lg w-44 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50">
+                      No categories
                     </div>
+                  ) : (
+                    <ul className="absolute left-0 top-full w-52 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover:block z-50 border border-gray-200 overflow-y-auto max-h-96 gradient-scrollbar">
+                      {spareParts.map((parent) => (
+                        <li key={parent._id} className="relative group/child">
+                          <Link
+                            to={`/spare-parts/${parent._id}`}
+                            className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-green-100 hover:to-green-200 hover:text-green-800 rounded-md transition-all duration-200"
+                          >
+                            {parent.name}
+                            {parent.children?.length > 0 && (
+                              <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
+                            )}
+                          </Link>
+                          {/* Child Level */}
+                          {parent.children?.length > 0 && (
+                            <ul className="absolute left-full top-0 w-44 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover/child:block z-50 border border-gray-200">
+                              {parent.children.map((child) => (
+                                <li
+                                  key={child._id}
+                                  className="relative group/grand"
+                                >
+                                  <Link
+                                    to={`/spare-parts/${child._id}`}
+                                    className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-blue-100 hover:to-blue-200 hover:text-blue-800 rounded-md transition-all duration-200"
+                                  >
+                                    {child.name}
+                                    {child.children?.length > 0 && (
+                                      <HiChevronRight className="text-gray-400 group-hover:text-blue-600 transition-colors" />
+                                    )}
+                                  </Link>
+                                  {/* Grandchild */}
+                                  {child.children?.length > 0 && (
+                                    <ul className="absolute left-full top-0 w-40 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover/grand:block z-50 border border-gray-200">
+                                      {child.children.map((grand) => (
+                                        <li key={grand._id}>
+                                          <Link
+                                            to={`/spare-parts/${grand._id}`}
+                                            className="block px-4 py-2.5 text-gray-700 hover:bg-gradient-to-r hover:from-purple-100 hover:to-purple-200 hover:text-purple-800 rounded-md transition-all duration-200"
+                                          >
+                                            {grand.name}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </li>
               </ul>

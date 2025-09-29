@@ -39,12 +39,15 @@ const SparePartDetails = () => {
       throw new Error(res.data?.message || "Category not found");
     },
     enabled: !!id,
-    onSuccess: (data) => {
-      // Choose initial main image
-      const initial = data.image || data.images?.[0] || null;
-      setMainImage(initial ? buildUrl(initial) : null);
-    },
   });
+
+  // Ensure mainImage is set whenever category changes
+  React.useEffect(() => {
+    if (category) {
+      const initial = category.image || category.images?.[0] || null;
+      setMainImage(initial ? buildUrl(initial) : null);
+    }
+  }, [category]);
 
   if (isLoading) return <Loading />;
   if (isError) return <p className="text-red-500">Error: {error.message}</p>;
@@ -82,7 +85,7 @@ const SparePartDetails = () => {
   // Build a combined, unique images array
   const imagesList = Array.from(
     new Set(
-      [...(category.images || []).filter(Boolean), category.image].filter(
+      [...(category?.images || []).filter(Boolean), category?.image].filter(
         Boolean
       )
     )
@@ -412,18 +415,6 @@ const SparePartDetails = () => {
                   </span>
                   <span className="block mt-1 text-gray-700">
                     {category.certificates}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            {category.moq && (
-              <div className="flex items-start p-3 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                <FaCheckCircle className="text-yellow-500 mt-1 mr-2 flex-shrink-0" />
-                <div>
-                  <span className="block text-gray-900 font-semibold">MOQ</span>
-                  <span className="block mt-1 text-gray-700">
-                    {category.moq}
                   </span>
                 </div>
               </div>
