@@ -9,7 +9,7 @@ export const useCategories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-  const res = await axiosInstance.get("/get-categories");
+        const res = await axiosInstance.get("/get-categories");
         if (res.data.success) {
           setCategories(res.data.data); // use backend nested data directly
         }

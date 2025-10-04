@@ -10,7 +10,7 @@ export const uploadToServer = async (file) => {
   formData.append("image", file); // must match backend multer key
 
   try {
-  const res = await axiosInstance.post(`/api/upload`, formData, {
+    const res = await axiosInstance.post(`/api/upload`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
       withCredentials: true, // in case you need auth cookie
     });

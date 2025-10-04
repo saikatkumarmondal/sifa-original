@@ -1,4 +1,12 @@
 import React from "react";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaPinterestP,
+  FaYoutube,
+} from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { IoCall, IoLocation } from "react-icons/io5";
 import { MdAlternateEmail } from "react-icons/md";
 import { useEffect, useRef } from "react";
@@ -195,7 +203,7 @@ const Footer = () => {
         }}
       />
       <div
-        className="flex items-center justify-center gap-2 bg-blue-500 text-white py-2"
+        className="flex flex-col sm:flex-row items-center justify-center gap-2 bg-blue-500 text-white py-2"
         style={{ marginTop: "-10px" }}
       >
         <p className="m-0 text-sm sm:text-base text-center py-2">
@@ -215,6 +223,75 @@ const Footer = () => {
             className="h-6 object-contain"
           />
         </a>
+        {/* Social Icons */}
+        <div className="flex gap-3 mt-2 sm:mt-0 p-6">
+          <a
+            href="https://www.facebook.com/profile.php?id=61560889584803"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+          >
+            <FaFacebookF
+              size={22}
+              className="hover:text-yellow-400 transition-colors duration-300"
+            />
+          </a>
+          <a
+            href="https://x.com/Ningbo_Sifa"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="X"
+          >
+            <FaXTwitter
+              size={22}
+              className="hover:text-yellow-400 transition-colors duration-300"
+            />
+          </a>
+          <a
+            href="https://www.instagram.com/nb_sifa/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <FaInstagram
+              size={22}
+              className="hover:text-yellow-400 transition-colors duration-300"
+            />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/ningbo-sifa-elevator-149890388/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+          >
+            <FaLinkedinIn
+              size={22}
+              className="hover:text-yellow-400 transition-colors duration-300"
+            />
+          </a>
+          <a
+            href="https://www.pinterest.com/NBSF8250/_boards/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Pinterest"
+          >
+            <FaPinterestP
+              size={22}
+              className="hover:text-yellow-400 transition-colors duration-300"
+            />
+          </a>
+          <a
+            href="https://www.youtube.com/@NingboSIFAElevator"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+          >
+            <FaYoutube
+              size={22}
+              className="hover:text-yellow-400 transition-colors duration-300"
+            />
+          </a>
+        </div>
       </div>
     </>
   );

@@ -32,8 +32,8 @@ export default function AddCategoryForm() {
 
   // Fetch categories
   useEffect(() => {
-      axiosInstance
-        .get("/get-categories")
+    axiosInstance
+      .get("/get-categories")
       .then((res) => {
         if (res.data.success) setCategories(res.data.data);
       })
@@ -43,8 +43,8 @@ export default function AddCategoryForm() {
   // Fetch single category for edit
   useEffect(() => {
     if (!id) return;
-      axiosInstance
-        .get(`/category/${id}`)
+    axiosInstance
+      .get(`/category/${id}`)
       .then((res) => {
         if (res.data.success) {
           const cat = res.data.data;
@@ -111,7 +111,7 @@ export default function AddCategoryForm() {
         ? `http://localhost:7777/category/${id}`
         : "http://localhost:7777/add-category";
 
-          const res = await axiosInstance.post(url, form, {
+      const res = await axiosInstance.post(url, form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

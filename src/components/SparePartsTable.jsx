@@ -12,7 +12,7 @@ const SparePartsTable = () => {
 
   const fetchParts = async () => {
     try {
-    const res = await axiosInstance.get(`/api/spareparts`);
+      const res = await axiosInstance.get(`/api/spareparts`);
       setData(res.data);
     } catch (err) {
       console.error(err);

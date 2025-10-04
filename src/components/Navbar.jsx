@@ -52,6 +52,14 @@ export default function Navbar() {
                 About Us
               </Link>
             </li>
+            <li>
+              <Link
+                to="/dashboard"
+                className="hover:text-blue-600 font-semibold"
+              >
+                Dashboard
+              </Link>
+            </li>
 
             {/* Elevator */}
             <li className="relative group">
@@ -207,6 +215,15 @@ export default function Navbar() {
                   onClick={() => setIsOpen(false)}
                 >
                   About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/dashboard"
+                  className="block py-2 font-semibold"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Dashboard
                 </Link>
               </li>
 

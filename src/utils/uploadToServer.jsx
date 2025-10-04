@@ -8,7 +8,7 @@ export const uploadToServer = async (file) => {
     formData.append("image", file);
 
     // Make sure to point to the correct backend port
-  const res = await axiosInstance.post("/api/upload", formData, {
+    const res = await axiosInstance.post("/api/upload", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
