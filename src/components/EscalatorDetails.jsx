@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { HiX } from "react-icons/hi";
 import { Link, useParams } from "react-router";
 import Footer from "./Footer";
-import ImageZoom from "react-image-zoom";
 
 const EscalatorDetails = () => {
   const { type } = useParams();
@@ -49,6 +49,7 @@ const EscalatorDetails = () => {
   const escalator = escalatorData[type];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [thumbnailStartIndex, setThumbnailStartIndex] = useState(0);
+  const [showModal, setShowModal] = useState(false);
   const thumbnailsPerPage = 3;
 
   useEffect(() => {
@@ -88,15 +89,6 @@ const EscalatorDetails = () => {
     setThumbnailStartIndex((prev) =>
       Math.min(prev + 1, escalator.images.length - thumbnailsPerPage)
     );
-  };
-
-  // Zoom props for main image
-  const zoomProps = {
-    width: 700,
-    height: 650,
-    zoomWidth: 300,
-    img: escalator.images[currentImageIndex],
-    zoomPosition: "left",
   };
 
   return (
@@ -141,9 +133,15 @@ const EscalatorDetails = () => {
                 {escalator.description}
               </p>
 
-              {/* Main Image with zoom */}
-              <div className="relative w-full max-w-2xl mx-auto mb-6">
-                <ImageZoom {...zoomProps} />
+              {/* Main Image with zoom-on-hover */}
+              <div className="relative w-full max-w-2xl mx-auto mb-6 group">
+                <img
+                  src={escalator.images[currentImageIndex]}
+                  alt={escalator.title}
+                  className="w-full h-[650px] object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110 cursor-zoom-in"
+                  style={{ maxWidth: "700px" }}
+                  onClick={() => setShowModal(true)}
+                />
                 <button
                   onClick={handleMainPrev}
                   disabled={currentImageIndex === 0}
@@ -193,6 +191,23 @@ const EscalatorDetails = () => {
                     />
                   </svg>
                 </button>
+                {/* Modal for fullscreen image */}
+                {showModal && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+                    <img
+                      src={escalator.images[currentImageIndex]}
+                      alt={escalator.title}
+                      className="w-full h-full object-contain"
+                    />
+                    <button
+                      className="absolute top-8 right-8 text-white text-4xl bg-black bg-opacity-60 rounded-full p-2 hover:bg-opacity-90 transition"
+                      onClick={() => setShowModal(false)}
+                      aria-label="Close"
+                    >
+                      <HiX />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <hr className="my-6 border-gray-200" />

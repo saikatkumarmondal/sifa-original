@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { HiX } from "react-icons/hi";
 import { Link, useParams } from "react-router";
 import Footer from "./Footer";
 
@@ -108,6 +109,7 @@ const ElevatorDetails = () => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [thumbnailStartIndex, setThumbnailStartIndex] = useState(0);
+  const [showModal, setShowModal] = useState(false);
   const thumbnailsPerPage = 3;
 
   useEffect(() => {
@@ -203,11 +205,12 @@ const ElevatorDetails = () => {
               </p>
 
               {/* Main Image with Prev/Next Buttons */}
-              <div className="relative w-full max-w-2xl mx-auto mb-6  overflow-hidden ">
+              <div className="relative w-full max-w-2xl mx-auto mb-6 overflow-hidden">
                 <img
                   src={elevator.images[currentImageIndex]}
                   alt={`${type} elevator ${currentImageIndex + 1}`}
                   className="w-full h-[450px] object-contain cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-120"
+                  onClick={() => setShowModal(true)}
                 />
 
                 {/* Main Prev Button */}
@@ -261,6 +264,23 @@ const ElevatorDetails = () => {
                     />
                   </svg>
                 </button>
+                {/* Modal for fullscreen image at 70% width/height */}
+                {showModal && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+                    <img
+                      src={elevator.images[currentImageIndex]}
+                      alt={`${type} elevator ${currentImageIndex + 1}`}
+                      className="w-[70vw] h-[70vh] object-contain rounded-xl shadow-2xl"
+                    />
+                    <button
+                      className="absolute top-8 right-8 text-white text-4xl bg-black bg-opacity-60 rounded-full p-2 hover:bg-opacity-90 transition"
+                      onClick={() => setShowModal(false)}
+                      aria-label="Close"
+                    >
+                      <HiX />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <hr className="my-6 border-gray-200" />
