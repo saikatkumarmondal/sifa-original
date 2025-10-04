@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 
 const BASE_URL = "http://localhost:7777"; // must match backend
 
@@ -9,7 +10,7 @@ export const uploadToServer = async (file) => {
   formData.append("image", file); // must match backend multer key
 
   try {
-    const res = await axios.post(`${BASE_URL}/api/upload`, formData, {
+  const res = await axiosInstance.post(`/api/upload`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
       withCredentials: true, // in case you need auth cookie
     });

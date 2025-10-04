@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 
 export const useCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -9,7 +9,7 @@ export const useCategories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get("http://localhost:7777/get-categories");
+  const res = await axiosInstance.get("/get-categories");
         if (res.data.success) {
           setCategories(res.data.data); // use backend nested data directly
         }

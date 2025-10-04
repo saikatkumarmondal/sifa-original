@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 import PartNode from "./PartNode";
 import Swal from "sweetalert2";
 
@@ -12,7 +12,7 @@ const SparePartsTable = () => {
 
   const fetchParts = async () => {
     try {
-      const res = await axios.get(`${BACKEND_URL}/api/spareparts`);
+    const res = await axiosInstance.get(`/api/spareparts`);
       setData(res.data);
     } catch (err) {
       console.error(err);

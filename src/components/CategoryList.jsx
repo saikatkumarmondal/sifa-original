@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 import Swal from "sweetalert2";
 import { FaTrash, FaEye, FaEdit } from "react-icons/fa";
 import Loading from "./Loading";
@@ -10,7 +11,7 @@ const API_URL = "http://localhost:7777"; // backend base URL
 
 // Fetch all categories (nested)
 const fetchCategories = async () => {
-  const { data } = await axios.get(`${API_URL}/get-categories`);
+  const { data } = await axiosInstance.get(`/get-categories`);
   return data.data || [];
 };
 

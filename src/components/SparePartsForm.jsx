@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
@@ -56,7 +56,7 @@ export default function AddCategoryForm() {
         }
       }
 
-      return axios.post("http://localhost:7777/add-category", form, {
+      return axiosInstance.post("/add-category", form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
     },

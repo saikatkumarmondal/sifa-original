@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 import Swal from "sweetalert2";
 import { useParams } from "react-router";
 import { FaTimes } from "react-icons/fa";
@@ -32,8 +32,8 @@ export default function AddCategoryForm() {
 
   // Fetch categories
   useEffect(() => {
-    axios
-      .get("http://localhost:7777/get-categories")
+      axiosInstance
+        .get("/get-categories")
       .then((res) => {
         if (res.data.success) setCategories(res.data.data);
       })
@@ -43,8 +43,8 @@ export default function AddCategoryForm() {
   // Fetch single category for edit
   useEffect(() => {
     if (!id) return;
-    axios
-      .get(`http://localhost:7777/category/${id}`)
+      axiosInstance
+        .get(`/category/${id}`)
       .then((res) => {
         if (res.data.success) {
           const cat = res.data.data;
@@ -111,7 +111,7 @@ export default function AddCategoryForm() {
         ? `http://localhost:7777/category/${id}`
         : "http://localhost:7777/add-category";
 
-      const res = await axios.post(url, form, {
+          const res = await axiosInstance.post(url, form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

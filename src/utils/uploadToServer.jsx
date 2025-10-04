@@ -1,5 +1,6 @@
 // utils/uploadToServer.js
 import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 
 export const uploadToServer = async (file) => {
   try {
@@ -7,7 +8,7 @@ export const uploadToServer = async (file) => {
     formData.append("image", file);
 
     // Make sure to point to the correct backend port
-    const res = await axios.post("http://localhost:7777/api/upload", formData, {
+  const res = await axiosInstance.post("/api/upload", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
