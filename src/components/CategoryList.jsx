@@ -7,7 +7,7 @@ import { FaTrash, FaEye, FaEdit } from "react-icons/fa";
 import Loading from "./Loading";
 import { Link, useNavigate } from "react-router";
 
-const API_URL = "http://localhost:7777"; // backend base URL
+const API_URL = "http://localhost:7777";
 
 // Fetch all categories (nested)
 const fetchCategories = async () => {
@@ -54,13 +54,6 @@ const CategoryList = ({ setEditingCategoryId }) => {
     });
   };
 
-  // ✅ Edit category → navigate and update layout state
-  // const handleEdit = (id) => {
-  //   navigate(`/dashboard/edit-category/${id}`); // navigate to URL
-  //   if (setEditingCategoryId) setEditingCategoryId(id); // update DashboardLayout state
-  // };
-
-  // Delete category (with confirmation)
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",

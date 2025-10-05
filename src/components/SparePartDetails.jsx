@@ -108,7 +108,7 @@ const SparePartDetails = () => {
         <motion.h1
           className="absolute text-4xl font-bold text-center"
           animate={{
-            color: ["#111111", "#333333", "#555555", "#222222", "#111111"], // blackish colors
+            color: ["#111111", "#333333", "#555555", "#222222", "#111111"],
           }}
           transition={{
             duration: 6,
