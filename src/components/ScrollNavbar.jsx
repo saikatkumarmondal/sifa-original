@@ -76,7 +76,7 @@ const ScrollNavbar = () => {
             <img
               src="/Photo/Photo/LOGO/SIFA LOGO Dark G.png"
               alt="Sifa Logo"
-              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[80px] lg:h-[45px] object-contain relative md:left-0 left-[10px]"
+              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[80px] lg:h-[45px] object-contain relative md:-left-5 left-[10px]"
             />
 
             {/* ✅ Desktop Nav */}
