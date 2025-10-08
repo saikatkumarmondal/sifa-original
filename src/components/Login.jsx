@@ -15,21 +15,20 @@ const Login = () => {
 
   // Auto-redirect if already logged in
   useEffect(() => {
-    const checkAuth = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setLoading(false);
-        return;
-      }
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
+    const checkAuth = async () => {
       try {
         const res = await axios.get("http://148.66.154.205:7777/me", {
           headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
         });
-        navigate(from, { replace: true }); // redirect if valid
+        navigate(from, { replace: true });
       } catch (err) {
-        localStorage.removeItem("token"); // remove invalid token
+        localStorage.removeItem("token");
       } finally {
         setLoading(false);
       }
@@ -40,28 +39,33 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
     setError("");
+    setMessage("");
+
+    if (!emailId || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
 
     try {
+      // Debug: check payload
+      console.log("Sending login:", { emailId, password });
+
       const res = await axios.post(
         "http://148.66.154.205:7777/login",
-        {
-          emailId,
-          password,
-        },
-        { withCredentials: true }
+        { emailId, password },
+        { headers: { "Content-Type": "application/json" } } // no withCredentials
       );
 
+      // Save token
       localStorage.setItem("token", res.data.token);
       setMessage("Login successful! Redirecting...");
 
-      //console.log("resdddd", res);
-
-      // Redirect immediately after login
+      // Redirect
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err.response?.data?.error || "Login failed. Please try again.");
+      console.log(err.response?.data); // Debug server response
+      setError(err.response?.data?.error || "Login failed. Try again.");
     }
   };
 
