@@ -10,7 +10,8 @@ const ScrollNavbar = () => {
 
   // ✅ Added for mobile + nested spare parts
   const [isOpen, setIsOpen] = useState(false); // Mobile menu toggle
-  const [mobileDropdowns, setMobileDropdowns] = useState({}); // Nested dropdown states
+  // Accordion state: openPath is an array of ids representing the open path (parent, child, grandchild)
+  const [openPath, setOpenPath] = useState([]);
   const [spareParts, setSpareParts] = useState([]);
 
   const dropdownRef = useRef(null);
@@ -52,11 +53,18 @@ const ScrollNavbar = () => {
   }, []);
 
   // ✅ toggle for mobile nested
-  const toggleMobileDropdown = (id) => {
-    setMobileDropdowns((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+  // Accordion toggle: open/close a given id at a given level
+  const toggleAccordion = (id, level) => {
+    setOpenPath((prev) => {
+      // If already open at this level, close it
+      if (prev[level] === id) {
+        return prev.slice(0, level);
+      }
+      // Open this id at this level, keep previous path
+      const newPath = prev.slice(0, level);
+      newPath[level] = id;
+      return newPath;
+    });
   };
 
   return (
@@ -68,7 +76,7 @@ const ScrollNavbar = () => {
             <img
               src="/Photo/Photo/LOGO/SIFA LOGO Dark G.png"
               alt="Sifa Logo"
-              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[80px] lg:h-[45px] object-contain relative -left-9"
+              className="w-[80px] h-[55px] md:w-[100px] md:h-[70px] lg:w-[80px] lg:h-[45px] object-contain relative md:left-0 left-[10px]"
             />
 
             {/* ✅ Desktop Nav */}
@@ -328,69 +336,122 @@ const ScrollNavbar = () => {
                     Newsroom
                   </Link>
                 </li>
-                {/* Spare Parts (from Navbar.jsx) */}
-                <li className="relative group">
-                  <button className="flex items-center cursor-pointer">
+                {/* Spare Parts (mobile accordion) */}
+                <li>
+                  <button
+                    className="flex items-center w-full py-2"
+                    onClick={() => toggleAccordion("spareParts", 0)}
+                  >
                     Spare Parts
-                    <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
+                    <HiChevronDown
+                      className={`ml-1 transition-transform duration-200 ${
+                        openPath[0] === "spareParts" ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
-                  {spareParts.length === 0 ? (
-                    <div className="absolute left-0 top-full bg-white shadow-lg w-44 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50">
-                      No categories
-                    </div>
-                  ) : (
-                    <ul className="absolute left-0 top-full w-52 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover:block z-50 border border-gray-200 overflow-y-auto max-h-96 gradient-scrollbar">
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ${
+                      openPath[0] === "spareParts"
+                        ? "max-h-[1000px]"
+                        : "max-h-0"
+                    }`}
+                  >
+                    <ul className="ml-4 border-l pl-3 space-y-1">
                       {spareParts.map((parent) => (
-                        <li key={parent._id} className="relative group/child">
-                          <Link
-                            to={`/spare-parts/${parent._id}`}
-                            className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-green-100 hover:to-green-200 hover:text-green-800 rounded-md transition-all duration-200"
-                          >
-                            {parent.name}
-                            {parent.children?.length > 0 && (
-                              <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
-                            )}
-                          </Link>
-                          {/* Child Level */}
-                          {parent.children?.length > 0 && (
-                            <ul className="absolute left-full top-0 w-44 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover/child:block z-50 border border-gray-200">
-                              {parent.children.map((child) => (
-                                <li
-                                  key={child._id}
-                                  className="relative group/grand"
-                                >
-                                  <Link
-                                    to={`/spare-parts/${child._id}`}
-                                    className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-blue-100 hover:to-blue-200 hover:text-blue-800 rounded-md transition-all duration-200"
-                                  >
-                                    {child.name}
-                                    {child.children?.length > 0 && (
-                                      <HiChevronRight className="text-gray-400 group-hover:text-blue-600 transition-colors" />
-                                    )}
-                                  </Link>
-                                  {/* Grandchild */}
-                                  {child.children?.length > 0 && (
-                                    <ul className="absolute left-full top-0 w-40 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover/grand:block z-50 border border-gray-200">
-                                      {child.children.map((grand) => (
-                                        <li key={grand._id}>
-                                          <Link
-                                            to={`/spare-parts/${grand._id}`}
-                                            className="block px-4 py-2.5 text-gray-700 hover:bg-gradient-to-r hover:from-purple-100 hover:to-purple-200 hover:text-purple-800 rounded-md transition-all duration-200"
+                        <li key={parent._id}>
+                          {parent.children?.length > 0 ? (
+                            <>
+                              <button
+                                className="flex justify-between items-center w-full py-2 text-gray-700 font-medium"
+                                onClick={() => toggleAccordion(parent._id, 1)}
+                              >
+                                {parent.name}
+                                <HiChevronDown
+                                  className={`ml-1 transition-transform duration-200 ${
+                                    openPath[1] === parent._id
+                                      ? "rotate-180"
+                                      : ""
+                                  }`}
+                                />
+                              </button>
+                              <div
+                                className={`overflow-hidden transition-all duration-300 ${
+                                  openPath[1] === parent._id
+                                    ? "max-h-[1000px]"
+                                    : "max-h-0"
+                                }`}
+                              >
+                                <ul className="ml-4 border-l pl-3 space-y-1">
+                                  {parent.children.map((child) => (
+                                    <li key={child._id}>
+                                      {child.children?.length > 0 ? (
+                                        <>
+                                          <button
+                                            className="flex justify-between items-center w-full py-2 text-gray-700"
+                                            onClick={() =>
+                                              toggleAccordion(child._id, 2)
+                                            }
                                           >
-                                            {grand.name}
-                                          </Link>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  )}
-                                </li>
-                              ))}
-                            </ul>
+                                            {child.name}
+                                            <HiChevronDown
+                                              className={`ml-1 transition-transform duration-200 ${
+                                                openPath[2] === child._id
+                                                  ? "rotate-180"
+                                                  : ""
+                                              }`}
+                                            />
+                                          </button>
+                                          <div
+                                            className={`overflow-hidden transition-all duration-300 ${
+                                              openPath[2] === child._id
+                                                ? "max-h-[1000px]"
+                                                : "max-h-0"
+                                            }`}
+                                          >
+                                            <ul className="ml-4 border-l pl-3 space-y-1">
+                                              {child.children.map((grand) => (
+                                                <li key={grand._id}>
+                                                  <Link
+                                                    to={`/spare-parts/${grand._id}`}
+                                                    className="block py-2 text-gray-700 hover:text-green-700"
+                                                    onClick={() =>
+                                                      setIsOpen(false)
+                                                    }
+                                                  >
+                                                    {grand.name}
+                                                  </Link>
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <Link
+                                          to={`/spare-parts/${child._id}`}
+                                          className="block py-2 text-gray-700 hover:text-green-700"
+                                          onClick={() => setIsOpen(false)}
+                                        >
+                                          {child.name}
+                                        </Link>
+                                      )}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </>
+                          ) : (
+                            <Link
+                              to={`/spare-parts/${parent._id}`}
+                              className="block py-2 text-gray-700 hover:text-green-700"
+                              onClick={() => setIsOpen(false)}
+                            >
+                              {parent.name}
+                            </Link>
                           )}
                         </li>
                       ))}
                     </ul>
-                  )}
+                  </div>
                 </li>
               </ul>
             </div>

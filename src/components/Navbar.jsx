@@ -108,70 +108,115 @@ export default function Navbar() {
             </li>
 
             {/* Spare Parts */}
-            <li className="relative group">
-              <button className="flex items-center cursor-pointer">
+            <li>
+              <button
+                className="flex justify-between items-center w-full py-2"
+                onClick={() => toggleMobileDropdown("spareParts")}
+              >
                 Spare Parts
-                <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
+                <HiChevronDown
+                  className={`ml-1 transition-transform duration-200 ${
+                    mobileDropdowns["spareParts"] ? "rotate-180" : ""
+                  }`}
+                />
               </button>
-              {spareParts.length === 0 ? (
-                <div className="absolute left-0 top-full bg-white shadow-lg w-44 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50">
-                  No categories
-                </div>
-              ) : (
-                <ul className="absolute left-0 top-full w-52 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover:block z-50 border border-gray-200">
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  mobileDropdowns["spareParts"] ? "max-h-[1000px]" : "max-h-0"
+                }`}
+              >
+                <ul className="ml-4 border-l pl-3 space-y-1">
                   {spareParts.map((parent) => (
-                    <li key={parent._id} className="relative group/child">
-                      <Link
-                        to={`/spare-parts/${parent._id}`}
-                        className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-green-100 hover:to-green-200 hover:text-green-800 rounded-md transition-all duration-200"
-                      >
-                        {parent.name}
-                        {parent.children?.length > 0 && (
-                          <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
-                        )}
-                      </Link>
-
-                      {/* Child Level */}
-                      {parent.children?.length > 0 && (
-                        <ul className="absolute left-full top-0 w-44 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover/child:block z-50 border border-gray-200">
-                          {parent.children.map((child) => (
-                            <li
-                              key={child._id}
-                              className="relative group/grand"
-                            >
-                              <Link
-                                to={`/spare-parts/${child._id}`}
-                                className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-blue-100 hover:to-blue-200 hover:text-blue-800 rounded-md transition-all duration-200"
-                              >
-                                {child.name}
-                                {child.children?.length > 0 && (
-                                  <HiChevronRight className="text-gray-400 group-hover:text-blue-600 transition-colors" />
-                                )}
-                              </Link>
-
-                              {/* Grandchild */}
-                              {child.children?.length > 0 && (
-                                <ul className="absolute left-full top-0 w-40 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover/grand:block z-50 border border-gray-200">
-                                  {child.children.map((grand) => (
-                                    <li key={grand._id}>
-                                      <Link
-                                        to={`/spare-parts/${grand._id}`}
-                                        className="block px-4 py-2.5 text-gray-700 hover:bg-gradient-to-r hover:from-purple-100 hover:to-purple-200 hover:text-purple-800 rounded-md transition-all duration-200"
+                    <li key={parent._id}>
+                      {parent.children?.length > 0 ? (
+                        <>
+                          <button
+                            className="flex justify-between items-center w-full py-2 text-gray-700 font-medium"
+                            onClick={() => toggleMobileDropdown(parent._id)}
+                          >
+                            {parent.name}
+                            <HiChevronDown
+                              className={`ml-1 transition-transform duration-200 ${
+                                mobileDropdowns[parent._id] ? "rotate-180" : ""
+                              }`}
+                            />
+                          </button>
+                          <div
+                            className={`overflow-hidden transition-all duration-300 ${
+                              mobileDropdowns[parent._id]
+                                ? "max-h-[1000px]"
+                                : "max-h-0"
+                            }`}
+                          >
+                            <ul className="ml-4 border-l pl-3 space-y-1">
+                              {parent.children.map((child) => (
+                                <li key={child._id}>
+                                  {child.children?.length > 0 ? (
+                                    <>
+                                      <button
+                                        className="flex justify-between items-center w-full py-2 text-gray-700"
+                                        onClick={() =>
+                                          toggleMobileDropdown(child._id)
+                                        }
                                       >
-                                        {grand.name}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
+                                        {child.name}
+                                        <HiChevronDown
+                                          className={`ml-1 transition-transform duration-200 ${
+                                            mobileDropdowns[child._id]
+                                              ? "rotate-180"
+                                              : ""
+                                          }`}
+                                        />
+                                      </button>
+                                      <div
+                                        className={`overflow-hidden transition-all duration-300 ${
+                                          mobileDropdowns[child._id]
+                                            ? "max-h-[1000px]"
+                                            : "max-h-0"
+                                        }`}
+                                      >
+                                        <ul className="ml-4 border-l pl-3 space-y-1">
+                                          {child.children.map((grand) => (
+                                            <li key={grand._id}>
+                                              <Link
+                                                to={`/spare-parts/${grand._id}`}
+                                                className="block py-2 text-gray-700 hover:text-green-700"
+                                                onClick={() => setIsOpen(false)}
+                                              >
+                                                {grand.name}
+                                              </Link>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <Link
+                                      to={`/spare-parts/${child._id}`}
+                                      className="block py-2 text-gray-700 hover:text-green-700"
+                                      onClick={() => setIsOpen(false)}
+                                    >
+                                      {child.name}
+                                    </Link>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </>
+                      ) : (
+                        <Link
+                          to={`/spare-parts/${parent._id}`}
+                          className="block py-2 text-gray-700 hover:text-green-700"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {parent.name}
+                        </Link>
                       )}
                     </li>
                   ))}
                 </ul>
-              )}
+              </div>
             </li>
 
             <li>
@@ -288,68 +333,119 @@ export default function Navbar() {
               </li>
 
               {/* Spare Parts */}
-              <li className="relative group">
-                <button className="flex items-center cursor-pointer">
+              <li>
+                <button
+                  className="flex justify-between items-center w-full py-2"
+                  onClick={() => toggleMobileDropdown("spareParts")}
+                >
                   Spare Parts
-                  <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
+                  <HiChevronDown
+                    className={`ml-1 transition-transform duration-200 ${
+                      mobileDropdowns["spareParts"] ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
-                {spareParts.length === 0 ? (
-                  <div className="absolute left-0 top-full bg-white shadow-lg w-44 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50">
-                    No categories
-                  </div>
-                ) : (
-                  <ul className="absolute left-0 top-full w-56 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover:block z-50 border border-gray-200 overflow-y-auto max-h-96 gradient-scrollbar">
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${
+                    mobileDropdowns["spareParts"] ? "max-h-[1000px]" : "max-h-0"
+                  }`}
+                >
+                  <ul className="ml-4 border-l pl-3 space-y-1">
                     {spareParts.map((parent) => (
-                      <li key={parent._id} className="relative group/parent">
-                        <Link
-                          to={`/spare-parts/${parent._id}`}
-                          className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-gradient-to-r hover:from-green-100 hover:to-green-200 hover:text-green-800 rounded-md transition-all duration-200"
-                        >
-                          {parent.name}
-                          {parent.children?.length > 0 && (
-                            <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
-                          )}
-                        </Link>
-                        {/* Child Popup */}
-                        {parent.children?.length > 0 && (
-                          <ul className="absolute left-full top-0 w-56 bg-white shadow-xl rounded-lg border border-gray-200 hidden group-hover/parent:block z-50">
-                            {parent.children.map((child) => (
-                              <li
-                                key={child._id}
-                                className="relative group/child"
-                              >
-                                <Link
-                                  to={`/spare-parts/${child._id}`}
-                                  className="flex justify-between items-center px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
-                                >
-                                  {child.name}
-                                  {child.children?.length > 0 && (
-                                    <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
-                                  )}
-                                </Link>
-                                {/* Grandchild Popup */}
-                                {child.children?.length > 0 && (
-                                  <ul className="absolute left-full top-0 w-56 bg-white shadow-xl rounded-lg border border-gray-200 hidden group-hover/child:block z-50">
-                                    {child.children.map((grand) => (
-                                      <li key={grand._id}>
-                                        <Link
-                                          to={`/spare-parts/${grand._id}`}
-                                          className="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all duration-200"
+                      <li key={parent._id}>
+                        {parent.children?.length > 0 ? (
+                          <>
+                            <button
+                              className="flex justify-between items-center w-full py-2 text-gray-700 font-medium"
+                              onClick={() => toggleMobileDropdown(parent._id)}
+                            >
+                              {parent.name}
+                              <HiChevronDown
+                                className={`ml-1 transition-transform duration-200 ${
+                                  mobileDropdowns[parent._id]
+                                    ? "rotate-180"
+                                    : ""
+                                }`}
+                              />
+                            </button>
+                            <div
+                              className={`overflow-hidden transition-all duration-300 ${
+                                mobileDropdowns[parent._id]
+                                  ? "max-h-[1000px]"
+                                  : "max-h-0"
+                              }`}
+                            >
+                              <ul className="ml-4 border-l pl-3 space-y-1">
+                                {parent.children.map((child) => (
+                                  <li key={child._id}>
+                                    {child.children?.length > 0 ? (
+                                      <>
+                                        <button
+                                          className="flex justify-between items-center w-full py-2 text-gray-700"
+                                          onClick={() =>
+                                            toggleMobileDropdown(child._id)
+                                          }
                                         >
-                                          {grand.name}
-                                        </Link>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                )}
-                              </li>
-                            ))}
-                          </ul>
+                                          {child.name}
+                                          <HiChevronDown
+                                            className={`ml-1 transition-transform duration-200 ${
+                                              mobileDropdowns[child._id]
+                                                ? "rotate-180"
+                                                : ""
+                                            }`}
+                                          />
+                                        </button>
+                                        <div
+                                          className={`overflow-hidden transition-all duration-300 ${
+                                            mobileDropdowns[child._id]
+                                              ? "max-h-[1000px]"
+                                              : "max-h-0"
+                                          }`}
+                                        >
+                                          <ul className="ml-4 border-l pl-3 space-y-1">
+                                            {child.children.map((grand) => (
+                                              <li key={grand._id}>
+                                                <Link
+                                                  to={`/spare-parts/${grand._id}`}
+                                                  className="block py-2 text-gray-700 hover:text-green-700"
+                                                  onClick={() =>
+                                                    setIsOpen(false)
+                                                  }
+                                                >
+                                                  {grand.name}
+                                                </Link>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      </>
+                                    ) : (
+                                      <Link
+                                        to={`/spare-parts/${child._id}`}
+                                        className="block py-2 text-gray-700 hover:text-green-700"
+                                        onClick={() => setIsOpen(false)}
+                                      >
+                                        {child.name}
+                                      </Link>
+                                    )}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </>
+                        ) : (
+                          <Link
+                            to={`/spare-parts/${parent._id}`}
+                            className="block py-2 text-gray-700 hover:text-green-700"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            {parent.name}
+                          </Link>
                         )}
                       </li>
                     ))}
                   </ul>
-                )}
+                </div>
               </li>
 
               <li>
