@@ -3,7 +3,7 @@ import axiosInstance from "../api/axiosInstance";
 import PartNode from "./PartNode";
 import Swal from "sweetalert2";
 
-const BACKEND_URL = "http://localhost:7777";
+const BACKEND_URL = "http://148.66.154.205:7777";
 
 const SparePartsTable = () => {
   const [data, setData] = useState([]);

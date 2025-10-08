@@ -37,7 +37,9 @@ const EditCategoryForm = () => {
   } = useQuery({
     queryKey: ["category", id],
     queryFn: async () => {
-      const { data } = await axios.get(`http://localhost:7777/category/${id}`);
+      const { data } = await axios.get(
+        `http://148.66.154.205:7777/category/${id}`
+      );
       return data.data; // actual category object
     },
     enabled: !!id,
@@ -96,7 +98,7 @@ const EditCategoryForm = () => {
       }
 
       const res = await axios.put(
-        `http://localhost:7777/update-category/${id}`,
+        `http://148.66.154.205:7777/update-category/${id}`,
         data,
         {
           headers: { "Content-Type": "multipart/form-data" },

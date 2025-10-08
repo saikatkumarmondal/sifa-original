@@ -9,7 +9,7 @@ export default function SparePartsDropdown() {
   const [activeChild, setActiveChild] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:7777/get-categories")
+    fetch("http://148.66.154.205:7777/get-categories")
       .then((res) => res.json())
       .then((data) => setSpareParts(Array.isArray(data.data) ? data.data : []))
       .catch(() => setSpareParts([]));

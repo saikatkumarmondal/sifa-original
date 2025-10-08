@@ -25,7 +25,7 @@ const SparePartDetails = () => {
     img &&
     (img.startsWith("http")
       ? img
-      : `http://localhost:7777/${img.replace(/\\/g, "/")}`);
+      : `http://148.66.154.205:7777/${img.replace(/\\/g, "/")}`);
 
   // Fetch category data
   const {
@@ -36,7 +36,7 @@ const SparePartDetails = () => {
   } = useQuery({
     queryKey: ["category", id],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:7777/category/${id}`);
+      const res = await axios.get(`http://148.66.154.205:7777/category/${id}`);
       if (res.data.success) return res.data.data;
       throw new Error(res.data?.message || "Category not found");
     },

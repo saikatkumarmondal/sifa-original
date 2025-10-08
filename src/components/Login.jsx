@@ -23,8 +23,9 @@ const Login = () => {
       }
 
       try {
-        const res = await axios.get("http://localhost:7777/me", {
+        const res = await axios.get("http://148.66.154.205:7777/me", {
           headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
         });
         navigate(from, { replace: true }); // redirect if valid
       } catch (err) {
@@ -43,15 +44,19 @@ const Login = () => {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:7777/login", {
-        emailId,
-        password,
-      });
+      const res = await axios.post(
+        "http://148.66.154.205:7777/login",
+        {
+          emailId,
+          password,
+        },
+        { withCredentials: true }
+      );
 
       localStorage.setItem("token", res.data.token);
       setMessage("Login successful! Redirecting...");
 
-      console.log("resdddd", res);
+      //console.log("resdddd", res);
 
       // Redirect immediately after login
       navigate(from, { replace: true });

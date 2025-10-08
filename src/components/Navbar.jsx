@@ -8,7 +8,7 @@ export default function Navbar() {
   const [spareParts, setSpareParts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:7777/get-categories")
+    fetch("http://148.66.154.205:7777/get-categories")
       .then((res) => res.json())
       .then((data) => {
         if (data && Array.isArray(data.data)) setSpareParts(data.data);
@@ -50,14 +50,6 @@ export default function Navbar() {
             <li>
               <Link to="/about" className="hover:text-blue-600">
                 About Us
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/dashboard"
-                className="hover:text-blue-600 font-semibold"
-              >
-                Dashboard
               </Link>
             </li>
 
@@ -215,15 +207,6 @@ export default function Navbar() {
                   onClick={() => setIsOpen(false)}
                 >
                   About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/dashboard"
-                  className="block py-2 font-semibold"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Dashboard
                 </Link>
               </li>
 

@@ -11,7 +11,7 @@ import {
 import { ObjectId } from "bson";
 
 const IMGBB_API_KEY = import.meta.env.VITE_IMGBB_API_KEY;
-const BACKEND_URL = "http://localhost:7777";
+const BACKEND_URL = "http://148.66.154.205:7777";
 
 // ImgBB upload helper
 const uploadToImgbb = async (file) => {

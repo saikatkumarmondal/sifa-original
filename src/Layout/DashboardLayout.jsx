@@ -29,7 +29,7 @@ const DashboardLayout = () => {
           return;
         }
 
-        const res = await axios.get("http://localhost:7777/me", {
+        const res = await axios.get("http://148.66.154.205:7777/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data);

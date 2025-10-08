@@ -108,8 +108,8 @@ export default function AddCategoryForm() {
       }
 
       const url = id
-        ? `http://localhost:7777/category/${id}`
-        : "http://localhost:7777/add-category";
+        ? `http://148.66.154.205:7777/category/${id}`
+        : "http://148.66.154.205:7777/add-category";
 
       const res = await axiosInstance.post(url, form, {
         headers: { "Content-Type": "multipart/form-data" },

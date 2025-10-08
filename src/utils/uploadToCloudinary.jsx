@@ -1,7 +1,7 @@
 import axios from "axios";
 import axiosInstance from "../api/axiosInstance";
 
-const BASE_URL = "http://localhost:7777"; // must match backend
+const BASE_URL = "http://148.66.154.205:7777"; // must match backend
 
 export const uploadToServer = async (file) => {
   if (!file) throw new Error("No file provided");

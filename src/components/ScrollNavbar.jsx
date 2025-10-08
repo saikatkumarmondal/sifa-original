@@ -30,7 +30,7 @@ const ScrollNavbar = () => {
 
   // ✅ Fetch spare parts (same for mobile & desktop)
   useEffect(() => {
-    fetch("http://localhost:7777/get-categories")
+    fetch("http://148.66.154.205:7777/get-categories")
       .then((res) => res.json())
       .then((data) => {
         if (data && Array.isArray(data.data)) setSpareParts(data.data);

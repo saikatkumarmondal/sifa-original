@@ -7,7 +7,7 @@ import { FaTrash, FaEye, FaEdit } from "react-icons/fa";
 import Loading from "./Loading";
 import { Link, useNavigate } from "react-router";
 
-const API_URL = "http://localhost:7777";
+const API_URL = "http://148.66.154.205:7777";
 
 // Fetch all categories (nested)
 const fetchCategories = async () => {
