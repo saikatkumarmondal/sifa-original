@@ -1,0 +1,9 @@
+# Query: /public/
+# ContextLines: 1
+
+1 result - 1 file
+
+src\Layout\DashboardLayout.jsx:
+  60  
+  61: const logoPlaceholder = "/logo.png";
+  62  

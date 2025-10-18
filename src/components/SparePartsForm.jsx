@@ -1,21 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
-export default function AddCategoryForm() {
-  const queryClient = useQueryClient();
-  const [step, setStep] = useState(1);
+const MySwal = withReactContent(Swal);
 
+const SparePartsForm = () => {
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
-    description: "",
-    parent_category_id: "",
-    child_category_id: "",
-    grandchild_category_id: "",
     brand: "",
     partType: "",
-    placeOfOrigin: "",
     material: "",
     dimensions: "",
     installSize: "",
@@ -29,48 +24,69 @@ export default function AddCategoryForm() {
     paymentTerms: "",
     paymentCurrency: "",
     packing: "",
-    images: [],
+    description: "",
+    categoryId: "",
   });
+  const [images, setImages] = useState([]);
+  const [previewImage, setPreviewImage] = useState(null);
 
-  // ✅ Handle input
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  // ✅ Handle file upload
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, images: e.target.files });
-  };
-
-  // ✅ Mutation
-  const mutation = useMutation({
-    mutationFn: async (data) => {
-      const form = new FormData();
-      for (let key in data) {
-        if (key === "images") {
-          for (let i = 0; i < data.images.length; i++) {
-            form.append("images", data.images[i]);
-          }
-        } else {
-          form.append(key, data[key]);
-        }
+  // Fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axiosInstance.get("/categories");
+        setCategories(res.data);
+      } catch (err) {
+        console.error("Failed to fetch categories:", err);
       }
+    };
+    fetchCategories();
+  }, []);
 
-      return axiosInstance.post("/add-category", form, {
+  // Input change handler
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // File input handler
+  const handleFileChange = (e) => {
+    setImages(e.target.files);
+  };
+
+  // Submit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    Object.entries(formData).forEach(([key, value]) => data.append(key, value));
+    Array.from(images).forEach((img) => data.append("images", img));
+
+    try {
+      await axiosInstance.post("/spare-parts", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-    },
-    onSuccess: (res) => {
-      queryClient.invalidateQueries(["categories"]);
+
+      // ✅ Tailwind styled SweetAlert2 success
+      MySwal.fire({
+        html: (
+          <p className="text-green-700 text-lg font-semibold">
+            Spare part created successfully!
+          </p>
+        ),
+        icon: "success",
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "bg-green-50 border border-green-300 rounded-lg p-6 shadow-lg",
+          confirmButton:
+            "bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md",
+        },
+      });
+
       setFormData({
         name: "",
-        description: "",
-        parent_category_id: "",
-        child_category_id: "",
-        grandchild_category_id: "",
         brand: "",
         partType: "",
-        placeOfOrigin: "",
         material: "",
         dimensions: "",
         installSize: "",
@@ -84,151 +100,298 @@ export default function AddCategoryForm() {
         paymentTerms: "",
         paymentCurrency: "",
         packing: "",
-        images: [],
+        description: "",
+        categoryId: "",
       });
+      setImages([]);
+    } catch (err) {
+      console.error(err);
 
-      Swal.fire({
-        title: "✅ Success!",
-        text: res.data.message || "Category added successfully",
-        icon: "success",
-      });
-    },
-    onError: (error) => {
-      Swal.fire({
-        title: "❌ Error",
-        text: error.response?.data?.message || "Something went wrong",
+      // ✅ Tailwind styled SweetAlert2 error
+      MySwal.fire({
+        html: (
+          <p className="text-red-700 text-lg font-semibold">
+            Failed to create spare part
+          </p>
+        ),
         icon: "error",
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "bg-red-50 border border-red-300 rounded-lg p-6 shadow-lg",
+          confirmButton:
+            "bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md",
+        },
       });
-    },
-  });
+    }
+  };
 
-  // ✅ Fields in steps (5 per step)
-  const fields = [
-    { name: "name", label: "Name" },
-    { name: "description", label: "Description" },
-    { name: "brand", label: "Brand" },
-    { name: "partType", label: "Part Type" },
-    { name: "placeOfOrigin", label: "Place of Origin" },
-
-    { name: "material", label: "Material" },
-    { name: "dimensions", label: "Dimensions" },
-    { name: "installSize", label: "Install Size" },
-    { name: "faceplateSize", label: "Faceplate Size" },
-    { name: "weight", label: "Weight" },
-
-    { name: "application", label: "Application" },
-    { name: "warrantyTime", label: "Warranty Time" },
-    { name: "certificates", label: "Certificates" },
-    { name: "moq", label: "MOQ" },
-    { name: "shippingTerms", label: "Shipping Terms" },
-
-    { name: "paymentTerms", label: "Payment Terms" },
-    { name: "paymentCurrency", label: "Payment Currency" },
-    { name: "packing", label: "Packing" },
-  ];
-
-  const start = (step - 1) * 5;
-  const currentFields = fields.slice(start, start + 5);
+  // Render categories recursively
+  const renderCategoryOptions = (cats, prefix = "") =>
+    cats.map((cat) => (
+      <React.Fragment key={cat._id}>
+        <option value={cat._id}>{prefix + cat.name}</option>
+        {cat.children && renderCategoryOptions(cat.children, prefix + "— ")}
+      </React.Fragment>
+    ));
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow rounded">
-      <h2 className="text-xl font-bold mb-4">Step {step}</h2>
+    <div className="max-w-3xl mx-auto p-6 bg-base-200 rounded-2xl shadow-md">
+      <h2 className="text-2xl font-bold mb-4">🧩 Add New Spare Part</h2>
 
-      {/* Parent - Child - Grandchild */}
-      <div className="mb-3">
-        <label className="block text-sm mb-1">Parent Category</label>
-        <select
-          name="parent_category_id"
-          value={formData.parent_category_id}
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
+        {/* Name */}
+        <input
+          type="text"
+          name="name"
+          placeholder="Spare Part Name"
+          value={formData.name}
           onChange={handleChange}
-          className="w-full border rounded p-2"
-        >
-          <option value="">-- Select Parent --</option>
-          <option value="1">Parent A</option>
-          <option value="2">Parent B</option>
-        </select>
-      </div>
+          className="input input-bordered w-full"
+          required
+        />
 
-      <div className="mb-3">
-        <label className="block text-sm mb-1">Child Category</label>
-        <select
-          name="child_category_id"
-          value={formData.child_category_id}
+        {/* Brand */}
+        <input
+          type="text"
+          name="brand"
+          placeholder="Brand"
+          value={formData.brand}
           onChange={handleChange}
-          className="w-full border rounded p-2"
-        >
-          <option value="">-- Select Child --</option>
-          <option value="11">Child A1</option>
-          <option value="12">Child A2</option>
-        </select>
-      </div>
+          className="input input-bordered w-full"
+        />
 
-      <div className="mb-3">
-        <label className="block text-sm mb-1">Grandchild Category</label>
+        {/* Category */}
         <select
-          name="grandchild_category_id"
-          value={formData.grandchild_category_id}
+          name="categoryId"
+          value={formData.categoryId}
           onChange={handleChange}
-          className="w-full border rounded p-2"
+          className="select select-bordered w-full"
         >
-          <option value="">-- Select Grandchild --</option>
-          <option value="111">Grandchild A1-1</option>
-          <option value="112">Grandchild A1-2</option>
+          <option value="">Select Category</option>
+          {renderCategoryOptions(categories)}
         </select>
-      </div>
 
-      {/* Step fields */}
-      {currentFields.map((field) => (
-        <div key={field.name} className="mb-3">
-          <label className="block text-sm mb-1">{field.label}</label>
-          <input
-            type="text"
-            name={field.name}
-            value={formData[field.name]}
-            onChange={handleChange}
-            className="w-full border rounded p-2"
-          />
-        </div>
-      ))}
+        {/* Part Type */}
+        <input
+          type="text"
+          name="partType"
+          placeholder="Part Type"
+          value={formData.partType}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
 
-      {/* File upload */}
-      {step === 4 && (
-        <div className="mb-3">
-          <label className="block text-sm mb-1">Images</label>
+        {/* Material */}
+        <input
+          type="text"
+          name="material"
+          placeholder="Material"
+          value={formData.material}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Dimensions */}
+        <input
+          type="text"
+          name="dimensions"
+          placeholder="Dimensions"
+          value={formData.dimensions}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Install Size */}
+        <input
+          type="text"
+          name="installSize"
+          placeholder="Install Size"
+          value={formData.installSize}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Faceplate Size */}
+        <input
+          type="text"
+          name="faceplateSize"
+          placeholder="Faceplate Size"
+          value={formData.faceplateSize}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Weight */}
+        <input
+          type="text"
+          name="weight"
+          placeholder="Weight"
+          value={formData.weight}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Application */}
+        <input
+          type="text"
+          name="application"
+          placeholder="Application"
+          value={formData.application}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Warranty */}
+        <input
+          type="text"
+          name="warrantyTime"
+          placeholder="Warranty Time"
+          value={formData.warrantyTime}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Certificates */}
+        <input
+          type="text"
+          name="certificates"
+          placeholder="Certificates"
+          value={formData.certificates}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* MOQ */}
+        <input
+          type="text"
+          name="moq"
+          placeholder="Minimum Order Quantity"
+          value={formData.moq}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Shipping Terms */}
+        <input
+          type="text"
+          name="shippingTerms"
+          placeholder="Shipping Terms"
+          value={formData.shippingTerms}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Payment Terms */}
+        <input
+          type="text"
+          name="paymentTerms"
+          placeholder="Payment Terms"
+          value={formData.paymentTerms}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Currency */}
+        <input
+          type="text"
+          name="paymentCurrency"
+          placeholder="Payment Currency"
+          value={formData.paymentCurrency}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Packing */}
+        <input
+          type="text"
+          name="packing"
+          placeholder="Packing Details"
+          value={formData.packing}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+
+        {/* Description */}
+        <textarea
+          name="description"
+          placeholder="Description"
+          value={formData.description}
+          onChange={handleChange}
+          className="textarea textarea-bordered w-full md:col-span-2"
+        ></textarea>
+
+        {/* Images */}
+        <div className="md:col-span-2">
           <input
             type="file"
             multiple
+            accept="image/*"
             onChange={handleFileChange}
-            className="w-full"
+            className="file-input file-input-bordered w-full"
           />
-        </div>
-      )}
 
-      {/* Buttons */}
-      <div className="flex justify-between mt-4">
-        <button
-          disabled={step === 1}
-          onClick={() => setStep(step - 1)}
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-        >
-          Prev
+          <div className="flex flex-wrap gap-3 mt-3">
+            {Array.from(images).map((file, index) => (
+              <div
+                key={index}
+                className="relative w-20 h-20 rounded-full overflow-hidden border border-base-300 shadow-sm cursor-pointer group"
+              >
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt="preview"
+                  className="w-full h-full object-cover rounded-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newImages = Array.from(images).filter(
+                      (_, i) => i !== index
+                    );
+                    setImages(newImages);
+                  }}
+                  className="absolute top-[10px] right-[10px] bg-red-500/85 text-white rounded-full p-[3px] text-[10px] hover:bg-red-600 transition"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Full Preview */}
+          {previewImage && (
+            <div
+              className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+              onClick={() => setPreviewImage(null)}
+            >
+              <div className="relative">
+                <img
+                  src={previewImage}
+                  alt="Full Preview"
+                  className="max-h-[80vh] max-w-[90vw] rounded-lg shadow-lg"
+                />
+                <button
+                  type="button"
+                  onClick={() => setPreviewImage(null)}
+                  className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full p-2 hover:bg-red-600"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Submit */}
+        <button type="submit" className="btn btn-primary w-full md:col-span-2">
+          Add Spare Part
         </button>
-        {step < 4 ? (
-          <button
-            onClick={() => setStep(step + 1)}
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Next
-          </button>
-        ) : (
-          <button
-            onClick={() => mutation.mutate(formData)}
-            className="px-4 py-2 bg-green-500 text-white rounded"
-          >
-            Submit
-          </button>
-        )}
-      </div>
+      </form>
     </div>
   );
-}
+};
+
+export default SparePartsForm;

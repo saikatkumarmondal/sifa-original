@@ -1,58 +1,29 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import axiosInstance from "../api/axiosInstance";
 import Swal from "sweetalert2";
 import { FaTrash, FaEye, FaEdit } from "react-icons/fa";
+import { Link } from "react-router";
 import Loading from "./Loading";
-import { Link, useNavigate } from "react-router";
 
-const API_URL = "http://148.66.154.205:7777";
+const API_URL = "http://localhost:7777";
 
-// Fetch all categories (nested)
 const fetchCategories = async () => {
-  const { data } = await axiosInstance.get(`/get-categories`);
-  return data.data || [];
+  const { data } = await axiosInstance.get("/categories");
+  return data || [];
 };
 
 const CategoryList = ({ setEditingCategoryId }) => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const { data: categories = [], isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
   });
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const totalPages = Math.ceil(categories.length / itemsPerPage);
-  const paginatedCategories = categories.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  // Delete category mutation
   const deleteMutation = useMutation({
-    mutationFn: (id) => axios.delete(`${API_URL}/categories/${id}`),
-    onSuccess: () => {
-      Swal.fire("Deleted!", "Category deleted successfully.", "success");
-      queryClient.invalidateQueries(["categories"]);
-    },
-    onError: () => Swal.fire("Error", "Failed to delete category.", "error"),
+    mutationFn: (id) => axiosInstance.delete(`/categories/${id}`),
+    onSuccess: () => queryClient.invalidateQueries(["categories"]),
   });
-
-  // View category
-  const handleView = (cat) => {
-    Swal.fire({
-      title: cat.name,
-      text: `Category ID: ${cat._id}`,
-      imageUrl: cat.image ? `${API_URL}/${cat.image}` : undefined,
-      imageWidth: 200,
-      imageHeight: 200,
-      confirmButtonText: "Close",
-    });
-  };
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -65,70 +36,44 @@ const CategoryList = ({ setEditingCategoryId }) => {
       confirmButtonText: "Yes, delete!",
     }).then((result) => {
       if (result.isConfirmed) {
-        queryClient.setQueryData(["categories"], (oldData) => {
-          const removeCategoryRecursively = (cats, targetId) =>
-            cats
-              .filter((cat) => cat._id !== targetId)
-              .map((cat) => ({
-                ...cat,
-                children: cat.children
-                  ? removeCategoryRecursively(cat.children, targetId)
-                  : [],
-              }));
-          return removeCategoryRecursively(oldData, id);
-        });
         deleteMutation.mutate(id);
       }
     });
   };
 
-  // Recursive render for nested categories
   const renderCategories = (cats, level = 0) =>
     cats.map((cat) => (
-      <div
-        key={cat._id}
-        className={`pl-${level * 4} my-2`}
-        style={{ marginLeft: `${level * 20}px` }}
-      >
-        <div className="flex justify-between items-center bg-gray-50 p-2 rounded shadow-sm">
+      <div key={cat._id} style={{ marginLeft: level * 20 }}>
+        <div className="flex justify-between items-center p-2 bg-gray-50 rounded mb-2">
           <div className="flex items-center gap-2">
             <img
               src={
                 cat.image
-                  ? `${API_URL}/${cat.image}`
+                  ? `${API_URL}/uploads/${cat.image}`
                   : `${API_URL}/default-category.png`
               }
               alt={cat.name}
               className="w-6 h-6 object-cover rounded"
             />
-            <span
-              className={`${level === 0 ? "text-lg" : "text-sm"} font-medium`}
-            >
+            <span className={`${level === 0 ? "font-medium" : "text-sm"}`}>
               {cat.name}
             </span>
           </div>
-          <div className="flex gap-3">
-            <button className="text-blue-500" onClick={() => handleView(cat)}>
+          <div className="flex gap-2">
+            <button onClick={() => Swal.fire(cat.name)}>
               <FaEye />
             </button>
-            <Link
-              to={`/dashboard/edit-category/${cat._id}`}
-              className="text-green-500"
-              // onClick={() => handleEdit(cat._id)}
-            >
+            <Link to={`/dashboard/edit-category/${cat._id}`}>
               <FaEdit />
             </Link>
-            <button
-              className="text-red-500"
-              onClick={() => handleDelete(cat._id)}
-            >
+            <button onClick={() => handleDelete(cat._id)}>
               <FaTrash />
             </button>
           </div>
         </div>
-        {cat.children && cat.children.length > 0 && (
-          <div>{renderCategories(cat.children, level + 1)}</div>
-        )}
+        {cat.children &&
+          cat.children.length > 0 &&
+          renderCategories(cat.children, level + 1)}
       </div>
     ));
 
@@ -136,35 +81,12 @@ const CategoryList = ({ setEditingCategoryId }) => {
 
   return (
     <div className="p-6 bg-white rounded shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Spare Parts Categories</h2>
-      {paginatedCategories.length ? (
-        renderCategories(paginatedCategories)
+      <h2 className="text-2xl font-bold mb-4">Categories</h2>
+      {categories.length ? (
+        renderCategories(categories)
       ) : (
-        <p className="text-gray-500">No categories found</p>
+        <p>No categories found</p>
       )}
-
-      {/* Pagination */}
-      <div className="flex justify-between mt-6">
-        <button
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span className="self-center">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
 };

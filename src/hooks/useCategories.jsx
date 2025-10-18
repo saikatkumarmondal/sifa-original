@@ -1,27 +1,32 @@
-import { useState, useEffect } from "react";
-import axiosInstance from "../api/axiosInstance";
+import { useQuery } from "@tanstack/react-query";
+import useAxios from "./useAxios";
 
-export const useCategories = () => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+/**
+ * Fetch categories for a given parent ID.
+ * - If parentId is null, fetch all top-level parents.
+ * - If parentId is provided, fetch only its direct children.
+ */
+const useCategories = (parentId = null) => {
+  const axiosInstance = useAxios();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await axiosInstance.get("/get-categories");
-        if (res.data.success) {
-          setCategories(res.data.data); // use backend nested data directly
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchCategories = async () => {
+    const endpoint = parentId
+      ? `/get-categories?parentId=${parentId}` // fetch direct children
+      : `/get-categories`; // fetch top-level parents
 
-    fetchCategories();
-  }, []);
+    const { data } = await axiosInstance.get(endpoint);
 
-  return { categories, loading, error };
+    if (!data.success)
+      throw new Error(data.message || "Failed to fetch categories");
+
+    return data.data || [];
+  };
+
+  return useQuery({
+    queryKey: ["categories", parentId],
+    queryFn: fetchCategories,
+    staleTime: 5 * 60 * 1000, // cache for 5 minutes
+  });
 };
+
+export default useCategories;

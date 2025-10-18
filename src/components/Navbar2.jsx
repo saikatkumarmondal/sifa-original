@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, NavLink } from "react-router";
 import Loading from "./Loading";
-import { useCategories } from "../hooks/useCategories";
+
 import NestedCategory from "./NestedCategory";
+import useCategories from "../hooks/useCategories";
 
 const Navbar2 = () => {
   const [show, setShow] = useState(false);

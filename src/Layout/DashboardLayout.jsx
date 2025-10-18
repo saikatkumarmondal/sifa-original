@@ -1,175 +1,184 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation, useParams } from "react-router";
-import CategoryList from "../components/CategoryList";
-import AddCategoryForm from "../components/AddCategoryForm";
-import EditCategoryForm from "../components/EditCategoryForm";
-import Loading from "../components/Loading";
-import axios from "axios";
-import { motion } from "framer-motion";
-import { FaList, FaPlus } from "react-icons/fa";
+import React from "react";
+import Footer from "../components/Footer";
+import { Link, Outlet, useLocation, useNavigate } from "react-router";
+import { FaSignOutAlt } from "react-icons/fa";
+import { RxDashboard } from "react-icons/rx";
+import axiosInstance from "../api/axiosInstance";
+import { AiOutlineAppstoreAdd } from "react-icons/ai";
+import { FaCogs } from "react-icons/fa";
+
+// Inline SVG Components
+const TagIcon = () => (
+  <svg
+    className="w-5 h-5"
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M12.586 12.586a2 2 0 0 0 2.828 0l3.04-3.04a2 2 0 0 0 0-2.828l-4.95-4.95A2 2 0 0 0 9.207 2H4a2 2 0 0 0-2 2v5.207a2 2 0 0 0 .586 1.414l4.95 4.95a2 2 0 0 0 2.828 0l3.04-3.04a2 2 0 0 0 0-2.828L12.586 12.586z" />
+    <circle cx="7" cy="7" r="1" />
+  </svg>
+);
+
+const WrenchIcon = () => (
+  <svg
+    className="w-5 h-5"
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94-7.94l-3.76 3.76a1 1 0 0 0 0 1.4zm-4.7 4.7l2 2m-2-2l-4-4m-4 4l-4 4m4-4l-4-4" />
+  </svg>
+);
+
+const BoxIcon = () => (
+  <svg
+    className="w-5 h-5"
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3m18 0v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8m18 0h-18M7 3v2M17 3v2m-6 3v10" />
+  </svg>
+);
+
+const logoPlaceholder = "/logo.png";
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const params = useParams(); // grab URL params if needed
-
-  const [activeMenu, setActiveMenu] = useState("all-categories");
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [editingCategoryId, setEditingCategoryId] = useState(null);
-
-  // Fetch logged-in user
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          window.location.href = "/login";
-          return;
-        }
-
-        const res = await axios.get("http://148.66.154.205:7777/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUser(res.data);
-      } catch (err) {
-        console.error(err);
+  const handleLogout = async () => {
+    try {
+      const res = await axiosInstance.post("/auth/logout");
+      if (res.status === 200) {
         localStorage.removeItem("token");
-        window.location.href = "/login";
-      } finally {
-        setLoading(false);
+        navigate("/");
       }
-    };
-    fetchUser();
-  }, []);
-
-  // ✅ Sync editingCategoryId with URL
-  useEffect(() => {
-    const match = location.pathname.match(/\/dashboard\/edit-category\/(.+)/);
-    if (match) {
-      setEditingCategoryId(match[1]); // set state from URL
-      setActiveMenu(null); // disable other menus
-    } else if (activeMenu === null) {
-      setEditingCategoryId(null); // reset if URL doesn't match
-      setActiveMenu("all-categories");
+    } catch (error) {
+      console.error("Logout failed:", error);
     }
-  }, [location.pathname]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    if (user) setUser(null);
-    navigate("/");
   };
-
-  if (loading) return <Loading />;
-
   return (
     <>
-      {/* Header */}
-      <motion.div
-        className="w-full h-20 flex justify-between items-center px-6 shadow-md text-white font-semibold"
-        style={{
-          background: "linear-gradient(270deg, #16a34a, #22d3ee, #a855f7)",
-          backgroundSize: "600% 600%",
-        }}
-        animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-      >
-        <h1 className="text-white text-lg font-semibold">{user?.emailId}</h1>
-        <motion.h1
-          className="text-2xl font-bold"
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 5, -5, 0],
-            color: ["#fff", "#facc15", "#fff"],
-          }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          ADMIN DASHBOARD
-        </motion.h1>
-        {user && (
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition"
-          >
-            Logout
-          </button>
-        )}
-      </motion.div>
-
-      {/* Sidebar + Main */}
-      <div className="flex h-screen bg-gray-100 font-sans">
+      <div className="flex h-full">
         {/* Sidebar */}
-        <aside
-          className={`bg-white w-64 shadow-md p-6 flex flex-col transition-transform duration-300 ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0`}
-        >
-          <h1 className="text-2xl font-bold mb-4 text-center text-gray-800">
-            Admin Dashboard
-          </h1>
-
-          <div className="flex flex-col gap-4">
-            <button
-              onClick={() => {
-                setActiveMenu("all-categories");
-                setEditingCategoryId(null);
-                navigate("/dashboard");
-              }}
-              className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors ${
-                activeMenu === "all-categories"
-                  ? "bg-gray-200 text-indigo-600"
-                  : "text-gray-700"
-              }`}
-            >
-              <FaList /> All Categories
-            </button>
-
-            <button
-              onClick={() => {
-                setActiveMenu("add-category");
-                setEditingCategoryId(null);
-                navigate("/dashboard/add");
-              }}
-              className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors ${
-                activeMenu === "add-category"
-                  ? "bg-gray-200 text-indigo-600"
-                  : "text-gray-700"
-              }`}
-            >
-              <FaPlus /> Add Category
-            </button>
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 p-6 overflow-y-auto">
-          <div className="mb-6">
-            <h2 className="text-3xl font-bold text-gray-800">
-              {editingCategoryId
-                ? "Edit Category"
-                : activeMenu === "all-categories"
-                ? "All Categories"
-                : "Add Category"}
-            </h2>
-          </div>
-
-          {/* Render based on state */}
-          {editingCategoryId ? (
-            <EditCategoryForm
-              categoryId={editingCategoryId}
-              onClose={() => {
-                setEditingCategoryId(null);
-                navigate("/dashboard");
-              }}
+        <div className="w-60 bg-emerald-800 flex flex-col items-center pb-6 shadow-xl fixed top-0 left-0 h-full overflow-y-auto z-50">
+          {/* Logo */}
+          <div className="bg-white w-full flex items-center justify-center">
+            <img
+              src={logoPlaceholder}
+              alt="App Logo"
+              className="w-20 h-auto py-5 rounded"
             />
-          ) : activeMenu === "all-categories" ? (
-            <CategoryList setEditingCategoryId={setEditingCategoryId} />
-          ) : (
-            <AddCategoryForm />
-          )}
-        </main>
+          </div>
+
+          {/* Navigation */}
+          <nav className="w-full space-y-2 px-4 py-5">
+            {/* Dashboard */}
+            <Link
+              to="/dashboard"
+              className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                location.pathname === "/dashboard"
+                  ? "bg-emerald-600 text-white shadow-inner"
+                  : "text-emerald-200 hover:bg-emerald-700 hover:text-white"
+              }`}
+            >
+              <RxDashboard className="mr-3" size={18} />
+              Dashboard
+            </Link>
+
+            {/* All Categories */}
+            <Link
+              to="/dashboard/all-categories"
+              className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                location.pathname === "/dashboard/all-categories"
+                  ? "bg-emerald-600 text-white shadow-inner"
+                  : "text-emerald-200 hover:bg-emerald-700 hover:text-white"
+              }`}
+            >
+              <TagIcon className="mr-3 fill-current" />
+              All Categories
+            </Link>
+
+            {/* All SpareParts */}
+            <Link
+              to="/dashboard/all-spareparts"
+              className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                location.pathname === "/dashboard/all-spareparts"
+                  ? "bg-emerald-600 text-white shadow-inner"
+                  : "text-emerald-200 hover:bg-emerald-700 hover:text-white"
+              }`}
+            >
+              <WrenchIcon className="mr-3 fill-current" />
+              All SpareParts
+            </Link>
+            {/* Add Category */}
+
+            <Link
+              to="/dashboard/add-category"
+              className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                location.pathname === "/dashboard/add-category"
+                  ? "bg-emerald-600 text-white shadow-inner"
+                  : "text-emerald-200 hover:bg-emerald-700 hover:text-white"
+              }`}
+            >
+              <AiOutlineAppstoreAdd className="mr-3 text-lg" />
+              Add Category
+            </Link>
+            {/* Add SpareParts */}
+            <Link
+              to="/dashboard/add-spareParts"
+              className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                location.pathname === "/dashboard/add-spareParts"
+                  ? "bg-emerald-600 text-white shadow-inner"
+                  : "text-emerald-200 hover:bg-emerald-700 hover:text-white"
+              }`}
+            >
+              <FaCogs className="mr-3 text-lg" />
+              Add Spare Part
+            </Link>
+          </nav>
+        </div>
+
+        {/* Main Area */}
+        <div className="flex-1 flex flex-col ml-60">
+          {/* Header */}
+          <div className="h-20 bg-white flex items-center justify-end px-6 shadow-md border-b border-gray-200">
+            <div className="w-10 h-10 rounded-full bg-gray-200 text-emerald-600 flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-colors hover:text-emerald-500">
+              <FaSignOutAlt size={20} onClick={handleLogout} />
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 flex flex-col w-full">
+            <main className="flex-grow bg-gray-100 w-full overflow-hidden">
+              <div className="p-8 h-full">
+                <Outlet />
+              </div>
+            </main>
+
+            {/* Footer */}
+            <Footer />
+          </div>
+        </div>
       </div>
     </>
   );

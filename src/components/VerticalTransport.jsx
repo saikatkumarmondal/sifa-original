@@ -52,20 +52,23 @@ const VerticalTransport = () => {
   return (
     <div
       ref={sectionRef}
-      className="w-full bg-cover bg-center py-10 px-4"
+      className="w-full bg-cover bg-center  text-white py-10 px-4"
       style={{
         backgroundImage: "url(/Photo/Photo/LOGO/SIFA LOGO Dark G.png)",
       }}
-      data-aos="fade-down">
+      data-aos="fade-down"
+    >
       <div className="max-w-4xl mx-auto flex flex-col items-center text-center space-y-4">
         <h1
           ref={(el) => (textRef.current[0] = el)}
-          className="text-3xl sm:text-4xl font-semibold text-gray-900">
+          className="text-3xl sm:text-4xl font-semibold text-gray-900"
+        >
           VERTICAL TRANSPORT & HORIZONTAL TRANSPORT
         </h1>
         <p
           ref={(el) => (textRef.current[1] = el)}
-          className="text-lg sm:text-xl text-gray-800">
+          className="text-lg sm:text-xl text-gray-800"
+        >
           We excel in providing complete elevator, escalator, and spare parts
           <br />
           solutions — prioritizing reliability, efficiency, and safety at every
@@ -73,7 +76,8 @@ const VerticalTransport = () => {
         </p>
         <p
           ref={(el) => (textRef.current[2] = el)}
-          className="text-sm text-gray-700">
+          className="text-sm text-gray-700"
+        >
           Our expertise spans across:
         </p>
       </div>

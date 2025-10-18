@@ -1,7 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Loading from "../components/Loading";
 import { Navigate, useLocation } from "react-router";
+
+import axiosInstance from "../api/axiosInstance";
+import Loading from "../components/Loading";
 
 const PrivateRoute = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -17,9 +18,7 @@ const PrivateRoute = ({ children }) => {
       }
 
       try {
-        const res = await axios.get("http://148.66.154.205:7777/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axiosInstance.get("/auth/me");
         setUser(res.data); // valid user
       } catch (err) {
         console.error("Invalid token or not authenticated:", err);

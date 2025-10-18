@@ -1,190 +1,126 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import Swal from "sweetalert2";
-import Loading from "./Loading";
+import { useState, useEffect } from "react";
+import axiosInstance from "../api/axiosInstance";
 
-const allFields = [
-  { name: "name", label: "Name" },
-  { name: "description", label: "Description" },
-  { name: "brand", label: "Brand" },
-  { name: "partType", label: "Part Type" },
-  { name: "material", label: "Material" },
-  { name: "dimensions", label: "Dimensions" },
-  { name: "installSize", label: "Install Size" },
-  { name: "faceplateSize", label: "Faceplate Size" },
-  { name: "weight", label: "Weight" },
-  { name: "application", label: "Application" },
-  { name: "warrantyTime", label: "Warranty Time" },
-  { name: "certificates", label: "Certificates" },
-  { name: "moq", label: "MOQ" },
-  { name: "shippingTerms", label: "Shipping Terms" },
-  { name: "paymentTerms", label: "Payment Terms" },
-  { name: "paymentCurrency", label: "Payment Currency" },
-  { name: "packing", label: "Packing" },
-];
-
-const EditCategoryForm = () => {
-  const { id } = useParams();
-  const queryClient = useQueryClient();
-
-  const {
-    data: category,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["category", id],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        `http://148.66.154.205:7777/category/${id}`
-      );
-      return data.data; // actual category object
-    },
-    enabled: !!id,
-  });
-
-  const [formData, setFormData] = useState({});
-  const [previewImages, setPreviewImages] = useState([]);
-  const [removedImages, setRemovedImages] = useState([]);
+const EditCategoryForm = ({ categoryId, onClose }) => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [parentCategories, setParentCategories] = useState([]);
+  const [parentId, setParentId] = useState(null);
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (category) {
-      setFormData(category);
-      setPreviewImages(category.images || []);
-    }
-  }, [category]);
+    const fetchData = async () => {
+      try {
+        const { data } = await axiosInstance.get("/categories");
+        const parents = data.filter(
+          (cat) => !cat.parentId && cat._id !== categoryId
+        );
+        setParentCategories(parents);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    const newPreviews = files.map((file) => URL.createObjectURL(file));
-    setPreviewImages((prev) => [...prev, ...newPreviews]);
-    setFormData({ ...formData, newFiles: files }); // store new files
-  };
-
-  const handleRemoveImage = (imgSrc, index) => {
-    // If existing image, mark it removed
-    if (category.images.includes(imgSrc)) {
-      setRemovedImages((prev) => [...prev, imgSrc]);
-    }
-    // Remove from preview
-    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const mutation = useMutation({
-    mutationFn: async (formData) => {
-      const data = new FormData();
-
-      // Add all fields
-      for (let key in formData) {
-        if (key !== "newFiles") data.append(key, formData[key]);
-      }
-
-      // Add new files
-      if (formData.newFiles) {
-        formData.newFiles.forEach((file) => {
-          data.append("images", file);
-        });
-      }
-
-      // Add removed images info
-      if (removedImages.length > 0) {
-        data.append("removedImages", JSON.stringify(removedImages));
-      }
-
-      const res = await axios.put(
-        `http://148.66.154.205:7777/update-category/${id}`,
-        data,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
+        const categoryRes = await axiosInstance.get(`/categories`);
+        const category = findCategoryById(categoryRes.data, categoryId);
+        if (category) {
+          setName(category.name);
+          setDescription(category.description || "");
+          setParentId(category.parentId || null);
+          setImagePreview(category.image ? `/uploads/${category.image}` : null);
         }
-      );
-      return res.data;
-    },
-    onSuccess: (data) => {
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: data.message,
-      });
-      setRemovedImages([]);
-      setFormData({});
-      setPreviewImages([]);
-      queryClient.invalidateQueries({ queryKey: ["category", id] });
-    },
-    onError: (err) => {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: err.response?.data?.message || err.message,
-      });
-    },
-  });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    mutation.mutate(formData);
+    fetchData();
+  }, [categoryId]);
+
+  const findCategoryById = (cats, id) => {
+    for (let cat of cats) {
+      if (cat._id === id) return cat;
+      if (cat.children) {
+        const found = findCategoryById(cat.children, id);
+        if (found) return found;
+      }
+    }
+    return null;
   };
 
-  if (isLoading) return <Loading />;
-  if (isError) return <p>Error: {error.message}</p>;
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+      const reader = new FileReader();
+      reader.onload = () => setImagePreview(reader.result);
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    if (parentId) formData.append("parentId", parentId);
+    if (image) formData.append("image", image);
+
+    try {
+      await axiosInstance.put(`/categories/${categoryId}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      onClose();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Edit Category</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {allFields.map((field) => (
-          <div key={field.name}>
-            <label className="block font-medium">{field.label}</label>
-            <input
-              type="text"
-              name={field.name}
-              value={formData[field.name] || ""}
-              onChange={handleChange}
-              className="w-full border rounded p-2"
-            />
-          </div>
-        ))}
-
-        <div>
-          <label className="block font-medium">Upload Images</label>
-          <input
-            type="file"
-            multiple
-            onChange={handleFileChange}
-            className="mt-1"
-          />
-        </div>
-
-        <div className="flex flex-wrap mt-2 gap-2">
-          {previewImages.map((imgSrc, idx) => (
-            <div key={idx} className="relative">
-              <img
-                src={imgSrc}
-                alt={`thumbnail-${idx}`}
-                className="w-20 h-20 object-cover border rounded"
-              />
-              <button
-                type="button"
-                onClick={() => handleRemoveImage(imgSrc, idx)}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-              >
-                &times;
-              </button>
-            </div>
+    <div className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-6">Edit Category</h2>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="border px-3 py-2 rounded"
+          placeholder="Category Name"
+          required
+        />
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={4}
+          className="border px-3 py-2 rounded"
+          placeholder="Description"
+        />
+        <select
+          className="border px-3 py-2 rounded"
+          value={parentId || ""}
+          onChange={(e) => setParentId(e.target.value || null)}
+        >
+          <option value="">-- No parent --</option>
+          {parentCategories.map((cat) => (
+            <option key={cat._id} value={cat._id}>
+              {cat.name}
+            </option>
           ))}
-        </div>
-
+        </select>
+        <input type="file" onChange={handleImageChange} />
+        {imagePreview && (
+          <img
+            src={imagePreview}
+            alt="Preview"
+            className="w-32 h-32 object-cover rounded border"
+          />
+        )}
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="bg-indigo-600 text-white px-4 py-2 rounded"
         >
-          Update Category
+          Save Changes
         </button>
       </form>
     </div>

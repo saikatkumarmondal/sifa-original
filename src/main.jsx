@@ -29,6 +29,13 @@ import Forbidden from "./components/Forbidden.jsx";
 import AdminRoute from "./routes/AdminRoute.jsx";
 import PrivateRoute from "./routes/PrivateRoute.jsx";
 import EditCategoryForm from "./components/EditCategoryForm.jsx";
+import SparePartsGrid from "./components/SparePartsGrid.jsx";
+import AddCategories from "./components/AddCategories.jsx";
+import DashBoardHome from "./components/DashBoardHome.jsx";
+import AllCategories from "./components/AllCategories.jsx";
+import AllSpareParts from "./components/AllSpareparts.jsx";
+import SparepartById from "./components/SparepartById.jsx";
+import SparePartsByCategory from "./components/SparePartsByCategory.jsx";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +55,7 @@ const router = createBrowserRouter([
       { path: "contact", Component: ContactUs },
       { path: "newsroom", Component: NewsRoom },
       { path: "career", Component: Career },
+      { path: "/spare-parts-grid/:id", Component: SparePartsGrid },
       { path: "/spare-parts/:id", Component: SparePartDetails },
       { path: "elevators/:type", Component: ElevatorDetails },
       { path: "escalator/:type", Component: EscalatorDetails },
@@ -63,11 +71,22 @@ const router = createBrowserRouter([
       </AdminRoute>
     ),
     children: [
-      { index: true, element: <SparePartsTable /> },
-      { path: "add", element: <SparePartsForm /> },
+      { index: true, element: <DashBoardHome /> },
+      { path: "add-category", element: <AddCategories /> },
+      { path: "add-spareParts", element: <SparePartsForm /> },
+      { path: "all-spareparts", element: <AllSpareParts /> },
+      { path: "single-sparePart/:id", element: <SparepartById /> },
+      {
+        path: "all-categories",
+        element: <AllCategories />,
+      },
       {
         path: "edit-category/:id",
         element: <EditCategoryForm key={window.location.pathname} />,
+      },
+      {
+        path: "category/:categoryId/spareparts",
+        element: <SparePartsByCategory />,
       },
     ],
   },

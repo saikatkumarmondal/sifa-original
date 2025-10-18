@@ -1,76 +1,43 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router";
-import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import axiosInstance from "../api/axiosInstance";
 
 const Login = () => {
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/dashboard";
-
-  // Auto-redirect if already logged in
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
-    const checkAuth = async () => {
-      try {
-        const res = await axios.get("http://148.66.154.205:7777/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        navigate(from, { replace: true });
-      } catch (err) {
-        localStorage.removeItem("token");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, [navigate, from]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setMessage("");
+    setLoading(true);
 
     if (!emailId || !password) {
       setError("Please enter both email and password.");
+      setLoading(false);
       return;
     }
 
     try {
-      // Debug: check payload
-      console.log("Sending login:", { emailId, password });
+      const res = await axiosInstance.post("/auth/login", {
+        emailId,
+        password,
+      });
 
-      const res = await axios.post(
-        "http://148.66.154.205:7777/login",
-        { emailId, password },
-        { headers: { "Content-Type": "application/json" } } // no withCredentials
-      );
-
-      // Save token
+      // ✅ Save token
       localStorage.setItem("token", res.data.token);
-      setMessage("Login successful! Redirecting...");
 
-      // Redirect
-      navigate(from, { replace: true });
+      // ✅ Navigate to dashboard
+      navigate("/dashboard", { replace: true });
     } catch (err) {
-      console.log(err.response?.data); // Debug server response
-      setError(err.response?.data?.error || "Login failed. Try again.");
+      console.error("Login error:", err.response?.data);
+      setError(err.response?.data?.error || "Login failed.");
+    } finally {
+      setLoading(false);
     }
   };
-
-  if (loading)
-    return <div className="text-white text-center mt-10">Loading...</div>;
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 p-4">
@@ -99,13 +66,12 @@ const Login = () => {
               required
             />
           </div>
-          {message && <p className="text-green-400">{message}</p>}
           {error && <p className="text-red-400">{error}</p>}
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-bold transition"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>
