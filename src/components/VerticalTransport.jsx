@@ -7,7 +7,6 @@ const VerticalTransport = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Initial entrance animation
       gsap.from(sectionRef.current, {
         opacity: 0,
         y: 50,
@@ -24,7 +23,6 @@ const VerticalTransport = () => {
         ease: "power2.out",
       });
 
-      // Hover animations
       textRef.current.forEach((el) => {
         el.addEventListener("mouseenter", () => {
           gsap.to(el, {
@@ -46,13 +44,13 @@ const VerticalTransport = () => {
       });
     }, sectionRef);
 
-    return () => ctx.revert(); // Cleanup
+    return () => ctx.revert();
   }, []);
 
   return (
     <div
       ref={sectionRef}
-      className="w-full bg-cover bg-center  text-white py-10 px-4"
+      className="w-full bg-cover bg-center text-white dark:bg-white dark:text-black py-10 px-4"
       style={{
         backgroundImage: "url(/Photo/Photo/LOGO/SIFA LOGO Dark G.png)",
       }}
@@ -61,13 +59,13 @@ const VerticalTransport = () => {
       <div className="max-w-4xl mx-auto flex flex-col items-center text-center space-y-4">
         <h1
           ref={(el) => (textRef.current[0] = el)}
-          className="text-3xl sm:text-4xl font-semibold text-gray-900"
+          className="text-3xl sm:text-4xl font-semibold text-gray-900 dark:text-black"
         >
           VERTICAL TRANSPORT & HORIZONTAL TRANSPORT
         </h1>
         <p
           ref={(el) => (textRef.current[1] = el)}
-          className="text-lg sm:text-xl text-gray-800"
+          className="text-lg sm:text-xl text-gray-800 dark:text-gray-900"
         >
           We excel in providing complete elevator, escalator, and spare parts
           <br />
@@ -76,7 +74,7 @@ const VerticalTransport = () => {
         </p>
         <p
           ref={(el) => (textRef.current[2] = el)}
-          className="text-sm text-gray-700"
+          className="text-sm text-gray-700 dark:text-gray-900"
         >
           Our expertise spans across:
         </p>

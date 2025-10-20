@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+import { motion } from "framer-motion";
 
 const images = [
   { src: "/Photo/Photo/5. Section/1.jpg" },
@@ -17,22 +18,16 @@ const TechnicalStrength1st = () => {
   const [visibleIndex, setVisibleIndex] = useState(0);
   const imageGroupRef = useRef(null);
 
-  // Track current screen size to change number of images per set
   const [slidesPerView, setSlidesPerView] = useState(4);
 
   useEffect(() => {
     const updateSlides = () => {
       const width = window.innerWidth;
-      if (width < 768) {
-        setSlidesPerView(1); // sm
-      } else if (width < 1024) {
-        setSlidesPerView(2); // md
-      } else {
-        setSlidesPerView(4); // lg+
-      }
+      if (width < 768) setSlidesPerView(1);
+      else if (width < 1024) setSlidesPerView(2);
+      else setSlidesPerView(4);
     };
-
-    updateSlides(); // initial check
+    updateSlides();
     window.addEventListener("resize", updateSlides);
     return () => window.removeEventListener("resize", updateSlides);
   }, []);
@@ -59,9 +54,10 @@ const TechnicalStrength1st = () => {
 
   const getCurrentSet = () => {
     const len = images.length;
-    return Array.from({ length: slidesPerView }, (_, i) => {
-      return images[(visibleIndex + i) % len];
-    });
+    return Array.from(
+      { length: slidesPerView },
+      (_, i) => images[(visibleIndex + i) % len]
+    );
   };
 
   const currentSet = getCurrentSet();
@@ -77,44 +73,58 @@ const TechnicalStrength1st = () => {
   }, []);
 
   return (
-    <div className="my-15">
-      <div>
-        <h1 className="text-5xl font-bold text-black group-hover:text-blue-900 transition text-center">
-          Technical Strength
-        </h1>
-        <p className="text-xl text-gray-800 mt-1 text-center">
+    <div className="my-15 bg-white text-black">
+      {/* 🔹 Heading with fade-up + zoom */}
+      <motion.div
+        className="text-center mb-6"
+        initial={{ opacity: 0, y: 50, scale: 0.9 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true }}
+      >
+        <h1 className="text-5xl font-bold">Technical Strength</h1>
+        <p className="text-xl text-gray-800 mt-2">
           Ningbo SIFA Elevator Co., Ltd.
         </p>
-      </div>
+      </motion.div>
 
+      {/* 🔹 Image Slider */}
       <div className="my-2">
         <div className="overflow-hidden py-10 bg-white pl-0.05 md:pl-7 lg:-pr-17">
           <div className="relative w-full h-[320px] flex flex-rows justify-center items-center mx-auto">
-            <div
+            <motion.div
               ref={imageGroupRef}
               className="
                 flex gap-6 transition duration-500 
                 sm:gap-6 sm:w-full sm:justify-center sm:px-4 
                 md:gap-6 md:w-[90%] 
                 lg:gap-6 lg:w-[80%] 
-                mx-auto">
+                mx-auto"
+              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              viewport={{ once: true }}
+            >
               {currentSet.map((item, index) => (
-                <div
+                <motion.div
                   key={index}
                   className="
                     relative w-[350px] h-[300px] rounded-xl overflow-hidden shadow-md border border-white
                     sm:w-[90%] sm:h-[220px]
                     md:w-[45%] md:h-[260px]
                     lg:w-[23%] lg:h-[300px]
-                  ">
+                  "
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                >
                   <img
                     src={item.src}
                     alt={`slide-${index}`}
                     className="w-full h-full object-cover"
                   />
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

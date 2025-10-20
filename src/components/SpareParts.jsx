@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 const SpareParts = () => {
   const sparePartsData = [
@@ -45,8 +46,15 @@ const SpareParts = () => {
   ];
 
   return (
-    <section className="mt-10 px-2 sm:px-4">
-      <div className="mx-auto mb-10 text-center">
+    <section className="mt-10 px-2 sm:px-4 bg-white text-black">
+      {/* 🔹 Animated Heading Section */}
+      <motion.div
+        className="mx-auto mb-10 text-center"
+        initial={{ opacity: 0, y: 50, scale: 0.8 }} // start faded, lower, and smaller
+        whileInView={{ opacity: 1, y: 0, scale: 1 }} // fade in, move up, and zoom to normal
+        transition={{ duration: 0.8, ease: "easeOut" }} // smooth transition
+        viewport={{ once: true }} // animate only once when in view
+      >
         <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-800">
           Spare Parts Solution
         </h2>
@@ -54,8 +62,9 @@ const SpareParts = () => {
           “Quality Spare Parts and Components We Offer for Elevators &
           Escalators”
         </p>
-      </div>
+      </motion.div>
 
+      {/* 🔹 Grid Section (your existing code) */}
       <div className="max-w-[1200px] mx-auto">
         <div
           className="

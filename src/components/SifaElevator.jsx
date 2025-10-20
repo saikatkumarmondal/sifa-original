@@ -64,7 +64,7 @@ const SifaElevator = () => {
   }, []);
 
   return (
-    <div className="mx-4 sm:mx-6 md:mx-10">
+    <div className="mx-4 sm:mx-6 md:mx-10 bg-white text-black dark:bg-white dark:text-black">
       <div className="text-center my-8">
         <h1 className="text-4xl font-bold">Ningbo SIFA Elevator Co., Ltd.</h1>
         <p className="text-xl font-semibold mt-2">
@@ -77,14 +77,15 @@ const SifaElevator = () => {
           <div
             key={index}
             ref={(el) => (cardRefs.current[index] = el)}
-            className="relative w-full h-[350px] md:h-[400px] overflow-hidden rounded-xl shadow-lg p-5 bg-white cursor-pointer">
+            className="relative w-full h-[350px] md:h-[400px] overflow-hidden rounded-xl shadow-lg p-5 bg-white cursor-pointer dark:bg-white dark:text-black"
+          >
             <img
               src={item.src}
               alt={item.label}
               className="w-full h-full object-cover rounded-xl"
             />
-            <div className="absolute bottom-0 w-full bg-white/90 py-4 text-center">
-              <p className="text-2xl font-bold text-black p-2 text-center mx-auto">
+            <div className="absolute bottom-0 w-full bg-white/90 py-4 text-center dark:bg-white/90">
+              <p className="text-2xl font-bold text-black p-2 text-center mx-auto dark:text-black">
                 {item.label}
               </p>
             </div>

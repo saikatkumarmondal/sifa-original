@@ -4,9 +4,7 @@ import { gsap } from "gsap";
 // Om Namah Shivaya
 const images = [
   "/Photo/Photo/1. Section/1.jpg",
-
   "/Photo/Photo/1. Section/3.jpg",
-
   "/Photo/Photo/1. Section/5.png",
   "/Photo/Photo/1. Section/changed.jfif",
 ];
@@ -17,7 +15,6 @@ const Gallery = () => {
   useEffect(() => {
     const imgs = containerRef.current.querySelectorAll(".gallery-img");
 
-    // Initial entrance animation
     gsap.fromTo(
       imgs,
       { opacity: 0, rotationY: 90, scale: 0.8 },
@@ -35,7 +32,6 @@ const Gallery = () => {
       const updateRotation = (x, y, bounds) => {
         const centerX = bounds.width / 2;
         const centerY = bounds.height / 2;
-
         const rotateX = ((y - centerY) / centerY) * 10;
         const rotateY = ((x - centerX) / centerX) * 10;
 
@@ -50,7 +46,6 @@ const Gallery = () => {
         });
       };
 
-      // Mouse hover rotation
       img.addEventListener("mousemove", (e) => {
         const bounds = img.getBoundingClientRect();
         updateRotation(e.clientX - bounds.left, e.clientY - bounds.top, bounds);
@@ -66,7 +61,6 @@ const Gallery = () => {
         });
       });
 
-      // Mobile/touch rotation
       img.addEventListener("touchmove", (e) => {
         const touch = e.touches[0];
         const bounds = img.getBoundingClientRect();
@@ -88,7 +82,7 @@ const Gallery = () => {
   }, []);
 
   return (
-    <div className="max-w-7xl bg-gray-300  mx-auto px-4 py-6 mt-6 ">
+    <div className="max-w-7xl w-full mx-auto px-4 py-6 mt-6 bg-gray-300 text-black dark:bg-white dark:text-black">
       <div
         ref={containerRef}
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5"
