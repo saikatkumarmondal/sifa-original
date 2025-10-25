@@ -1,3 +1,4 @@
+// src/components/SparePartsSidebar.jsx
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
@@ -8,25 +9,16 @@ import { motion } from "framer-motion";
 const SidebarItem = ({ item, level = 0, selectedId, onItemClick }) => {
   const [open, setOpen] = useState(false);
   const hasChildren = item.children && item.children.length > 0;
-  const hasGrandchildren = hasChildren
-    ? item.children.some((child) => child.children && child.children.length > 0)
-    : false;
 
   return (
     <div className="mb-1" style={{ paddingLeft: `${level * 16}px` }}>
       <motion.button
         onClick={() => {
-          if (!hasChildren) {
-            // Leaf → navigate to details
-            onItemClick(item._id, "details");
-          } else if (hasGrandchildren) {
-            // Parent with children having grandchildren → expand only
-            setOpen(!open);
-          } else {
-            // Parent with only children → show in grid
-            onItemClick(item._id, "grid");
-            setOpen(!open);
+          if (hasChildren) {
+            setOpen(!open); // toggle submenu
           }
+          // Navigate to grid view for any category (parent, child, or grandchild)
+          onItemClick(item._id);
         }}
         className={`w-full flex items-center py-2 px-3 rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-teal-500 ${
           selectedId === item._id ? "bg-teal-100" : "bg-white"
@@ -73,19 +65,14 @@ const SparePartsSidebar = ({ selectedId }) => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
-      const res = await axiosInstance.get("/get-categories");
-      if (!res.data.success) throw new Error(res.data.message || "Failed");
-      return res.data.data;
+      const res = await axiosInstance.get("/categories"); // your backend endpoint
+      return res.data; // assuming backend returns array of categories
     },
     staleTime: 5 * 60 * 1000,
   });
 
-  const handleItemClick = (id, type) => {
-    if (type === "details") {
-      navigate(`/spare-parts/${id}`);
-    } else if (type === "grid") {
-      navigate(`/spare-parts-grid/${id}`);
-    }
+  const handleItemClick = (id) => {
+    navigate(`/spare-parts-grid/${id}`); // always navigate to grid view
   };
 
   if (isLoading) return <p className="p-4 text-gray-500">Loading...</p>;
@@ -95,7 +82,7 @@ const SparePartsSidebar = ({ selectedId }) => {
   return (
     <div className="w-72 h-screen p-6 bg-white border-r border-teal-100 shadow-xl flex flex-col gap-4 overflow-y-auto scrollbar-thin scrollbar-thumb-teal-300 scrollbar-track-teal-50 rounded-xl">
       <h2 className="text-2xl font-bold text-teal-700 mb-6 border-b border-teal-200 pb-4">
-        Parts Inventory
+        Spare Parts
       </h2>
       <div className="space-y-1">
         {data?.map((category) => (

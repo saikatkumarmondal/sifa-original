@@ -1,16 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { motion } from "framer-motion";
+import axiosInstance from "../api/axiosInstance";
 import Loading from "./Loading";
 import SparePartsLogo from "/spare-parts-details.png";
-import { FaCogs } from "react-icons/fa";
-import { FaCheckCircle } from "react-icons/fa";
-import SparePartsSidebar from "./SparePartsSidebar"; // ✅ added
+import { FaCogs, FaCheckCircle } from "react-icons/fa";
+import SparePartsSidebar from "./SparePartsSidebar";
 
 const SparePartDetails = () => {
   const { id } = useParams();
+  const [part, setPart] = useState(null);
   const [mainImage, setMainImage] = useState(null);
   const [isZoomActive, setIsZoomActive] = useState(false);
   const [lensStyle, setLensStyle] = useState({
@@ -19,42 +18,35 @@ const SparePartDetails = () => {
     bgPosX: 0,
     bgPosY: 0,
   });
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const imgRef = useRef(null);
-
-  const buildUrl = (img) =>
-    img &&
-    (img.startsWith("http")
-      ? img
-      : `http://148.66.154.205:7777/${img.replace(/\\/g, "/")}`);
-
-  const {
-    data: category,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["category", id],
-    queryFn: async () => {
-      const res = await axios.get(`http://148.66.154.205:7777/category/${id}`);
-      if (res.data.success) return res.data.data;
-      throw new Error(res.data?.message || "Category not found");
-    },
-    enabled: !!id,
-  });
-
-  React.useEffect(() => {
-    if (category) {
-      const initial = category.image || category.images?.[0] || null;
-      setMainImage(initial ? buildUrl(initial) : null);
-    }
-  }, [category]);
-
-  if (isLoading) return <Loading />;
-  if (isError) return <p className="text-red-500">Error: {error.message}</p>;
 
   const LENS_SIZE = 200;
   const ZOOM_SCALE = 2.5;
+
+  const buildUrl = (img) =>
+    img &&
+    (img.startsWith("http") ? img : `http://localhost:7777/uploads/${img}`);
+
+  useEffect(() => {
+    const fetchSparePart = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await axiosInstance.get(`/spare-parts/${id}`);
+        setPart(res.data);
+        const initialImg = res.data.image || res.data.images?.[0] || null;
+        setMainImage(initialImg ? buildUrl(initialImg) : null);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch spare part details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (id) fetchSparePart();
+  }, [id]);
 
   const handleMouseMove = (e) => {
     if (!imgRef.current) return;
@@ -75,25 +67,32 @@ const SparePartDetails = () => {
   const handleMouseEnter = () => setIsZoomActive(true);
   const handleMouseLeave = () => setIsZoomActive(false);
 
+  if (loading) return <Loading />;
+  if (error) return <p className="text-red-500 text-center mt-6">{error}</p>;
+  if (!part)
+    return (
+      <p className="text-gray-500 text-center mt-6">Spare part not found.</p>
+    );
+
   const imagesList = Array.from(
     new Set(
-      [...(category?.images || []).filter(Boolean), category?.image].filter(
-        Boolean
-      )
+      [...(part.images || []).filter(Boolean), part.image].filter(Boolean)
     )
   ).map(buildUrl);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 bg-gray-50 min-h-screen">
-      {/* ✅ Sidebar (col-span-3) */}
+      {/* Sidebar */}
       <div className="col-span-12 md:col-span-3 bg-white shadow-lg border-r border-gray-200 p-4">
         <div className="w-[90%] mx-auto">
-          <SparePartsSidebar />
+          <SparePartsSidebar selectedId={part.categoryId?._id} />
         </div>
       </div>
-      {/* ✅ Main Spare Parts Content (col-span-9) */}
+
+      {/* Main Content */}
       <div className="col-span-12 md:col-span-9 overflow-hidden">
         <div className="overflow-hidden">
+          {/* Header Image */}
           <div className="relative w-full h-48 sm:h-64 flex justify-center items-center my-5 overflow-hidden">
             <img
               src={SparePartsLogo}
@@ -105,18 +104,15 @@ const SparePartDetails = () => {
               animate={{
                 color: ["#111111", "#333333", "#555555", "#222222", "#111111"],
               }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             >
               Spare Parts
             </motion.h1>
           </div>
 
+          {/* Main Grid */}
           <div className="max-w-7xl mx-auto p-4 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-10 text-black bg-white rounded-xl shadow-2xl ring-4 ring-yellow-500/80">
-            {/* Left Section */}
+            {/* Left Section: Images */}
             <div className="col-span-12 md:col-span-6 flex flex-col items-center">
               <div className="w-full h-64 sm:h-[30rem] flex justify-center items-center bg-gray-100 rounded-xl relative overflow-hidden transition-shadow duration-300 hover:shadow-xl">
                 {mainImage ? (
@@ -124,7 +120,7 @@ const SparePartDetails = () => {
                     <img
                       ref={imgRef}
                       src={mainImage}
-                      alt={category.name}
+                      alt={part.name}
                       className="w-full h-full object-contain"
                       onMouseMove={handleMouseMove}
                       onMouseEnter={handleMouseEnter}
@@ -168,6 +164,7 @@ const SparePartDetails = () => {
                 )}
               </div>
 
+              {/* Thumbnail Images */}
               <div className="flex gap-3 mt-6 overflow-x-auto justify-center w-full pb-3">
                 {imagesList.length === 0 && (
                   <div className="text-gray-500">No images available</div>
@@ -194,29 +191,29 @@ const SparePartDetails = () => {
               </div>
             </div>
 
-            {/* Right Section */}
+            {/* Right Section: Details */}
             <div className="col-span-12 md:col-span-6 space-y-4 mt-4 md:mt-0">
               <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-4 text-center md:text-left">
-                Elevator DOT Display SIFA-DOT-R-BO
+                {part.name}
               </h1>
 
               <div className="space-y-2 text-base sm:text-lg text-gray-700">
-                <p>
-                  <span className="font-bold text-gray-900">Product Name:</span>{" "}
-                  <span className="ml-1">Elevator DOT Display</span>
-                </p>
-                <p>
-                  <span className="font-bold text-gray-900">Model:</span>{" "}
-                  <span className="ml-1">SIFA-DOT-R-BO</span>
-                </p>
-                <p>
-                  <span className="font-bold text-gray-900">Category:</span>{" "}
-                  <span className="ml-1">Elevator Display</span>
-                </p>
-                <p>
-                  <span className="font-bold text-gray-900">Type:</span>{" "}
-                  <span className="ml-1">Dot Display Series</span>
-                </p>
+                {[
+                  ["Product Name", part.name],
+                  ["Brand", part.brand],
+                  ["Part Type", part.partType],
+                  ["Material", part.material],
+                  ["Dimensions", part.dimensions],
+                  ["Category", part.categoryId?.name],
+                  ["Description", part.description],
+                ].map(([label, value], i) =>
+                  value ? (
+                    <p key={i}>
+                      <span className="font-bold text-gray-900">{label}:</span>{" "}
+                      <span className="ml-1">{value}</span>
+                    </p>
+                  ) : null
+                )}
               </div>
 
               <hr className="border-gray-200 my-4 sm:my-6" />
@@ -226,8 +223,7 @@ const SparePartDetails = () => {
                   <span className="font-bold text-gray-900">Condition:</span>
                   <span className="ml-2 text-gray-700">
                     Brand-new, unused, unopened, and undamaged. Delivered in
-                    original SlFA packaging to guarantee quality and
-                    authenticity.
+                    original packaging to guarantee quality.
                   </span>
                 </p>
               </div>
@@ -262,7 +258,7 @@ const SparePartDetails = () => {
             </h2>
             <div className="space-y-2 text-gray-700 my-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-gray-700">
-                {Object.entries(category)
+                {Object.entries(part)
                   .filter(
                     ([key, val]) =>
                       val &&
@@ -281,6 +277,8 @@ const SparePartDetails = () => {
                         "paymentTerms",
                         "paymentCurrency",
                         "packing",
+                        "brand",
+                        "description",
                       ].includes(key)
                   )
                   .map(([key, val]) => (

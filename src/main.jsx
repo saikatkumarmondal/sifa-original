@@ -39,28 +39,31 @@ import SparePartsByCategory from "./components/SparePartsByCategory.jsx";
 
 const queryClient = new QueryClient();
 
-// Get the user from localStorage (or context)
-
 const router = createBrowserRouter([
   {
     path: "/",
-    Component: MainLayout,
+    element: <MainLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, Component: Home },
-      { path: "about", Component: AboutUs },
-      { path: "elevator", Component: Elevators },
-      { path: "escalator", Component: Escalator },
-      { path: "spare-parts", Component: Sparepartss },
-      { path: "contact", Component: ContactUs },
-      { path: "newsroom", Component: NewsRoom },
-      { path: "career", Component: Career },
-      { path: "/spare-parts-grid/:id", Component: SparePartsGrid },
-      { path: "/spare-parts/:id", Component: SparePartDetails },
-      { path: "elevators/:type", Component: ElevatorDetails },
-      { path: "escalator/:type", Component: EscalatorDetails },
-      { path: "login", Component: Login },
-      { path: "/forbidden", Component: Forbidden },
+      { index: true, element: <Home /> },
+      { path: "about", element: <AboutUs /> },
+      { path: "elevator", element: <Elevators /> },
+      { path: "escalator", element: <Escalator /> },
+      { path: "spare-parts", element: <Sparepartss /> },
+      { path: "contact", element: <ContactUs /> },
+      { path: "newsroom", element: <NewsRoom /> },
+      { path: "career", element: <Career /> },
+
+      // Spare parts routes
+      { path: "spare-parts-grid/:id", element: <SparePartsGrid /> },
+      { path: "spare-parts-details/:id", element: <SparePartDetails /> },
+
+      // Elevator / Escalator details
+      { path: "elevators/:type", element: <ElevatorDetails /> },
+      { path: "escalator/:type", element: <EscalatorDetails /> },
+
+      { path: "login", element: <Login /> },
+      { path: "forbidden", element: <Forbidden /> },
     ],
   },
   {
@@ -76,10 +79,7 @@ const router = createBrowserRouter([
       { path: "add-spareParts", element: <SparePartsForm /> },
       { path: "all-spareparts", element: <AllSpareParts /> },
       { path: "single-sparePart/:id", element: <SparepartById /> },
-      {
-        path: "all-categories",
-        element: <AllCategories />,
-      },
+      { path: "all-categories", element: <AllCategories /> },
       {
         path: "edit-category/:id",
         element: <EditCategoryForm key={window.location.pathname} />,
