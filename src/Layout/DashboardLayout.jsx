@@ -159,18 +159,38 @@ const DashboardLayout = () => {
         </div>
 
         {/* Main Area */}
-        <div className="flex-1 flex flex-col ml-60">
-          {/* Header */}
-          <div className="h-20 bg-white flex items-center justify-end px-6 shadow-md border-b border-gray-200">
-            <div className="w-10 h-10 rounded-full bg-gray-200 text-emerald-600 flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-colors hover:text-emerald-500">
-              <FaSignOutAlt size={20} onClick={handleLogout} />
+        <div className="flex-1 flex flex-col ml-60 bg-gray-50 min-h-screen">
+          {/* Dashboard Title & Header */}
+          <div className="sticky top-0 z-10">
+            <div className="flex items-center justify-between p-6 bg-white shadow-lg border-b border-gray-100">
+              {/* Title Section */}
+              <h2 className="text-3xl font-extrabold text-gray-800 tracking-tight">
+                Admin Dashboard
+              </h2>
+
+              {/* User/Logout Section */}
+              <div className="flex items-center space-x-4">
+                {/* Optional: User Name/Profile Info (Placeholder) */}
+                <span className="text-gray-600 font-medium hidden sm:block">
+                  Hello, Admin
+                </span>
+
+                {/* Logout Button (Green Focus) */}
+                <div
+                  className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-green-600 hover:shadow-lg"
+                  onClick={handleLogout}
+                  title="Logout"
+                >
+                  <FaSignOutAlt size={18} />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Main Content */}
+          {/* Main Content (Flex-1 ensures it takes remaining vertical space) */}
           <div className="flex-1 flex flex-col w-full">
-            <main className="flex-grow bg-gray-100 w-full overflow-hidden">
-              <div className="p-8 h-full">
+            <main className="flex-grow w-full overflow-y-auto">
+              <div className="p-8">
                 <Outlet />
               </div>
             </main>

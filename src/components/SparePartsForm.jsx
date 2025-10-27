@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react"; // ADDED: useRef
 import axiosInstance from "../api/axiosInstance";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -29,6 +29,9 @@ const SparePartsForm = () => {
   });
   const [images, setImages] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
+
+  // ADDED: Ref for the file input element
+  const fileInputRef = useRef(null);
 
   // Fetch categories
   useEffect(() => {
@@ -83,6 +86,9 @@ const SparePartsForm = () => {
         },
       });
 
+      // --- FIX: CLEAR ALL FIELDS AFTER SUCCESS ---
+
+      // 1. Reset all text/select fields (which you already did)
       setFormData({
         name: "",
         brand: "",
@@ -103,7 +109,16 @@ const SparePartsForm = () => {
         description: "",
         categoryId: "",
       });
+
+      // 2. Clear the images state for the preview
       setImages([]);
+
+      // 3. Reset the hidden value of the file input element using the ref
+      if (fileInputRef.current) {
+        // The simplest way to clear a file input is to reset the form or the input's value
+        fileInputRef.current.value = "";
+      }
+      // ---------------------------------------------
     } catch (err) {
       console.error(err);
 
@@ -332,6 +347,7 @@ const SparePartsForm = () => {
             accept="image/*"
             onChange={handleFileChange}
             className="file-input file-input-bordered w-full"
+            ref={fileInputRef} // ADDED: Attach the ref here
           />
 
           <div className="flex flex-wrap gap-3 mt-3">

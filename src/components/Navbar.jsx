@@ -8,8 +8,12 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false); // mobile menu
   const [sparePartsCategories, setSparePartsCategories] = useState([]);
 
+  // states for click toggles
+  const [openParent, setOpenParent] = useState(null);
+  const [openChild, setOpenChild] = useState(null);
+  const [isSparePartsOpen, setIsSparePartsOpen] = useState(false);
+
   useEffect(() => {
-    // Fetch categories (nested)
     axiosInstance
       .get("/categories/")
       .then((res) => setSparePartsCategories(res.data))
@@ -19,26 +23,13 @@ export default function Navbar() {
       });
   }, []);
 
-  const renderChildren = (children) => {
-    if (!children || children.length === 0) return null;
-    return (
-      <ul className="absolute left-full top-0 w-56 bg-white shadow-xl rounded-lg border border-gray-200 hidden group-hover:block z-50">
-        {children.map((child) => (
-          <li key={child._id} className="relative group/child">
-            <Link
-              to={`/spare-parts-grid/${child._id}`}
-              className="flex justify-between items-center px-4 py-2.5 text-gray-700 hover:bg-blue-100 hover:text-blue-800 rounded-md transition-all duration-200"
-            >
-              {child.name}
-              {child.children?.length > 0 && (
-                <HiChevronRight className="text-gray-400 group-hover:text-blue-600 transition-colors" />
-              )}
-            </Link>
-            {renderChildren(child.children)}
-          </li>
-        ))}
-      </ul>
-    );
+  const toggleParent = (id) => {
+    setOpenParent(openParent === id ? null : id);
+    setOpenChild(null); // close any open child when switching parent
+  };
+
+  const toggleChild = (id) => {
+    setOpenChild(openChild === id ? null : id);
   };
 
   return (
@@ -128,29 +119,115 @@ export default function Navbar() {
             </li>
 
             {/* Spare Parts */}
-            <li className="relative group">
-              <button className="flex items-center cursor-pointer">
+            <li
+              className="relative group"
+              onMouseEnter={() => setIsSparePartsOpen(true)}
+              onMouseLeave={() => setIsSparePartsOpen(false)}
+            >
+              <button
+                className="flex items-center cursor-pointer"
+                onClick={() => setIsSparePartsOpen(!isSparePartsOpen)}
+              >
                 Spare Parts
-                <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
+                <HiChevronDown
+                  className={`ml-1 transition-transform duration-200 ${
+                    isSparePartsOpen ? "rotate-180" : ""
+                  }`}
+                />
               </button>
+
               {sparePartsCategories.length === 0 ? (
                 <div className="absolute left-0 top-full bg-white shadow-lg w-44 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50">
                   No categories
                 </div>
               ) : (
-                <ul className="absolute left-0 top-full w-56 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg hidden group-hover:block z-50 border border-gray-200">
+                <ul
+                  className={`absolute left-0 top-full w-56 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg border border-gray-200 z-50 transition-all duration-300 ${
+                    isSparePartsOpen ? "block" : "hidden group-hover:block"
+                  }`}
+                >
                   {sparePartsCategories.map((parent) => (
                     <li key={parent._id} className="relative group/parent">
-                      <Link
-                        to={`/spare-parts-grid/${parent._id}`}
-                        className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-green-100 hover:text-green-800 rounded-md transition-all duration-200"
-                      >
-                        {parent.name}
-                        {parent.children?.length > 0 && (
-                          <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
-                        )}
-                      </Link>
-                      {renderChildren(parent.children)}
+                      {/* If parent has children -> toggle button, else Link */}
+                      {parent.children?.length > 0 ? (
+                        <>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              toggleParent(parent._id);
+                            }}
+                            className="flex justify-between items-center w-full text-left px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded transition-all duration-150"
+                          >
+                            <span>{parent.name}</span>
+                            <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
+                          </button>
+
+                          {/* child list */}
+                          <ul
+                            className={`absolute left-full top-0 w-56 bg-white shadow-xl rounded-lg border border-gray-200 transition-all duration-200 ${
+                              openParent === parent._id
+                                ? "block"
+                                : "hidden group/parent:hover:block"
+                            }`}
+                          >
+                            {parent.children.map((child) => (
+                              <li
+                                key={child._id}
+                                className="relative group/child"
+                              >
+                                {/* child with grandchildren -> toggle; else Link */}
+                                {child.children?.length > 0 ? (
+                                  <>
+                                    <button
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        toggleChild(child._id);
+                                      }}
+                                      className="flex justify-between items-center w-full text-left px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded transition-all duration-150"
+                                    >
+                                      <span>{child.name}</span>
+                                      <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
+                                    </button>
+
+                                    <ul
+                                      className={`absolute left-full top-0 w-56 bg-white shadow-xl rounded-lg border border-gray-200 transition-all duration-200 ${
+                                        openChild === child._id
+                                          ? "block"
+                                          : "hidden group/child:hover:block"
+                                      }`}
+                                    >
+                                      {child.children.map((grand) => (
+                                        <li key={grand._id}>
+                                          <Link
+                                            to={`/spare-parts-grid/${grand._id}`}
+                                            className="block px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded transition-all duration-150"
+                                          >
+                                            {grand.name}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </>
+                                ) : (
+                                  <Link
+                                    to={`/spare-parts-grid/${child._id}`}
+                                    className="flex justify-between items-center px-4 py-2.5 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded-md transition-all duration-200"
+                                  >
+                                    {child.name}
+                                  </Link>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      ) : (
+                        <Link
+                          to={`/spare-parts-grid/${parent._id}`}
+                          className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-green-100 hover:text-green-800 rounded-md transition-all duration-200"
+                        >
+                          {parent.name}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>
