@@ -152,7 +152,7 @@ export default function SparePartsGrid() {
                   // --- Framer Motion on Image for Scale Effect ---
                   <div className="w-full h-40 overflow-hidden rounded-md mb-3">
                     <motion.img
-                      src={`http://localhost:7777/uploads/${part.image}`}
+                      src={`http://148.66.154.205:7777/uploads/${part.image}`}
                       alt={part.name}
                       className="w-full h-full object-cover"
                       whileHover={{ scale: 1.1 }} // Increased scale for noticeable effect

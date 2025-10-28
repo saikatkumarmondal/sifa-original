@@ -28,7 +28,9 @@ const SparePartDetails = () => {
 
   const buildUrl = (img) =>
     img &&
-    (img.startsWith("http") ? img : `http://localhost:7777/uploads/${img}`);
+    (img.startsWith("http")
+      ? img
+      : `http://148.66.154.205:7777/uploads/${img}`);
 
   useEffect(() => {
     const fetchSparePart = async () => {

@@ -64,7 +64,7 @@ const SparepartById = () => {
             {part.images.map((img, index) => (
               <img
                 key={index}
-                src={`http://localhost:7777/uploads/${img}`}
+                src={`http://148.66.154.205:7777/uploads/${img}`}
                 alt={part.name}
                 className="w-40 h-40 object-cover rounded shadow-sm"
               />

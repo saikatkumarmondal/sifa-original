@@ -6,7 +6,7 @@ import { FaTrash, FaEye, FaEdit } from "react-icons/fa";
 import { Link } from "react-router";
 import Loading from "./Loading";
 
-const API_URL = "http://localhost:7777";
+const API_URL = "http://148.66.154.205:7777";
 
 const fetchCategories = async () => {
   const { data } = await axiosInstance.get("/categories");
