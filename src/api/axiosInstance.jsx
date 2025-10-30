@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: "http://148.66.154.205:7777",
-  withCredentials: true, // allow cookies if backend uses them
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",

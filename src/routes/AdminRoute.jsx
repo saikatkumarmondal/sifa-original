@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router";
 import axiosInstance from "../api/axiosInstance";
+import Loading from "../components/Loading";
 
 const AdminRoute = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -9,21 +10,13 @@ const AdminRoute = ({ children }) => {
 
   useEffect(() => {
     const checkAdmin = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setLoading(false);
-        return;
-      }
-
       try {
-        const res = await axiosInstance.get("/auth/me");
-
+        const res = await axiosInstance.get("/auth/me"); // cookie sent automatically
         if (res.data.role === "admin") {
           setIsAdmin(true);
         }
       } catch (err) {
         console.error("AdminRoute error:", err.response?.data);
-        localStorage.removeItem("token");
       } finally {
         setLoading(false);
       }
@@ -32,7 +25,7 @@ const AdminRoute = ({ children }) => {
     checkAdmin();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading></Loading>;
 
   if (!isAdmin)
     return <Navigate to="/login" state={{ from: location }} replace />;

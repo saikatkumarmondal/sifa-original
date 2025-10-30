@@ -29,7 +29,7 @@ const Login = () => {
       // ✅ Save token
       localStorage.setItem("token", res.data.token);
 
-      // ✅ Navigate to dashboard
+      // ✅ Navigate to dashboard\
       navigate("/dashboard", { replace: true });
     } catch (err) {
       console.error("Login error:", err.response?.data);
