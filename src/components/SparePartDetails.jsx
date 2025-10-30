@@ -27,10 +27,7 @@ const SparePartDetails = () => {
   const ZOOM_SCALE = 2.5;
 
   const buildUrl = (img) =>
-    img &&
-    (img.startsWith("http")
-      ? img
-      : `http://148.66.154.205:7777/uploads/${img}`);
+    img && (img.startsWith("http") ? img : `http://nbsifa.comuploads/${img}`);
 
   useEffect(() => {
     const fetchSparePart = async () => {

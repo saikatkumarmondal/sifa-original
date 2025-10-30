@@ -93,7 +93,7 @@ const AllCategories = () => {
           <td className="p-3 text-center">
             {cat.image ? (
               <img
-                src={`http://148.66.154.205:7777/uploads/${cat.image}`}
+                src={`http://nbsifa.comuploads/${cat.image}`}
                 alt={cat.name}
                 className="w-12 h-12 object-cover rounded-md mx-auto"
               />

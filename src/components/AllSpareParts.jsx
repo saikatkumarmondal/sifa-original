@@ -75,7 +75,7 @@ const AllSpareParts = () => {
                 >
                   {part.images && part.images.length > 0 ? (
                     <img
-                      src={`http://148.66.154.205:7777/uploads/${part.images[0]}`}
+                      src={`http://nbsifa.comuploads/${part.images[0]}`}
                       alt={part.name}
                       className="w-16 h-16 object-cover rounded"
                     />
