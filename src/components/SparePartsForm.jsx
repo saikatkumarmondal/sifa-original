@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react"; // ADDED: useRef
+import React, { useEffect, useState, useRef } from "react";
 import axiosInstance from "../api/axiosInstance";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -24,13 +24,10 @@ const SparePartsForm = () => {
     paymentTerms: "",
     paymentCurrency: "",
     packing: "",
-    description: "",
+    deliveryTime: "", // will store as string (YYYY-MM-DD)
     categoryId: "",
   });
   const [images, setImages] = useState([]);
-  const [previewImage, setPreviewImage] = useState(null);
-
-  // ADDED: Ref for the file input element
   const fileInputRef = useRef(null);
 
   // Fetch categories
@@ -61,6 +58,7 @@ const SparePartsForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
+    // deliveryTime is already a string "YYYY-MM-DD"
     Object.entries(formData).forEach(([key, value]) => data.append(key, value));
     Array.from(images).forEach((img) => data.append("images", img));
 
@@ -69,7 +67,6 @@ const SparePartsForm = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      // ✅ Tailwind styled SweetAlert2 success
       MySwal.fire({
         html: (
           <p className="text-green-700 text-lg font-semibold">
@@ -86,9 +83,7 @@ const SparePartsForm = () => {
         },
       });
 
-      // --- FIX: CLEAR ALL FIELDS AFTER SUCCESS ---
-
-      // 1. Reset all text/select fields (which you already did)
+      // Reset all fields after success
       setFormData({
         name: "",
         brand: "",
@@ -106,23 +101,13 @@ const SparePartsForm = () => {
         paymentTerms: "",
         paymentCurrency: "",
         packing: "",
-        description: "",
+        deliveryTime: "",
         categoryId: "",
       });
-
-      // 2. Clear the images state for the preview
       setImages([]);
-
-      // 3. Reset the hidden value of the file input element using the ref
-      if (fileInputRef.current) {
-        // The simplest way to clear a file input is to reset the form or the input's value
-        fileInputRef.current.value = "";
-      }
-      // ---------------------------------------------
+      if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (err) {
       console.error(err);
-
-      // ✅ Tailwind styled SweetAlert2 error
       MySwal.fire({
         html: (
           <p className="text-red-700 text-lg font-semibold">
@@ -141,7 +126,6 @@ const SparePartsForm = () => {
     }
   };
 
-  // Render categories recursively
   const renderCategoryOptions = (cats, prefix = "") =>
     cats.map((cat) => (
       <React.Fragment key={cat._id}>
@@ -330,14 +314,15 @@ const SparePartsForm = () => {
           className="input input-bordered w-full"
         />
 
-        {/* Description */}
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={formData.description}
+        {/* Delivery Time */}
+        <input
+          type="text"
+          name="deliveryTime"
+          placeholder="Delivery Time"
+          value={formData.deliveryTime}
           onChange={handleChange}
-          className="textarea textarea-bordered w-full md:col-span-2"
-        ></textarea>
+          className="input input-bordered w-full"
+        />
 
         {/* Images */}
         <div className="md:col-span-2">
@@ -347,9 +332,8 @@ const SparePartsForm = () => {
             accept="image/*"
             onChange={handleFileChange}
             className="file-input file-input-bordered w-full"
-            ref={fileInputRef} // ADDED: Attach the ref here
+            ref={fileInputRef}
           />
-
           <div className="flex flex-wrap gap-3 mt-3">
             {Array.from(images).map((file, index) => (
               <div
@@ -376,29 +360,6 @@ const SparePartsForm = () => {
               </div>
             ))}
           </div>
-
-          {/* Full Preview */}
-          {previewImage && (
-            <div
-              className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
-              onClick={() => setPreviewImage(null)}
-            >
-              <div className="relative">
-                <img
-                  src={previewImage}
-                  alt="Full Preview"
-                  className="max-h-[80vh] max-w-[90vw] rounded-lg shadow-lg"
-                />
-                <button
-                  type="button"
-                  onClick={() => setPreviewImage(null)}
-                  className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full p-2 hover:bg-red-600"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Submit */}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axiosInstance from "../api/axiosInstance";
+import Loading from "./Loading";
 
 export default function SparePartsByCategory() {
   const { categoryId } = useParams();
@@ -25,8 +26,7 @@ export default function SparePartsByCategory() {
     fetchParts();
   }, [categoryId]);
 
-  if (loading)
-    return <p className="text-center mt-10">Loading spare parts...</p>;
+  if (loading) return <Loading></Loading>;
   if (!parts.length)
     return <p className="text-center mt-10">No spare parts found.</p>;
 

@@ -125,7 +125,7 @@ export default function Navbar() {
               onMouseLeave={() => setIsSparePartsOpen(false)}
             >
               <button
-                className="flex items-center cursor-pointer"
+                className="flex items-center cursor-pointer whitespace-normal"
                 onClick={() => setIsSparePartsOpen(!isSparePartsOpen)}
               >
                 Spare Parts
@@ -137,18 +137,20 @@ export default function Navbar() {
               </button>
 
               {sparePartsCategories.length === 0 ? (
-                <div className="absolute left-0 top-full bg-white shadow-lg w-44 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50">
+                <div className="absolute left-0 top-full bg-white shadow-lg w-44 p-4 text-sm text-gray-600 rounded hidden group-hover:block z-50 whitespace-normal">
                   No categories
                 </div>
               ) : (
                 <ul
                   className={`absolute left-0 top-full w-56 bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl rounded-lg border border-gray-200 z-50 transition-all duration-300 ${
                     isSparePartsOpen ? "block" : "hidden group-hover:block"
-                  }`}
+                  } whitespace-normal`}
                 >
                   {sparePartsCategories.map((parent) => (
-                    <li key={parent._id} className="relative group/parent">
-                      {/* If parent has children -> toggle button, else Link */}
+                    <li
+                      key={parent._id}
+                      className="relative group/parent whitespace-normal"
+                    >
                       {parent.children?.length > 0 ? (
                         <>
                           <button
@@ -156,26 +158,24 @@ export default function Navbar() {
                               e.preventDefault();
                               toggleParent(parent._id);
                             }}
-                            className="flex justify-between items-center w-full text-left px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded transition-all duration-150"
+                            className="flex justify-between items-center w-full text-left px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded transition-all duration-150 whitespace-normal"
                           >
                             <span>{parent.name}</span>
                             <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
                           </button>
 
-                          {/* child list */}
                           <ul
                             className={`absolute left-full top-0 w-56 bg-white shadow-xl rounded-lg border border-gray-200 transition-all duration-200 ${
                               openParent === parent._id
                                 ? "block"
                                 : "hidden group/parent:hover:block"
-                            }`}
+                            } whitespace-normal`}
                           >
                             {parent.children.map((child) => (
                               <li
                                 key={child._id}
-                                className="relative group/child"
+                                className="relative group/child whitespace-normal"
                               >
-                                {/* child with grandchildren -> toggle; else Link */}
                                 {child.children?.length > 0 ? (
                                   <>
                                     <button
@@ -183,7 +183,7 @@ export default function Navbar() {
                                         e.preventDefault();
                                         toggleChild(child._id);
                                       }}
-                                      className="flex justify-between items-center w-full text-left px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded transition-all duration-150"
+                                      className="flex justify-between items-center w-full text-left px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded transition-all duration-150 whitespace-normal"
                                     >
                                       <span>{child.name}</span>
                                       <HiChevronRight className="text-gray-400 group-hover:text-green-600 transition-colors" />
@@ -194,13 +194,16 @@ export default function Navbar() {
                                         openChild === child._id
                                           ? "block"
                                           : "hidden group/child:hover:block"
-                                      }`}
+                                      } whitespace-normal`}
                                     >
                                       {child.children.map((grand) => (
-                                        <li key={grand._id}>
+                                        <li
+                                          key={grand._id}
+                                          className="whitespace-normal"
+                                        >
                                           <Link
                                             to={`/spare-parts-grid/${grand._id}`}
-                                            className="block px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded transition-all duration-150"
+                                            className="block px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded transition-all duration-150 whitespace-normal"
                                           >
                                             {grand.name}
                                           </Link>
@@ -211,7 +214,7 @@ export default function Navbar() {
                                 ) : (
                                   <Link
                                     to={`/spare-parts-grid/${child._id}`}
-                                    className="flex justify-between items-center px-4 py-2.5 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded-md transition-all duration-200"
+                                    className="flex justify-between items-center px-4 py-2.5 text-gray-700 hover:bg-green-100 hover:text-green-700 rounded-md transition-all duration-200 whitespace-normal"
                                   >
                                     {child.name}
                                   </Link>
@@ -223,7 +226,7 @@ export default function Navbar() {
                       ) : (
                         <Link
                           to={`/spare-parts-grid/${parent._id}`}
-                          className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-green-100 hover:text-green-800 rounded-md transition-all duration-200"
+                          className="flex justify-between items-center px-4 py-2.5 text-gray-700 font-medium hover:bg-green-100 hover:text-green-800 rounded-md transition-all duration-200 whitespace-normal"
                         >
                           {parent.name}
                         </Link>

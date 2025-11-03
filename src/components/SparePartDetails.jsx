@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import axiosInstance from "../api/axiosInstance";
 import Loading from "./Loading";
 import SparePartsLogo from "/SpareParts.png";
-import { FaCogs, FaCheckCircle } from "react-icons/fa";
+import { FaCogs, FaCheckCircle, FaTimes } from "react-icons/fa";
 import SparePartsSidebar from "./SparePartsSidebar";
 import Footer from "./Footer";
 
@@ -13,6 +13,7 @@ const SparePartDetails = () => {
   const [part, setPart] = useState(null);
   const [mainImage, setMainImage] = useState(null);
   const [isZoomActive, setIsZoomActive] = useState(false);
+  const [isFullZoom, setIsFullZoom] = useState(false);
   const [lensStyle, setLensStyle] = useState({
     left: 0,
     top: 0,
@@ -26,9 +27,15 @@ const SparePartDetails = () => {
   const LENS_SIZE = 200;
   const ZOOM_SCALE = 2.5;
 
+  // Helper to build full URL for images
   const buildUrl = (img) =>
-    img && (img.startsWith("http") ? img : `http://nbsifa.comuploads/${img}`);
+    img
+      ? img.startsWith("http")
+        ? img
+        : `http://localhost:7777${img}`
+      : SparePartsLogo;
 
+  // Fetch part details
   useEffect(() => {
     const fetchSparePart = async () => {
       setLoading(true);
@@ -36,8 +43,9 @@ const SparePartDetails = () => {
       try {
         const res = await axiosInstance.get(`/spare-parts/${id}`);
         setPart(res.data);
-        const initialImg = res.data.image || res.data.images?.[0] || null;
-        setMainImage(initialImg ? buildUrl(initialImg) : null);
+        const initialImg =
+          res.data.image || res.data.images?.[0] || SparePartsLogo;
+        setMainImage(buildUrl(initialImg));
       } catch (err) {
         console.error(err);
         setError("Failed to fetch spare part details.");
@@ -48,6 +56,22 @@ const SparePartDetails = () => {
     if (id) fetchSparePart();
   }, [id]);
 
+  // Build images list safely
+  const imagesList = React.useMemo(() => {
+    if (!part) return [];
+    return Array.from(
+      new Set(
+        [...(part.images || []).filter(Boolean), part.image].filter(Boolean)
+      )
+    ).map(buildUrl);
+  }, [part]);
+
+  // Always run hook (never conditional)
+  useEffect(() => {
+    if (!mainImage && imagesList.length > 0) setMainImage(imagesList[0]);
+  }, [imagesList, mainImage]);
+
+  // Zoom handlers
   const handleMouseMove = (e) => {
     if (!imgRef.current) return;
     const rect = imgRef.current.getBoundingClientRect();
@@ -67,18 +91,21 @@ const SparePartDetails = () => {
   const handleMouseEnter = () => setIsZoomActive(true);
   const handleMouseLeave = () => setIsZoomActive(false);
 
+  // UI States
   if (loading) return <Loading />;
   if (error) return <p className="text-red-500 text-center mt-6">{error}</p>;
+
+  // fallback for not found
   if (!part)
     return (
-      <p className="text-gray-500 text-center mt-6">Spare part not found.</p>
+      <>
+        <p className="text-gray-500 text-center mt-6">Spare part not found.</p>
+        <Footer />
+      </>
     );
 
-  const imagesList = Array.from(
-    new Set(
-      [...(part.images || []).filter(Boolean), part.image].filter(Boolean)
-    )
-  ).map(buildUrl);
+  // Fallback if no images
+  if (imagesList.length === 0) imagesList.push(SparePartsLogo);
 
   return (
     <>
@@ -92,7 +119,7 @@ const SparePartDetails = () => {
         {/* Sidebar */}
         <div className="col-span-12 md:col-span-3">
           <div className="sticky top-0 h-screen  p-4">
-            <div className="w-full max-w-xs mx-auto ml-10 relative left-10 -bottom-12">
+            <div className="w-full max-w-xs mx-auto ml-10 relative left-10 top-7">
               <SparePartsSidebar selectedId={part.categoryId?._id} />
             </div>
           </div>
@@ -101,9 +128,6 @@ const SparePartDetails = () => {
         {/* Main Content */}
         <div className="col-span-12 md:col-span-9 bg-gray-50 p-10">
           <div className="overflow-hidden pb-8">
-            {/* Header Image */}
-
-            {/* Main Grid */}
             <div className="max-w-5xl mx-auto p-4 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 text-black bg-white rounded-xl shadow-xl ring-1 ring-yellow-500/30">
               {/* Left Section: Images */}
               <div className="col-span-12 md:col-span-6 flex flex-col items-center justify-center">
@@ -114,11 +138,11 @@ const SparePartDetails = () => {
                         ref={imgRef}
                         src={mainImage}
                         alt={part.name}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-contain cursor-zoom-in"
+                        onClick={() => setIsFullZoom(true)}
                         onMouseMove={handleMouseMove}
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
-                        style={{ cursor: "crosshair" }}
                       />
                       {isZoomActive && (
                         <div
@@ -151,6 +175,22 @@ const SparePartDetails = () => {
                           }}
                         />
                       )}
+                      {/* Fullscreen Zoom Overlay */}
+                      {isFullZoom && (
+                        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-[9999]">
+                          <button
+                            onClick={() => setIsFullZoom(false)}
+                            className="absolute top-5 right-5 text-white text-3xl hover:text-red-400 transition"
+                          >
+                            <FaTimes />
+                          </button>
+                          <img
+                            src={mainImage}
+                            alt="Zoomed"
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                      )}
                     </>
                   ) : (
                     <FaCogs className="text-6xl sm:text-7xl text-yellow-500/50 animate-pulse" />
@@ -159,11 +199,6 @@ const SparePartDetails = () => {
 
                 {/* Thumbnail Images */}
                 <div className="flex gap-2 sm:gap-3 mt-3 overflow-x-auto justify-center w-full pb-2">
-                  {imagesList.length === 0 && (
-                    <div className="text-gray-500 text-sm">
-                      No images available
-                    </div>
-                  )}
                   {imagesList.map((img, idx) => (
                     <button
                       key={idx}
@@ -200,15 +235,29 @@ const SparePartDetails = () => {
                     ["Material", part.material],
                     ["Dimensions", part.dimensions],
                     ["Category", part.categoryId?.name],
-                    ["Description", part.description],
+                    ["Delivery Time", part.deliveryTime],
                   ].map(([label, value], i) =>
                     value ? (
-                      <p key={i}>
-                        <span className="font-bold text-gray-900">
-                          {label}:
-                        </span>{" "}
-                        <span className="ml-1">{value}</span>
-                      </p>
+                      label === "Delivery Time" ? (
+                        <div
+                          key={i}
+                          className="w-full mt-4 whitespace-normal break-words"
+                        >
+                          <span className="font-bold text-gray-900">
+                            {label}:
+                          </span>
+                          <p className="mt-1 text-gray-700 w-full break-words">
+                            {value}
+                          </p>
+                        </div>
+                      ) : (
+                        <p key={i}>
+                          <span className="font-bold text-gray-900">
+                            {label}:
+                          </span>{" "}
+                          <span className="ml-1">{value}</span>
+                        </p>
+                      )
                     ) : null
                   )}
                 </div>
@@ -250,11 +299,11 @@ const SparePartDetails = () => {
                 <hr className="border-gray-200 my-3 sm:my-4" />
               </div>
             </div>
-
-            {/* Specifications Section */}
           </div>
         </div>
       </div>
+
+      {/* Specifications Section */}
       <div>
         <div className="mt-4 sm:mt-8 px-4 sm:px-12">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-700 text-center">
@@ -282,7 +331,7 @@ const SparePartDetails = () => {
                       "paymentCurrency",
                       "packing",
                       "brand",
-                      "description",
+                      "deliveryTime",
                     ].includes(key)
                 )
                 .map(([key, val]) => (
@@ -305,7 +354,8 @@ const SparePartDetails = () => {
           </div>
         </div>
       </div>
-      <Footer></Footer>
+
+      <Footer />
     </>
   );
 };

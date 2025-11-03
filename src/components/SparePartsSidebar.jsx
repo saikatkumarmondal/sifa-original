@@ -96,7 +96,7 @@ export default function SparePartsSidebar() {
   };
 
   return (
-    <aside className="w-64 bg-gray-400 shadow-lg border-r border-gray-200 overflow-y-auto p-4 flex flex-col items-center rounded-4xl">
+    <aside className="w-64 bg-sky-300 shadow-lg border-r border-gray-200 overflow-y-auto p-4 flex flex-col items-center rounded-4xl">
       <h2 className="text-xl font-bold mb-4 text-gray-800 border-b border-gray-200 w-full text-center pb-2">
         Parts Categories ⚙️
       </h2>

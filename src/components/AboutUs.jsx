@@ -1,14 +1,16 @@
-import React from 'react';
+import React from "react";
 import ImageOne from "/Photo/Photo/aboutUs/Photo 1.png";
 import ImageTwo from "/Photo/Photo/aboutUs/Phhoto 2.png";
 import ImageThree from "/Photo/Photo/aboutUs/Photo 3.png";
+import Footer from "./Footer";
 const AboutUs = () => {
   return (
     <div>
       <h1
-        className="text-5xl md:text-6xl font-bold text-center text-indigo-700 my-10 tracking-wide"
+        className="text-5xl md:text-6xl font-bold text-center text-blue-700 my-10 tracking-wide"
         data-aos="fade-up"
-        data-aos-duration="1000">
+        data-aos-duration="1000"
+      >
         About Us
       </h1>
 
@@ -25,14 +27,14 @@ const AboutUs = () => {
         {/* Text Section */}
         <div className="w-full h-auto sm:h-[700px] md:h-auto flex flex-col justify-between bg-white shadow-xl rounded-xl p-4 sm:p-5 md:p-6 hover:scale-[1.02] hover:shadow-indigo-200 transition duration-300">
           <div className="w-full h-auto flex flex-col bg-white shadow-xl rounded-xl p-4 sm:p-5 md:p-6 hover:scale-[1.02] hover:shadow-indigo-200 transition duration-300 gap-3 sm:gap-4 md:gap-5">
-            <h3 className="text-2xl sm:text-3xl font-semibold text-indigo-700">
+            <h3 className="text-2xl sm:text-3xl font-semibold text-blue-700">
               Ningbo SIFA Elevator Co., Ltd.
               <br />
               Your Vertical Movement Partner
             </h3>
 
             <p className="text-gray-700 leading-relaxed text-[15px] sm:text-[16px] md:text-[17px]">
-              <span className="font-bold text-indigo-800">
+              <span className="font-bold text-blue-700">
                 Ningbo SIFA Elevator Co., Ltd.
               </span>{" "}
               is a professional company specializing in the design,
@@ -64,14 +66,15 @@ const AboutUs = () => {
         <div
           className="w-full h-auto flex flex-col gap-6 bg-white shadow-xl rounded-xl p-6 hover:scale-[1.02] hover:shadow-indigo-200 transition duration-300"
           data-aos="fade-right"
-          data-aos-duration="1000">
-          <h3 className="text-3xl font-semibold text-indigo-700">
+          data-aos-duration="1000"
+        >
+          <h3 className="text-3xl font-semibold text-blue-700">
             Mission & Vision
           </h3>
 
           <p className="text-gray-700 leading-relaxed text-[15px] sm:text-[16px] md:text-[17px]">
             At{" "}
-            <span className="font-bold text-indigo-800">
+            <span className="font-bold text-blue-700">
               Ningbo SIFA Elevator Co., Ltd.,
             </span>{" "}
             we believe elevators, escalators, and spare parts are more than just
@@ -90,9 +93,7 @@ const AboutUs = () => {
             adaptable to tomorrow’s needs.
           </p>
 
-          <h2 className="text-xl font-bold text-indigo-700 mt-4">
-            Our Mission
-          </h2>
+          <h2 className="text-xl font-bold text-blue-700 mt-4">Our Mission</h2>
           <p className="text-gray-700 leading-relaxed text-[17px]">
             To provide innovative, safe, and dependable elevator, escalator, and
             spare parts solutions that elevate the way people move — with a
@@ -100,7 +101,7 @@ const AboutUs = () => {
             satisfaction.
           </p>
 
-          <h2 className="text-xl font-bold text-indigo-700 mt-4">Our Vision</h2>
+          <h2 className="text-xl font-bold text-blue-700 mt-4">Our Vision</h2>
           <p className="text-gray-700 leading-relaxed text-[17px]">
             To become a globally recognized brand in the vertical transportation
             industry by delivering smarter, more efficient solutions that
@@ -112,7 +113,8 @@ const AboutUs = () => {
         <div
           className="h-[500px] w-full flex items-center justify-center bg-white shadow-xl rounded-xl hover:scale-[1.02] hover:shadow-indigo-200 transition duration-300"
           data-aos="fade-left"
-          data-aos-duration="1000">
+          data-aos-duration="1000"
+        >
           <img
             src={ImageTwo}
             alt="Mission and Vision"
@@ -126,7 +128,8 @@ const AboutUs = () => {
         <div
           className="h-[400px] sm:h-[500px] md:h-[450px] w-full md:w-[410px] flex items-center justify-center bg-white shadow-xl rounded-xl hover:scale-[1.02] hover:shadow-indigo-200 transition duration-300 md:relative -bottom-35"
           data-aos="fade-left"
-          data-aos-duration="1000">
+          data-aos-duration="1000"
+        >
           <img
             src={ImageThree}
             alt="Mission and Vision"
@@ -142,7 +145,7 @@ const AboutUs = () => {
 
           <div className="text-gray-700 text-[15px] sm:text-[16px] md:text-[17px] leading-relaxed space-y-6">
             <div className="flex items-start gap-3 p-4 rounded-lg hover:shadow-lg hover:scale-[1.02] transition-transform duration-300">
-              <span className="text-indigo-600 text-xl mt-1 flex-shrink-0">
+              <span className="text-blue-700 text-xl mt-1 flex-shrink-0">
                 ✅
               </span>
               <div>
@@ -159,7 +162,7 @@ const AboutUs = () => {
             </div>
 
             <div className="flex items-start gap-3 p-4 rounded-lg hover:shadow-lg hover:scale-[1.02] transition-transform duration-300">
-              <span className="text-indigo-600 text-xl mt-1 flex-shrink-0">
+              <span className="text-blue-700 text-xl mt-1 flex-shrink-0">
                 ✅
               </span>
               <div>
@@ -176,7 +179,7 @@ const AboutUs = () => {
             </div>
 
             <div className="flex items-start gap-3 p-4 rounded-lg hover:shadow-lg hover:scale-[1.02] transition-transform duration-300">
-              <span className="text-indigo-600 text-xl mt-1 flex-shrink-0">
+              <span className="text-blue-700 text-xl mt-1 flex-shrink-0">
                 ✅
               </span>
               <div>
@@ -193,7 +196,7 @@ const AboutUs = () => {
             </div>
 
             <div className="flex items-start gap-3 p-4 rounded-lg hover:shadow-lg hover:scale-[1.02] transition-transform duration-300">
-              <span className="text-indigo-600 text-xl mt-1 flex-shrink-0">
+              <span className="text-blue-700 text-xl mt-1 flex-shrink-0">
                 ✅
               </span>
               <div>
@@ -210,7 +213,7 @@ const AboutUs = () => {
             </div>
 
             <div className="flex items-start gap-3 p-4 rounded-lg hover:shadow-lg hover:scale-[1.02] transition-transform duration-300">
-              <span className="text-indigo-600 text-xl mt-1 flex-shrink-0">
+              <span className="text-blue-700 text-xl mt-1 flex-shrink-0">
                 ✅
               </span>
               <div>
@@ -228,6 +231,7 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
+      <Footer></Footer>
     </div>
   );
 };

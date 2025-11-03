@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router";
 
 import { FaArrowLeft } from "react-icons/fa";
 import axiosInstance from "../api/axiosInstance";
+import Loading from "./Loading";
 
 const SparepartById = () => {
   const { id } = useParams();
@@ -25,8 +26,7 @@ const SparepartById = () => {
     fetchPart();
   }, [id]);
 
-  if (loading)
-    return <p className="text-center mt-10">Loading spare part...</p>;
+  if (loading) return <Loading></Loading>;
   if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
   if (!part) return <p className="text-center mt-10">No spare part found.</p>;
 

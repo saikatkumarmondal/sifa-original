@@ -94,52 +94,62 @@ const ScrollNavbar = () => {
               </li>
 
               {/* Elevator Dropdown (Placeholder structure) */}
-              <li className="relative cursor-pointer group">
-                <button className="flex items-center text-gray-800 hover:text-green-700 font-medium transition-colors duration-200 peer">
+              {/* Elevator */}
+              <li className="relative group">
+                <button className="flex items-center cursor-pointer">
                   Elevator
-                  <HiChevronDown className="ml-1 text-gray-500 transition-all duration-200 peer-hover:rotate-180 group-hover:rotate-180 peer-hover:text-green-700 group-hover:text-green-700" />
+                  <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
                 </button>
-                <ul className="absolute left-0 top-full min-w-max bg-white shadow-lg rounded-lg border invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 z-50 mt-2 py-2">
-                  <li>
-                    <Link
-                      to="/elevators/passenger"
-                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all"
-                    >
-                      Passenger Elevator
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/elevators/villa"
-                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all"
-                    >
-                      Villa Elevator
-                    </Link>
-                  </li>
+                <ul className="absolute left-0 top-full w-56 bg-white shadow-lg rounded hidden group-hover:block z-50">
+                  {[
+                    "Passenger",
+                    "Villa",
+                    "Panoramic",
+                    "Hospital",
+                    "Freight",
+                    "Hydraulic",
+                  ].map((name, i) => (
+                    <li key={i}>
+                      <Link
+                        to={`/elevators/${name.toLowerCase()}`}
+                        className="block px-3 py-2 hover:bg-gray-50"
+                      >
+                        {name} Elevator
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </li>
 
               {/* Escalator Dropdown (Placeholder structure) */}
-              <li className="relative cursor-pointer group">
-                <button className="flex items-center text-gray-800 hover:text-green-700 font-medium transition-colors duration-200 peer">
+              <li className="relative group">
+                <button className="flex items-center cursor-pointer">
                   Escalator
-                  <HiChevronDown className="ml-1 text-gray-500 transition-transform duration-200 peer-hover:rotate-180 group-hover:rotate-180 peer-hover:text-green-700 group-hover:text-green-700" />
+                  <HiChevronDown className="ml-1 transition-transform duration-200 group-hover:rotate-180" />
                 </button>
-                <ul className="absolute left-0 top-full min-w-max bg-white shadow-lg rounded-lg border invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 z-50 mt-2 py-2">
+                <ul className="absolute left-0 top-full w-56 bg-white shadow-lg rounded hidden group-hover:block z-50">
                   <li>
                     <Link
                       to="/escalator/indoor"
-                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all"
+                      className="block px-4 py-2.5 hover:bg-gray-100"
                     >
                       Indoor Escalator
                     </Link>
                   </li>
                   <li>
                     <Link
-                      to="/escalator/moving-walks"
-                      className="block whitespace-nowrap px-5 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-800 rounded-md transition-all"
+                      to="/escalator/out-door"
+                      className="block px-4 py-2.5 hover:bg-gray-100"
                     >
-                      Moving Walk
+                      Outdoor Escalator
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/escalator/moving-walks"
+                      className="block px-4 py-2.5 hover:bg-gray-100"
+                    >
+                      Moving Walks
                     </Link>
                   </li>
                 </ul>
