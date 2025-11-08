@@ -7,7 +7,7 @@ import { Link } from "react-router";
 import Loading from "./Loading";
 
 const API_URL = "http://148.66.154.205:7777";
-
+const IMAGE_BASE_URL = "http://localhost:7777/uploads";
 const fetchCategories = async () => {
   const { data } = await axiosInstance.get("/categories");
   return data || [];
@@ -46,15 +46,17 @@ const CategoryList = ({ setEditingCategoryId }) => {
       <div key={cat._id} style={{ marginLeft: level * 20 }}>
         <div className="flex justify-between items-center p-2 bg-gray-50 rounded mb-2">
           <div className="flex items-center gap-2">
-            <img
-              src={
-                cat.image
-                  ? `${API_URL}/uploads/${cat.image}`
-                  : `${API_URL}/default-category.png`
-              }
-              alt={cat.name}
-              className="w-6 h-6 object-cover rounded"
-            />
+            <td className="p-3 text-center">
+              {cat.image ? (
+                <img
+                  src={`${IMAGE_BASE_URL}/${cat.image}`}
+                  alt={cat.name}
+                  className="w-12 h-12 object-cover rounded-md mx-auto"
+                />
+              ) : (
+                <div className="w-12 h-12 bg-gray-300 rounded-md mx-auto" />
+              )}
+            </td>
             <span className={`${level === 0 ? "font-medium" : "text-sm"}`}>
               {cat.name}
             </span>

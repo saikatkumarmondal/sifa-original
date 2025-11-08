@@ -27,15 +27,15 @@ const SparePartDetails = () => {
   const LENS_SIZE = 200;
   const ZOOM_SCALE = 2.5;
 
-  // Helper to build full URL for images
-  const buildUrl = (img) =>
-    img
-      ? img.startsWith("http")
-        ? img
-        : `http://localhost:7777${img}`
-      : SparePartsLogo;
+  // ✅ Fixed: base URL and image path handling
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const buildUrl = (img) => {
+    if (!img) return SparePartsLogo;
+    if (img.startsWith("http")) return img;
+    if (img.startsWith("/uploads")) return `${API_BASE_URL}${img}`;
+    return `${API_BASE_URL}/uploads/${img}`;
+  };
 
-  // Fetch part details
   useEffect(() => {
     const fetchSparePart = async () => {
       setLoading(true);
@@ -56,7 +56,6 @@ const SparePartDetails = () => {
     if (id) fetchSparePart();
   }, [id]);
 
-  // Build images list safely
   const imagesList = React.useMemo(() => {
     if (!part) return [];
     return Array.from(
@@ -66,12 +65,10 @@ const SparePartDetails = () => {
     ).map(buildUrl);
   }, [part]);
 
-  // Always run hook (never conditional)
   useEffect(() => {
     if (!mainImage && imagesList.length > 0) setMainImage(imagesList[0]);
   }, [imagesList, mainImage]);
 
-  // Zoom handlers
   const handleMouseMove = (e) => {
     if (!imgRef.current) return;
     const rect = imgRef.current.getBoundingClientRect();
@@ -91,11 +88,8 @@ const SparePartDetails = () => {
   const handleMouseEnter = () => setIsZoomActive(true);
   const handleMouseLeave = () => setIsZoomActive(false);
 
-  // UI States
   if (loading) return <Loading />;
   if (error) return <p className="text-red-500 text-center mt-6">{error}</p>;
-
-  // fallback for not found
   if (!part)
     return (
       <>
@@ -104,7 +98,6 @@ const SparePartDetails = () => {
       </>
     );
 
-  // Fallback if no images
   if (imagesList.length === 0) imagesList.push(SparePartsLogo);
 
   return (
@@ -115,18 +108,18 @@ const SparePartDetails = () => {
         className="w-full h-full object-contain"
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 bg-gray-50 ">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 bg-gray-50">
         {/* Sidebar */}
         <div className="col-span-12 md:col-span-3">
-          <div className="sticky top-0 h-screen  p-4">
-            <div className="w-full max-w-xs mx-auto ml-10 relative left-10 top-7">
+          <div className="sticky top-4 h-screen p-4">
+            <div className="w-full max-w-xs mx-auto relative -right-6 mt-9">
               <SparePartsSidebar selectedId={part.categoryId?._id} />
             </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="col-span-12 md:col-span-9 bg-gray-50 p-10">
+        <div className="col-span-12 md:col-span-9 bg-gray-50 p-12 w-full max-w-[1400px]]">
           <div className="overflow-hidden pb-8">
             <div className="max-w-5xl mx-auto p-4 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 text-black bg-white rounded-xl shadow-xl ring-1 ring-yellow-500/30">
               {/* Left Section: Images */}
@@ -175,7 +168,6 @@ const SparePartDetails = () => {
                           }}
                         />
                       )}
-                      {/* Fullscreen Zoom Overlay */}
                       {isFullZoom && (
                         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-[9999]">
                           <button
@@ -235,7 +227,6 @@ const SparePartDetails = () => {
                     ["Material", part.material],
                     ["Dimensions", part.dimensions],
                     ["Category", part.categoryId?.name],
-                    ["Delivery Time", part.deliveryTime],
                   ].map(([label, value], i) =>
                     value ? (
                       label === "Delivery Time" ? (

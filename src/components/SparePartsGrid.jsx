@@ -34,13 +34,13 @@ const itemVariants = {
 const cardHoverSpring = {
   type: "spring",
   stiffness: 400,
-  damping: 30, // Increased damping slightly for stability on image scale
+  damping: 30,
 };
 
 // --- Custom Transition for Image Scale ---
 const imageScaleSpring = {
   type: "spring",
-  stiffness: 200, // Softer spring for the image
+  stiffness: 200,
   damping: 15,
   mass: 0.5,
 };
@@ -52,10 +52,12 @@ export default function SparePartsGrid() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  // FIX: Changed ITEMS_PER_PAGE from 20 to 12
   const ITEMS_PER_PAGE = 12;
+
+  // ✅ Base URL for images
+  const backendURL = import.meta.env.VITE_API_BASE_URL;
+  // or your deployed backend URL
 
   useEffect(() => {
     setLoading(true);
@@ -66,7 +68,7 @@ export default function SparePartsGrid() {
       .then((res) => {
         setSpareParts(res.data);
         setLoading(false);
-        setCurrentPage(1); // reset page when category changes
+        setCurrentPage(1);
       })
       .catch((err) => {
         console.error("Failed to fetch spare parts:", err);
@@ -95,8 +97,6 @@ export default function SparePartsGrid() {
       </div>
     );
 
-  // Pagination calculations
-  // FIX: totalPages and currentItems now use ITEMS_PER_PAGE = 12
   const totalPages = Math.ceil(spareParts.length / ITEMS_PER_PAGE);
   const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentItems = spareParts.slice(startIdx, startIdx + ITEMS_PER_PAGE);
@@ -106,7 +106,7 @@ export default function SparePartsGrid() {
       <img
         src={SparePartsLogo}
         alt="Spare Parts"
-        className=" w-screen  object-contain rounded-lg"
+        className="w-screen object-contain rounded-lg"
       />
 
       <div className="p-6">
@@ -125,7 +125,6 @@ export default function SparePartsGrid() {
             <motion.div
               key={part._id}
               variants={itemVariants}
-              // Tailwind classes for the card design
               className="
               bg-white 
               rounded-xl 
@@ -138,9 +137,8 @@ export default function SparePartsGrid() {
               hover:shadow-2xl 
               hover:border-green-500
             "
-              // Card Hover Effect (subtle lift and shadow change)
               whileHover={{
-                y: -3, // Slight upward lift
+                y: -3,
                 boxShadow:
                   "0 20px 25px -5px rgba(0, 128, 0, 0.1), 0 10px 10px -5px rgba(0, 128, 0, 0.04)",
               }}
@@ -149,18 +147,16 @@ export default function SparePartsGrid() {
             >
               <div className="p-4 relative z-10 h-full flex flex-col">
                 {part.image ? (
-                  // --- Framer Motion on Image for Scale Effect ---
                   <div className="w-full h-40 overflow-hidden rounded-md mb-3">
                     <motion.img
-                      src={`http://nbsifa.comuploads/${part.image}`}
+                      src={`${backendURL}${part.image}`} // image already has /uploads/...
                       alt={part.name}
                       className="w-full h-full object-cover"
-                      whileHover={{ scale: 1.1 }} // Increased scale for noticeable effect
+                      whileHover={{ scale: 1.1 }}
                       transition={imageScaleSpring}
                     />
                   </div>
                 ) : (
-                  // ------------------------------------------------
                   <div className="w-full h-40 bg-gray-100 flex items-center justify-center rounded-md mb-3 text-gray-400">
                     No Image
                   </div>
@@ -188,21 +184,15 @@ export default function SparePartsGrid() {
           ))}
         </motion.div>
 
-        {/* --- */}
-
-        {/* Pagination Controls */}
         <div className="flex justify-center items-center mt-8 gap-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`
-            px-4 py-2 rounded-lg text-white font-semibold transition
-            ${
+            className={`px-4 py-2 rounded-lg text-white font-semibold transition ${
               currentPage === 1
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-green-600 hover:bg-green-700"
-            }
-          `}
+            }`}
           >
             Previous
           </button>
@@ -214,20 +204,17 @@ export default function SparePartsGrid() {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`
-            px-4 py-2 rounded-lg text-white font-semibold transition
-            ${
+            className={`px-4 py-2 rounded-lg text-white font-semibold transition ${
               currentPage === totalPages
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-green-600 hover:bg-green-700"
-            }
-          `}
+            }`}
           >
             Next
           </button>
         </div>
       </div>
-      <Footer></Footer>
+      <Footer />
     </>
   );
 }

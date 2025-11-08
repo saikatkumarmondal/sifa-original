@@ -1,8 +1,11 @@
 import axios from "axios";
 
+// Load API URL from Vite environment variable (.env)
+const baseURL = "https://nbsifa.com";
+
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:7777",
-  withCredentials: true,
+  baseURL, // all requests automatically prefixed with the domain
+  withCredentials: true, // for cookies or JWT auth
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",

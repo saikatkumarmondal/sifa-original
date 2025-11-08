@@ -5,10 +5,8 @@ import { HiChevronDown, HiChevronRight, HiMenu, HiX } from "react-icons/hi";
 import axiosInstance from "../api/axiosInstance";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false); // mobile menu
+  const [isOpen, setIsOpen] = useState(false);
   const [sparePartsCategories, setSparePartsCategories] = useState([]);
-
-  // states for click toggles
   const [openParent, setOpenParent] = useState(null);
   const [openChild, setOpenChild] = useState(null);
   const [isSparePartsOpen, setIsSparePartsOpen] = useState(false);
@@ -16,16 +14,19 @@ export default function Navbar() {
   useEffect(() => {
     axiosInstance
       .get("/categories/")
-      .then((res) => setSparePartsCategories(res.data))
+      .then((res) => {
+        console.log("✅ Categories fetched successfully:", res.data);
+        setSparePartsCategories(res.data);
+      })
       .catch((err) => {
-        console.error("Failed to fetch categories:", err);
+        console.error("❌ Failed to fetch categories:", err.message);
         setSparePartsCategories([]);
       });
   }, []);
 
   const toggleParent = (id) => {
     setOpenParent(openParent === id ? null : id);
-    setOpenChild(null); // close any open child when switching parent
+    setOpenChild(null);
   };
 
   const toggleChild = (id) => {
@@ -36,7 +37,6 @@ export default function Navbar() {
     <header className="w-full bg-white shadow sticky top-0 z-50 text-black">
       <nav className="w-full relative">
         <div className="w-full px-4 lg:px-8 py-3 flex items-center justify-between">
-          {/* Mobile menu button */}
           <button
             className="lg:hidden text-2xl"
             onClick={() => setIsOpen(!isOpen)}
@@ -44,7 +44,6 @@ export default function Navbar() {
             {isOpen ? <HiX /> : <HiMenu />}
           </button>
 
-          {/* Desktop Menu */}
           <ul className="hidden lg:flex lg:flex-1 items-center justify-around gap-6 relative">
             <li>
               <Link to="/" className="hover:text-blue-600">
@@ -250,7 +249,6 @@ export default function Navbar() {
           </ul>
         </div>
 
-        {/* Mobile Menu */}
         {isOpen && (
           <div className="lg:hidden bg-white border-t shadow-md">
             <ul className="flex flex-col gap-2 p-4">
