@@ -281,7 +281,7 @@ const Footer = () => {
             />
           </a>
           <a
-            href="https://www.youtube.com/@NingboSIFAElevator"
+            href="https://www.youtube.com/@SIFAElevator"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="YouTube"
